@@ -3,92 +3,17 @@ set -Eeuo pipefail
 
 : "${MANUAL:=""}"
 : "${DETECTED:=""}"
-: "${VERSION:="win11x64"}"
+: "${VERSION:="win11arm"}"
 
 if [[ "${VERSION}" == \"*\" || "${VERSION}" == \'*\' ]]; then
   VERSION="${VERSION:1:-1}"
 fi
 
-[[ "${VERSION,,}" == "11" ]] && VERSION="win11x64"
-[[ "${VERSION,,}" == "win11" ]] && VERSION="win11x64"
+[[ "${VERSION,,}" == "11" ]] && VERSION="win11arm"
+[[ "${VERSION,,}" == "win11" ]] && VERSION="win11arm"
 
-[[ "${VERSION,,}" == "10" ]] && VERSION="win10x64"
-[[ "${VERSION,,}" == "win10" ]] && VERSION="win10x64"
-
-[[ "${VERSION,,}" == "8" ]] && VERSION="win81x64"
-[[ "${VERSION,,}" == "81" ]] && VERSION="win81x64"
-[[ "${VERSION,,}" == "8.1" ]] && VERSION="win81x64"
-[[ "${VERSION,,}" == "win8" ]] && VERSION="win81x64"
-[[ "${VERSION,,}" == "win81" ]] && VERSION="win81x64"
-
-[[ "${VERSION,,}" == "7" ]] && VERSION="win7x64"
-[[ "${VERSION,,}" == "win7" ]] && VERSION="win7x64"
-
-[[ "${VERSION,,}" == "vista" ]] && VERSION="winvistax64"
-[[ "${VERSION,,}" == "winvista" ]] && VERSION="winvistax64"
-
-[[ "${VERSION,,}" == "xp" ]] && VERSION="winxpx86"
-[[ "${VERSION,,}" == "winxp" ]] && VERSION="winxpx86"
-
-[[ "${VERSION,,}" == "22" ]] && VERSION="win2022-eval"
-[[ "${VERSION,,}" == "2022" ]] && VERSION="win2022-eval"
-[[ "${VERSION,,}" == "win22" ]] && VERSION="win2022-eval"
-[[ "${VERSION,,}" == "win2022" ]] && VERSION="win2022-eval"
-
-[[ "${VERSION,,}" == "19" ]] && VERSION="win2019-eval"
-[[ "${VERSION,,}" == "2019" ]] && VERSION="win2019-eval"
-[[ "${VERSION,,}" == "win19" ]] && VERSION="win2019-eval"
-[[ "${VERSION,,}" == "win2019" ]] && VERSION="win2019-eval"
-
-[[ "${VERSION,,}" == "16" ]] && VERSION="win2016-eval"
-[[ "${VERSION,,}" == "2016" ]] && VERSION="win2016-eval"
-[[ "${VERSION,,}" == "win16" ]] && VERSION="win2016-eval"
-[[ "${VERSION,,}" == "win2016" ]] && VERSION="win2016-eval"
-
-[[ "${VERSION,,}" == "2012" ]] && VERSION="win2012r2-eval"
-[[ "${VERSION,,}" == "win2012" ]] && VERSION="win2012r2-eval"
-
-[[ "${VERSION,,}" == "2008" ]] && VERSION="win2008r2"
-[[ "${VERSION,,}" == "win2008" ]] && VERSION="win2008r2"
-
-[[ "${VERSION,,}" == "ltsc10" ]] && VERSION="win10x64-enterprise-ltsc-eval"
-[[ "${VERSION,,}" == "10ltsc" ]] && VERSION="win10x64-enterprise-ltsc-eval"
-[[ "${VERSION,,}" == "win10-ltsc" ]] && VERSION="win10x64-enterprise-ltsc-eval"
-[[ "${VERSION,,}" == "win10x64-ltsc" ]] && VERSION="win10x64-enterprise-ltsc-eval"
-
-if [[ "${VERSION,,}" == "win10x64-enterprise-ltsc-eval" ]]; then
-  DETECTED="win10x64-ltsc"
-fi
-
-if [[ "${VERSION,,}" == "win7x64" ]]; then
-  DETECTED="win7x64"
-  VERSION="https://dl.bobpony.com/windows/7/en_windows_7_enterprise_with_sp1_x64_dvd_u_677651.iso"
-fi
-
-if [[ "${VERSION,,}" == "winvistax64" ]]; then
-  DETECTED="winvistax64"
-  VERSION="https://dl.bobpony.com/windows/vista/en_windows_vista_sp2_x64_dvd_342267.iso"
-fi
-
-if [[ "${VERSION,,}" == "winxpx86" ]]; then
-  DETECTED="winxpx86"
-  VERSION="https://dl.bobpony.com/windows/xp/professional/en_windows_xp_professional_with_service_pack_3_x86_cd_vl_x14-73974.iso"
-fi
-
-if [[ "${VERSION,,}" == "core11" ]]; then
-  DETECTED="win11x64"
-  VERSION="https://archive.org/download/tiny-11-core-x-64-beta-1/tiny11%20core%20x64%20beta%201.iso"
-fi
-
-if [[ "${VERSION,,}" == "tiny11" ]]; then
-  DETECTED="win11x64"
-  VERSION="https://archive.org/download/tiny11-2311/tiny11%202311%20x64.iso"
-fi
-
-if [[ "${VERSION,,}" == "tiny10" ]]; then
-  DETECTED="win10x64-ltsc"
-  VERSION="https://archive.org/download/tiny-10-23-h2/tiny10%20x64%2023h2.iso"
-fi
+[[ "${VERSION,,}" == "10" ]] && VERSION="win10arm"
+[[ "${VERSION,,}" == "win10" ]] && VERSION="win10arm"
 
 CUSTOM="custom.iso"
 
@@ -100,7 +25,7 @@ CUSTOM="custom.iso"
 [ ! -f "$STORAGE/$CUSTOM" ] && CUSTOM="custom.IMG"
 [ ! -f "$STORAGE/$CUSTOM" ] && CUSTOM="CUSTOM.IMG"
 
-MACHINE="q35"
+ESD_URL=""
 TMP="$STORAGE/tmp"
 DIR="$TMP/unpack"
 FB="falling back to manual installation!"
@@ -112,19 +37,8 @@ printVersion() {
   local id="$1"
   local desc=""
 
-  [[ "$id" == "win7"* ]] && desc="Windows 7"
-  [[ "$id" == "win8"* ]] && desc="Windows 8"
-  [[ "$id" == "win10"* ]] && desc="Windows 10"
-  [[ "$id" == "win11"* ]] && desc="Windows 11"
-  [[ "$id" == "winxp"* ]] && desc="Windows XP"
-  [[ "$id" == "winvista"* ]] && desc="Windows Vista"
-  [[ "$id" == "win2025"* ]] && desc="Windows Server 2025"
-  [[ "$id" == "win2022"* ]] && desc="Windows Server 2022"
-  [[ "$id" == "win2019"* ]] && desc="Windows Server 2019"
-  [[ "$id" == "win2016"* ]] && desc="Windows Server 2016"
-  [[ "$id" == "win2012"* ]] && desc="Windows Server 2012"
-  [[ "$id" == "win2008"* ]] && desc="Windows Server 2008"
-  [[ "$id" == "win10x64-ltsc" ]] && desc="Windows 10 LTSC"
+  [[ "$id" == "win10"* ]] && desc="Windows 10 for ARM"
+  [[ "$id" == "win11"* ]] && desc="Windows 11 for ARM"
 
   echo "$desc"
   return 0
@@ -135,42 +49,12 @@ getName() {
   local file="$1"
   local desc=""
 
-  [[ "${file,,}" == "win11"* ]] && desc="Windows 11"
-  [[ "${file,,}" == "win10"* ]] && desc="Windows 10"
-  [[ "${file,,}" == "win8.1"* ]] && desc="Windows 8"
-  [[ "${file,,}" == "win8"* ]] && desc="Windows 8"
-  [[ "${file,,}" == "win7"* ]] && desc="Windows 7"
-  [[ "${file,,}" == "winxp"* ]] && desc="Windows XP"
-  [[ "${file,,}" == "winvista"* ]] && desc="Windows Vista"
-  [[ "${file,,}" == "tiny10"* ]] && desc="Tiny 10"
-  [[ "${file,,}" == "tiny11"* ]] && desc="Tiny 11"
-  [[ "${file,,}" == "tiny11_core"* ]] && desc="Tiny 11 Core"
-  [[ "${file,,}" == *"windows11"* ]] && desc="Windows 11"
-  [[ "${file,,}" == *"windows10"* ]] && desc="Windows 10"
-  [[ "${file,,}" == *"windows8.1"* ]] && desc="Windows 8"
-  [[ "${file,,}" == *"windows8"* ]] && desc="Windows 8"
-  [[ "${file,,}" == *"windows7"* ]] && desc="Windows 7"
-  [[ "${file,,}" == *"windowsxp"* ]] && desc="Windows XP"
-  [[ "${file,,}" == *"windowsvista"* ]] && desc="Windows Vista"
-  [[ "${file,,}" == *"windows_11"* ]] && desc="Windows 11"
-  [[ "${file,,}" == *"windows_10"* ]] && desc="Windows 10"
-  [[ "${file,,}" == *"windows_8.1"* ]] && desc="Windows 8"
-  [[ "${file,,}" == *"windows_8"* ]] && desc="Windows 8"
-  [[ "${file,,}" == *"windows_7"* ]] && desc="Windows 7"
-  [[ "${file,,}" == *"windows_xp"* ]] && desc="Windows XP"
-  [[ "${file,,}" == *"windows_vista"* ]] && desc="Windows Vista"
-  [[ "${file,,}" == *"server2008"* ]] && desc="Windows Server 2008"
-  [[ "${file,,}" == *"server2012"* ]] && desc="Windows Server 2012"
-  [[ "${file,,}" == *"server2016"* ]] && desc="Windows Server 2016"
-  [[ "${file,,}" == *"server2019"* ]] && desc="Windows Server 2019"
-  [[ "${file,,}" == *"server2022"* ]] && desc="Windows Server 2022"
-  [[ "${file,,}" == *"server2025"* ]] && desc="Windows Server 2025"
-  [[ "${file,,}" == *"server_2008"* ]] && desc="Windows Server 2008"
-  [[ "${file,,}" == *"server_2012"* ]] && desc="Windows Server 2012"
-  [[ "${file,,}" == *"server_2016"* ]] && desc="Windows Server 2016"
-  [[ "${file,,}" == *"server_2019"* ]] && desc="Windows Server 2019"
-  [[ "${file,,}" == *"server_2022"* ]] && desc="Windows Server 2022"
-  [[ "${file,,}" == *"server_2025"* ]] && desc="Windows Server 2025"
+  [[ "${file,,}" == "win11"* ]] && desc="Windows 11 for ARM"
+  [[ "${file,,}" == "win10"* ]] && desc="Windows 10 for ARM"
+  [[ "${file,,}" == *"windows11"* ]] && desc="Windows 11 for ARM"
+  [[ "${file,,}" == *"windows10"* ]] && desc="Windows 10 for ARM"
+  [[ "${file,,}" == *"windows_11"* ]] && desc="Windows 11 for ARM"
+  [[ "${file,,}" == *"windows_10"* ]] && desc="Windows 10 for ARM"
 
   echo "$desc"
   return 0
@@ -181,24 +65,8 @@ getVersion() {
   local name="$1"
   local detected=""
 
-  [[ "${name,,}" == *"windows 7"* ]] && detected="win7x64"
-  [[ "${name,,}" == *"windows 8"* ]] && detected="win81x64"
-  [[ "${name,,}" == *"windows 11"* ]] && detected="win11x64"
-  [[ "${name,,}" == *"windows vista"* ]] && detected="winvistax64"
-  [[ "${name,,}" == *"server 2025"* ]] && detected="win2025-eval"
-  [[ "${name,,}" == *"server 2022"* ]] && detected="win2022-eval"
-  [[ "${name,,}" == *"server 2019"* ]] && detected="win2019-eval"
-  [[ "${name,,}" == *"server 2016"* ]] && detected="win2016-eval"
-  [[ "${name,,}" == *"server 2012"* ]] && detected="win2012r2-eval"
-  [[ "${name,,}" == *"server 2008"* ]] && detected="win2008r2"
-
-  if [[ "${name,,}" == *"windows 10"* ]]; then
-    if [[ "${name,,}" == *"ltsc"* ]]; then
-      detected="win10x64-ltsc"
-    else
-      detected="win10x64"
-    fi
-  fi
+  [[ "${name,,}" == *"windows 11"* ]] && detected="win11arm"
+  [[ "${name,,}" == *"windows 10"* ]] && detected="win10arm"
 
   echo "$detected"
   return 0
@@ -258,12 +126,7 @@ finishInstall() {
 
   rm -f "$STORAGE/windows.boot"
   cp /run/version "$STORAGE/windows.ver"
-
-  if [[ "${BOOT_MODE,,}" == "windows_legacy" ]]; then
-    echo "$MACHINE" > "$STORAGE/windows.old"
-  else
-    rm -f "$STORAGE/windows.old"
-  fi
+  rm -f "$STORAGE/windows.old"
 
   rm -rf "$TMP"
   return 0
@@ -345,16 +208,99 @@ startInstall() {
 
   fi
 
+  rm -rf "$TMP"
   mkdir -p "$TMP"
 
   if [ ! -f "$STORAGE/$CUSTOM" ]; then
     CUSTOM=""
-    ISO="$TMP/$BASE"
+    if [[ "$EXTERNAL" == [Yy1]* ]]; then
+      ISO="$TMP/$BASE"
+    else
+      ISO="$TMP/$VERSION.esd"
+    fi
   else
     ISO="$STORAGE/$CUSTOM"
   fi
 
   rm -f "$TMP/$BASE"
+  return 0
+}
+
+getESD() {
+
+  local dir="$1"
+  local file="$2"
+  local architecture="ARM64"
+  local winCatalog space space_gb size
+
+  case "${VERSION,,}" in
+    win11arm)
+      winCatalog="https://go.microsoft.com/fwlink?linkid=2156292"
+      ;;
+    win10arm)
+      winCatalog="https://go.microsoft.com/fwlink/?LinkId=841361"
+      ;;
+    *)
+      error "Invalid version specified: $VERSION"
+      return 1
+      ;;
+  esac
+
+  local msg="Downloading product information from Microsoft..."
+  info "$msg" && html "$msg"
+
+  rm -rf "$dir"
+  mkdir -p "$dir"
+
+  space=$(df --output=avail -B 1 "$dir" | tail -n 1)
+  space_gb=$(( (space + 1073741823)/1073741824 ))
+
+  if (( 12884901888 > space )); then
+    error "Not enough free space in $STORAGE, have $space_gb GB available but need at least 12 GB."
+    return 1
+  fi
+
+  local wFile="catalog.cab"
+
+  mkdir -p "$dir"
+
+  { wget "$winCatalog" -O "$dir/$wFile" -q --no-check-certificate; rc=$?; } || :
+  (( rc != 0 )) && error "Failed to download $winCatalog , reason: $rc" && return 1
+
+  cd "$dir"
+
+  if ! cabextract "$wFile" > /dev/null; then
+    cd /run
+    error "Failed to extract CAB file!" && return 1
+  fi
+
+  cd /run
+
+  if [ ! -f "$dir/products.xml" ]; then
+    error "Failed to find products.xml!" && return 1
+  fi
+
+  local esdLang="en-us"
+  local editionName="Professional"
+  local edQuery='//File[Architecture="'${architecture}'"][Edition="'${editionName}'"]'
+
+  echo -e '<Catalog>' > "${dir}/products_filter.xml"
+  xpath -q -n -e "${edQuery}" "${dir}/products.xml" >> "${dir}/products_filter.xml" 2>/dev/null
+  echo -e '</Catalog>'>> "${dir}/products_filter.xml"
+  xpath -q -n -e '//File[LanguageCode="'${esdLang}'"]' "${dir}/products_filter.xml" >"${dir}/esd_edition.xml"
+
+  size=$(stat -c%s "${dir}/esd_edition.xml")
+  if ((size<20)); then
+    error "Invalid esd_edition.xml file!" && return 1
+  fi
+
+  ESD_URL=$(xpath -n -q -e '//FilePath' "${dir}/esd_edition.xml" | sed -E -e 's/<[\/]?FilePath>//g')
+
+  if [ -z "$ESD_URL" ]; then
+    error "Failed to find ESD url!" && return 1
+  fi
+
+  rm -rf "$dir"
   return 0
 }
 
@@ -369,7 +315,7 @@ downloadImage() {
 
   if [[ "$EXTERNAL" != [Yy1]* ]]; then
 
-    file="$iso.PART"
+    file="$iso"
     desc=$(printVersion "$VERSION")
     [ -z "$desc" ] && desc="Windows"
 
@@ -380,39 +326,113 @@ downloadImage() {
 
   fi
 
+  if [[ "$EXTERNAL" != [Yy1]* ]]; then
+
+    if ! getESD "$TMP/esd" "$file"; then
+      return 1
+    fi
+
+    url="$ESD_URL"
+
+  fi
+
   local msg="Downloading $desc..."
   info "$msg" && html "$msg"
 
   /run/progress.sh "$file" "Downloading $desc ([P])..." &
 
-  if [[ "$EXTERNAL" != [Yy1]* ]]; then
-
-    cd "$TMP"
-    { /run/mido.sh "$url"; rc=$?; } || :
-    cd /run
-
-    fKill "progress.sh"
-    (( rc != 0 )) && return 1
-
+  # Check if running with interactive TTY or redirected to docker log
+  if [ -t 1 ]; then
+    progress="--progress=bar:noscroll"
   else
-
-    # Check if running with interactive TTY or redirected to docker log
-    if [ -t 1 ]; then
-      progress="--progress=bar:noscroll"
-    else
-      progress="--progress=dot:giga"
-    fi
-
-    { wget "$url" -O "$iso" -q --no-check-certificate --show-progress "$progress"; rc=$?; } || :
-
-    fKill "progress.sh"
-    (( rc != 0 )) && error "Failed to download $url , reason: $rc" && exit 60
-
+    progress="--progress=dot:giga"
   fi
+
+  { wget "$url" -O "$iso" -q --no-check-certificate --show-progress "$progress"; rc=$?; } || :
+
+  fKill "progress.sh"
+  (( rc != 0 )) && error "Failed to download $url , reason: $rc" && exit 60
 
   [ ! -f "$iso" ] && return 1
 
   html "Download finished successfully..."
+  return 0
+}
+
+extractESD() {
+
+  local iso="$1"
+  local dir="$2"
+  local size desc
+
+  desc=$(printVersion "$VERSION")
+  local msg="Extracting $desc bootdisk..."
+  info "$msg" && html "$msg"
+
+  size=$(stat -c%s "$iso")
+
+  if ((size<10000000)); then
+    error "Invalid ESD file: Size is smaller than 10 MB" && exit 62
+  fi
+
+  rm -rf "$dir"
+  mkdir -p "$dir"
+
+  local esdImageCount
+  esdImageCount=$(wimlib-imagex info "${iso}" | awk '/Image Count:/ {print $3}')
+
+  wimlib-imagex apply "$iso" 1 "${dir}" --quiet 2>/dev/null || {
+    retVal=$?
+    error "Extract of boot files failed" && return $retVal
+  }
+
+  local bootWimFile="${dir}/sources/boot.wim"
+  local installWimFile="${dir}/sources/install.wim"
+
+  local msg="Extracting $desc environment..."
+  info "$msg" && html "$msg"
+
+  wimlib-imagex export "${iso}" 2 "${bootWimFile}" --compress=LZX --chunk-size 32K --quiet || {
+    retVal=$?
+    error "Add of WinPE failed" && return ${retVal}
+  }
+
+  local msg="Extracting $desc setup..."
+  info "$msg" && html "$msg"
+
+  wimlib-imagex export "${iso}" 3 "$bootWimFile" --compress=LZX --chunk-size 32K --boot --quiet || {
+   retVal=$?
+   error "Add of Windows Setup failed" && return ${retVal}
+  }
+
+  local msg="Extracting $desc image..."
+  info "$msg" && html "$msg"
+
+  local edition imageIndex imageEdition
+
+  case "${VERSION,,}" in
+    win11arm)
+      edition="11 pro"
+      ;;
+    win10arm)
+      edition="10 pro"
+      ;;
+    *)
+      error "Invalid version specified: $VERSION"
+      return 1
+      ;;
+  esac
+  
+  for (( imageIndex=4; imageIndex<=esdImageCount; imageIndex++ )); do
+    imageEdition=$(wimlib-imagex info "${iso}" ${imageIndex} | grep '^Description:' | sed 's/Description:[ \t]*//')
+    [[ "${imageEdition,,}" != *"$edition"* ]] && continue
+    wimlib-imagex export "${iso}" ${imageIndex} "${installWimFile}" --compress=LZMS --chunk-size 128K --quiet || {
+      retVal=$?
+      error "Addition of ${imageIndex} to the image failed" && return $retVal
+    }
+    break
+  done
+
   return 0
 }
 
@@ -422,6 +442,14 @@ extractImage() {
   local dir="$2"
   local desc="downloaded ISO"
   local size size_gb space space_gb
+
+  if [[ "${iso,,}" == *".esd" ]]; then
+    if ! extractESD "$iso" "$dir"; then
+      error "Failed to extract ESD file!"
+      exit 67
+    fi
+    return 0
+  fi
 
   if [[ "$EXTERNAL" != [Yy1]* ]] && [ -z "$CUSTOM" ]; then
     desc=$(printVersion "$VERSION")
@@ -489,21 +517,13 @@ detectImage() {
 
   info "Detecting Windows version from ISO image..."
 
-  if [ -f "$dir/WIN51" ] || [ -f "$dir/SETUPXP.HTM" ]; then
-    DETECTED="winxpx86"
-    info "Detected: Windows XP"
-    return 0
-  fi
-
   local tag result name name2 desc
   local loc="$dir/sources/install.wim"
   [ ! -f "$loc" ] && loc="$dir/sources/install.esd"
 
   if [ ! -f "$loc" ]; then
-
     warn "failed to locate 'install.wim' or 'install.esd' in ISO image, $FB"
-    BOOT_MODE="windows_legacy"
-    return 1
+    return 0
   fi
 
   tag="DISPLAYNAME"
@@ -538,188 +558,22 @@ detectImage() {
   return 0
 }
 
-prepareXP() {
-
-  local iso="$1"
-  local dir="$2"
-  local arch="x86"
-  local target="$dir/I386"
-
-  if [ -d "$dir/AMD64" ]; then
-    arch="amd64"
-    target="$dir/AMD64"
-  fi
-
-  MACHINE="pc-q35-2.10"
-  BOOT_MODE="windows_legacy"
-  ETFS="[BOOT]/Boot-NoEmul.img"
-
-  [[ "$MANUAL" == [Yy1]* ]] && return 0
-
-  local drivers="$TMP/drivers"
-  rm -rf "$drivers"
-
-  if ! 7z x /run/drivers.iso -o"$drivers" > /dev/null; then
-    error "Failed to extract driver ISO file!"
-    exit 66
-  fi
-
-  cp "$drivers/viostor/xp/$arch/viostor.sys" "$target"
-
-  mkdir -p "$dir/\$OEM\$/\$1/Drivers/viostor"
-  cp "$drivers/viostor/xp/$arch/viostor.cat" "$dir/\$OEM\$/\$1/Drivers/viostor"
-  cp "$drivers/viostor/xp/$arch/viostor.inf" "$dir/\$OEM\$/\$1/Drivers/viostor"
-  cp "$drivers/viostor/xp/$arch/viostor.sys" "$dir/\$OEM\$/\$1/Drivers/viostor"
-
-  mkdir -p "$dir/\$OEM\$/\$1/Drivers/NetKVM"
-  cp "$drivers/NetKVM/xp/$arch/netkvm.cat" "$dir/\$OEM\$/\$1/Drivers/NetKVM"
-  cp "$drivers/NetKVM/xp/$arch/netkvm.inf" "$dir/\$OEM\$/\$1/Drivers/NetKVM"
-  cp "$drivers/NetKVM/xp/$arch/netkvm.sys" "$dir/\$OEM\$/\$1/Drivers/NetKVM"
-
-  sed -i '/^\[SCSI.Load\]/s/$/\nviostor=viostor.sys,4/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[SourceDisksFiles.'"$arch"'\]/s/$/\nviostor.sys=1,,,,,,4_,4,1,,,1,4/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[SCSI\]/s/$/\nviostor=\"Red Hat VirtIO SCSI Disk Device\"/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[HardwareIdsDatabase\]/s/$/\nPCI\\VEN_1AF4\&DEV_1001\&SUBSYS_00000000=\"viostor\"/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[HardwareIdsDatabase\]/s/$/\nPCI\\VEN_1AF4\&DEV_1001\&SUBSYS_00020000=\"viostor\"/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[HardwareIdsDatabase\]/s/$/\nPCI\\VEN_1AF4\&DEV_1001\&SUBSYS_00021AF4=\"viostor\"/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[HardwareIdsDatabase\]/s/$/\nPCI\\VEN_1AF4\&DEV_1001\&SUBSYS_00000000=\"viostor\"/' "$target/TXTSETUP.SIF"
-
-  mkdir -p "$dir/\$OEM\$/\$1/Drivers/sata"
-
-  cp -a "$drivers/sata/xp/$arch/." "$dir/\$OEM\$/\$1/Drivers/sata"
-  cp -a "$drivers/sata/xp/$arch/." "$target"
-
-  sed -i '/^\[SCSI.Load\]/s/$/\niaStor=iaStor.sys,4/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[FileFlags\]/s/$/\niaStor.sys = 16/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[SourceDisksFiles.'"$arch"'\]/s/$/\niaStor.cat = 1,,,,,,,1,0,0/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[SourceDisksFiles.'"$arch"'\]/s/$/\niaStor.inf = 1,,,,,,,1,0,0/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[SourceDisksFiles.'"$arch"'\]/s/$/\niaStor.sys = 1,,,,,,4_,4,1,,,1,4/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[SourceDisksFiles.'"$arch"'\]/s/$/\niaStor.sys = 1,,,,,,,1,0,0/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[SourceDisksFiles.'"$arch"'\]/s/$/\niaahci.cat = 1,,,,,,,1,0,0/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[SourceDisksFiles.'"$arch"'\]/s/$/\niaAHCI.inf = 1,,,,,,,1,0,0/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[SCSI\]/s/$/\niaStor=\"Intel\(R\) SATA RAID\/AHCI Controller\"/' "$target/TXTSETUP.SIF"
-  sed -i '/^\[HardwareIdsDatabase\]/s/$/\nPCI\\VEN_8086\&DEV_2922\&CC_0106=\"iaStor\"/' "$target/TXTSETUP.SIF"
-
-  rm -f "$target/winnt.sif"
-  rm -f "$target/Winnt.sif"
-  rm -f "$target/winnt.SIF"
-  rm -f "$target/WinNT.sif"
-  rm -f "$target/WINNT.sif"
-  rm -f "$target/WINNT.SIF"
-
-  local key="M6TF9-8XQ2M-YQK9F-7TBB2-XGG88"
-  [[ "${arch,,}" == "amd64" ]] && key="B66VY-4D94T-TPPD4-43F72-8X4FY"
-
-  local sif="$target/WINNT.SIF"
-  {       echo "[Data]"
-          echo "AutoPartition=1"
-          echo "MsDosInitiated=\"0\""
-          echo "UnattendedInstall=\"Yes\""
-          echo "AutomaticUpdates=\"Yes\""
-          echo ""
-          echo "[Unattended]"
-          echo "UnattendSwitch=Yes"
-          echo "UnattendMode=FullUnattended"
-          echo "FileSystem=NTFS"
-          echo "OemSkipEula=Yes"
-          echo "OemPreinstall=Yes"
-          echo "Repartition=Yes"
-          echo "WaitForReboot=\"No\""
-          echo "DriverSigningPolicy=\"Ignore\""
-          echo "NonDriverSigningPolicy=\"Ignore\""
-          echo "OemPnPDriversPath=\"Drivers\viostor;Drivers\NetKVM;Drivers\sata\""
-          echo "NoWaitAfterTextMode=1"
-          echo "NoWaitAfterGUIMode=1"
-          echo "FileSystem-ConvertNTFS"
-          echo "ExtendOemPartition=0"
-          echo "Hibernation=\"No\""
-          echo ""
-          echo "[GuiUnattended]"
-          echo "OEMSkipRegional=1"
-          echo "OemSkipWelcome=1"
-          echo "AdminPassword=*"
-          echo "TimeZone=0"
-          echo "AutoLogon=Yes"
-          echo "AutoLogonCount=99999"
-          echo ""
-          echo "[UserData]"
-          echo "FullName=\"Docker\""
-          echo "ComputerName=\"*\""
-          echo "OrgName=\"Windows for Docker\""
-          echo "ProductKey=$key"
-          echo ""
-          echo "[Identification]"
-          echo "JoinWorkgroup"
-          echo ""
-          echo "[Networking]"
-          echo "InstallDefaultComponents=Yes"
-          echo ""
-          echo "[RegionalSettings]"
-          echo "Language=00000409"
-          echo ""
-          echo "[TerminalServices]"
-          echo "AllowConnections=1"
-  } > "$sif"
-
-  return 0
-}
-
-prepareLegacy() {
-
-  local iso="$1"
-  local dir="$2"
-
-  ETFS="boot.img"
-  BOOT_MODE="windows_legacy"
-
-  local len offset
-  len=$(isoinfo -d -i "$iso" | grep "Nsect " | grep -o "[^ ]*$")
-  offset=$(isoinfo -d -i "$iso" | grep "Bootoff " | grep -o "[^ ]*$")
-
-  if ! dd "if=$iso" "of=$dir/$ETFS" bs=2048 "count=$len" "skip=$offset" status=none; then
-    error "Failed to extract boot image from ISO!"
-    exit 67
-  fi
-
-  return 0
-}
-
 prepareImage() {
 
   local iso="$1"
   local dir="$2"
 
-  if [[ "${BOOT_MODE,,}" == "windows" ]]; then
-    if [[ "${DETECTED,,}" != "winxp"* ]] && [[ "${DETECTED,,}" != "win2008"* ]]; then
-      if [[ "${DETECTED,,}" != "winvista"* ]] && [[ "${DETECTED,,}" != "win7"* ]]; then
-
-        if [ -f "$dir/$ETFS" ] && [ -f "$dir/$EFISYS" ]; then
-          return 0
-        fi
-
-        if [ ! -f "$dir/$ETFS" ]; then
-          warn "failed to locate file 'etfsboot.com' in ISO image, falling back to legacy boot!"
-        else
-          warn "failed to locate file 'efisys_noprompt.bin' in ISO image, falling back to legacy boot!"
-        fi
-
-      fi
-    fi
+  if [ -f "$dir/$ETFS" ] && [ -f "$dir/$EFISYS" ]; then
+    return 0
   fi
 
-  if [[ "${DETECTED,,}" == "winxp"* ]]; then
-    if ! prepareXP "$iso" "$dir"; then
-      error "Failed to prepare Windows XP ISO!"
-      return 1
-    fi
+  if [ ! -f "$dir/$ETFS" ]; then
+    warn "failed to locate file 'etfsboot.com' in ISO image!"
   else
-    if ! prepareLegacy "$iso" "$dir"; then
-      error "Failed to prepare Windows ISO!"
-      return 1
-    fi
+    warn "failed to locate file 'efisys_noprompt.bin' in ISO image!"
   fi
 
-  return 0
+  return 1
 }
 
 updateImage() {
@@ -737,7 +591,6 @@ updateImage() {
 
   if [ ! -f "$loc" ]; then
     warn "failed to locate 'boot.wim' or 'boot.esd' in ISO image, $FB"
-    BOOT_MODE="windows_legacy"
     return 1
   fi
 
@@ -786,33 +639,10 @@ buildImage() {
     return 1
   fi
 
-  if [[ "${BOOT_MODE,,}" != "windows_legacy" ]]; then
-
-    if ! genisoimage -o "$out" -b "$ETFS" -no-emul-boot -c "$cat" -iso-level 4 -J -l -D -N -joliet-long -relaxed-filenames -V "$label" \
-                     -udf -boot-info-table -eltorito-alt-boot -eltorito-boot "$EFISYS" -no-emul-boot -allow-limited-size -quiet "$dir" 2> "$log"; then
-      [ -f "$log" ] && echo "$(<"$log")"
-      return 1
-    fi
-
-  else
-
-    if [[ "${DETECTED,,}" != "winxp"* ]]; then
-
-      if ! genisoimage -o "$out" -b "$ETFS" -no-emul-boot -c "$cat" -iso-level 2 -J -l -D -N -joliet-long -relaxed-filenames -V "$label" \
-                       -udf -allow-limited-size -quiet "$dir" 2> "$log"; then
-        [ -f "$log" ] && echo "$(<"$log")"
-        return 1
-      fi
-
-    else
-
-      if ! genisoimage -o "$out" -b "$ETFS" -no-emul-boot -boot-load-seg 1984 -boot-load-size 4 -c "$cat" -iso-level 2 -J -l -D -N -joliet-long \
-                       -relaxed-filenames -V "$label" -quiet "$dir" 2> "$log"; then
-        [ -f "$log" ] && echo "$(<"$log")"
-        return 1
-      fi
-
-    fi
+  if ! genisoimage -o "$out" -b "$ETFS" -no-emul-boot -c "$cat" -iso-level 4 -J -l -D -N -joliet-long -relaxed-filenames -V "$label" \
+                    -udf -boot-info-table -eltorito-alt-boot -eltorito-boot "$EFISYS" -no-emul-boot -allow-limited-size -quiet "$dir" 2> "$log"; then
+    [ -f "$log" ] && echo "$(<"$log")"
+    return 1
   fi
 
   local error=""
@@ -833,13 +663,6 @@ buildImage() {
 ######################################
 
 if ! startInstall; then
-
-  if [ -f "$STORAGE/windows.old" ]; then
-    MACHINE=$(<"$STORAGE/windows.old")
-    [ -z "$MACHINE" ] && MACHINE="q35"
-    BOOT_MODE="windows_legacy"
-  fi
-
   rm -rf "$TMP"
   return 0
 fi
