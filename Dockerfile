@@ -1,5 +1,5 @@
 FROM scratch
-COPY --from=qemux/qemu-docker:latest / /
+COPY --from=qemux/qemu-arm:latest / /
 
 ARG DEBCONF_NOWARNINGS="yes"
 ARG DEBIAN_FRONTEND "noninteractive"
@@ -10,13 +10,15 @@ RUN apt-get update \
         curl \
         7zip \
         wimtools \
+        cabextract \
         genisoimage \
+        libxml-xpath-perl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY ./src /run/
 COPY ./assets /run/assets
-ADD https://github.com/qemus/virtiso/releases/download/v0.1.240/virtio-win-0.1.240.iso /run/drivers.iso
+ADD https://github.com/qemus/virtiso-arm/releases/download/v0.1.240/virtio-win-0.1.240.iso /run/drivers.iso
 RUN chmod +x /run/*.sh
 
 EXPOSE 8006 3389
