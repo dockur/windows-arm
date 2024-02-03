@@ -3,7 +3,7 @@ set -Eeuo pipefail
 
 APP="Windows"
 BOOT_MODE="windows"
-SUPPORT="https://github.com/dockur/windows"
+SUPPORT="https://github.com/dockur/windows-arm"
 
 cd /run
 
