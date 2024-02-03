@@ -1,6 +1,6 @@
-<h1 align="center">Windows<br />
+<h1 align="center">Windows ARM<br />
 <div align="center">
-<img src="https://github.com/dockur/windows/raw/master/.github/logo.png" title="Logo" style="max-width:100%;" width="128" />
+<img src="https://github.com/dockur/windows-arm/raw/master/.github/logo.png" title="Logo" style="max-width:100%;" width="128" />
 </div>
 <div align="center">
 
@@ -11,7 +11,7 @@
 
 </div></h1>
 
-Windows in a docker container.
+Windows for ARM in a docker container.
 
 ## Features
 
@@ -27,8 +27,8 @@ Via `docker-compose.yml`
 version: "3"
 services:
   windows:
-    image: dockurr/windows
     container_name: windows
+    image: dockurr/windows-arm
     devices:
       - /dev/kvm
     cap_add:
@@ -44,7 +44,7 @@ services:
 Via `docker run`
 
 ```bash
-docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-timeout 120 dockurr/windows
+docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-timeout 120 dockurr/windows-arm
 ```
 
 ## FAQ
@@ -76,21 +76,6 @@ docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-ti
   |---|---|---|---|---|
   | `win11`   | Windows 11 Pro         | Microsoft    | Fast    | 6.4 GB    |
   | `win10`   | Windows 10 Pro         | Microsoft    | Fast    | 5.8 GB    |
-  | `ltsc10`  | Windows 10 LTSC        | Microsoft    | Fast    | 4.6 GB    |
-  | `win81`   | Windows 8.1 Pro        | Microsoft    | Fast    | 4.2 GB    |
-  | `win7`    | Windows 7 SP1          | Bob Pony     | Medium  | 3.0 GB    |
-  | `vista`   | Windows Vista SP2      | Bob Pony     | Medium  | 3.6 GB    |
-  | `winxp`   | Windows XP SP3         | Bob Pony     | Medium  | 0.6 GB    |
-  ||||||
-  | `2022`    | Windows Server 2022    | Microsoft    | Fast    | 4.7 GB    |
-  | `2019`    | Windows Server 2019    | Microsoft    | Fast    | 5.3 GB    |
-  | `2016`    | Windows Server 2016    | Microsoft    | Fast    | 6.5 GB    |
-  | `2012`    | Windows Server 2012 R2 | Microsoft    | Fast    | 4.3 GB    |
-  | `2008`    | Windows Server 2008 R2 | Microsoft    | Fast    | 3.0 GB    |
-  ||||||
-  | `core11`  | Tiny 11 Core           | Archive.org  | Slow    | 2.1 GB    |
-  | `tiny11`  | Tiny 11                | Archive.org  | Slow    | 3.8 GB    |
-  | `tiny10`  | Tiny 10                | Archive.org  | Slow    | 3.6 GB    |
   
 * ### How do I increase the amount of CPU or RAM?
 
@@ -152,17 +137,15 @@ docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-ti
 
   - Start the container and connect to [port 8006](http://localhost:8006) of the container in your web browser. After the download is finished, you will see the Windows installation screen.
 
-  - Start the installation by clicking `Install now`. On the next screen, press 'OK' when prompted to `Load driver` and select the `VirtIO SCSI` driver from the list that matches your Windows version. So for Windows 11, select `D:\amd64\w11\vioscsi.inf` and click 'Next'.
+  - Start the installation by clicking `Install now`. On the next screen, press 'OK' when prompted to `Load driver` and select the `VirtIO SCSI` driver from the list that matches your Windows version. So for Windows 11, select `D:\ARM64\w11\vioscsi.inf` and click 'Next'.
 
   - Accept the license agreement and select your preferred Windows edition, like Home or Pro.
 
-  - Choose `Custom: Install Windows only (advanced)`, and click `Load driver` on the next screen. Select 'Browse' and navigate to the `D:\NetKVM\w11\amd64` folder, and click 'OK'. Select the `VirtIO Ethernet Adapter` from the list and click 'Next'.
+  - Choose `Custom: Install Windows only (advanced)`, and click `Load driver` on the next screen. Select 'Browse' and navigate to the `D:\NetKVM\w11\ARM64` folder, and click 'OK'. Select the `VirtIO Ethernet Adapter` from the list and click 'Next'.
 
   - Select `Drive 0` and click 'Next'.
 
   - Wait until Windows finishes copying files and completes the installation.
-
-  - Once you see the desktop, open File Explorer and navigate to the CD-ROM drive (E:). Double-click on `virtio-win-gt-x64.msi` and proceed to install the VirtIO drivers.
 
   Enjoy your brand new machine, and don't forget to star this repo!
 
@@ -262,11 +245,11 @@ docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-ti
 
 The product names, logos, brands, and other trademarks referred to within this project are the property of their respective trademark holders. This project is not affiliated, sponsored, or endorsed by Microsoft Corporation.
 
-[build_url]: https://github.com/dockur/windows/
-[hub_url]: https://hub.docker.com/r/dockurr/windows/
-[tag_url]: https://hub.docker.com/r/dockurr/windows/tags
+[build_url]: https://github.com/dockur/windows-arm/
+[hub_url]: https://hub.docker.com/r/dockurr/windows-arm/
+[tag_url]: https://hub.docker.com/r/dockurr/windows-arm/tags
 
-[Build]: https://github.com/dockur/windows/actions/workflows/build.yml/badge.svg
-[Size]: https://img.shields.io/docker/image-size/dockurr/windows/latest?color=066da5&label=size
-[Pulls]: https://img.shields.io/docker/pulls/dockurr/windows.svg?style=flat&label=pulls&logo=docker
-[Version]: https://img.shields.io/docker/v/dockurr/windows/latest?arch=amd64&sort=semver&color=066da5
+[Build]: https://github.com/dockur/windows-arm/actions/workflows/build.yml/badge.svg
+[Size]: https://img.shields.io/docker/image-size/dockurr/windows-arm/latest?color=066da5&label=size
+[Pulls]: https://img.shields.io/docker/pulls/dockurr/windows-arm.svg?style=flat&label=pulls&logo=docker
+[Version]: https://img.shields.io/docker/v/dockurr/windows-arm/latest?arch=amd64&sort=semver&color=066da5
