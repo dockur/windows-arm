@@ -74,8 +74,8 @@ docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-ti
   
   | **Value**  | **Description**  | **Source**  | **Transfer**  | **Size**  |
   |---|---|---|---|---|
-  | `win11`   | Windows 11 Pro         | Microsoft    | Fast    | 6.4 GB    |
-  | `win10`   | Windows 10 Pro         | Microsoft    | Fast    | 5.8 GB    |
+  | `win11`   | Windows 11 ARM64 Pro   | Microsoft    | Fast    | 6.4 GB    |
+  | `win10`   | Windows 10 ARM64 Pro   | Microsoft    | Fast    | 5.8 GB    |
 
   To install x86 or x64 versions of Windows use [dockur/windows](https://github.com/dockur/windows/).
 
