@@ -77,7 +77,7 @@ docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-ti
   | `win11`   | Windows 11 Pro         | Microsoft    | Fast    | 6.4 GB    |
   | `win10`   | Windows 10 Pro         | Microsoft    | Fast    | 5.8 GB    |
 
-  For the x86 and x64 versions use [dockur/windows](https://github.com/dockur/windows/)
+  For x86 and x64 versions see [dockur/windows](https://github.com/dockur/windows/)
 
 * ### How do I increase the amount of CPU or RAM?
 
