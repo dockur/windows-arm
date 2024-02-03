@@ -60,7 +60,7 @@
         </Disk>
       </DiskConfiguration>
       <ImageInstall>
-        <OSImage>    
+        <OSImage>
           <InstallTo>
             <DiskID>0</DiskID>
             <PartitionID>3</PartitionID>
