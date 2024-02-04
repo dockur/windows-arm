@@ -298,14 +298,12 @@ downloadImage() {
 
   local iso="$1"
   local url="$2"
-  local file="$iso"
   local desc rc progress
 
   rm -f "$iso"
 
   if [[ "$EXTERNAL" != [Yy1]* ]]; then
 
-    file="$iso"
     desc=$(printVersion "$VERSION")
     [ -z "$desc" ] && desc="Windows"
 
@@ -318,9 +316,7 @@ downloadImage() {
 
   if [[ "$EXTERNAL" != [Yy1]* ]]; then
 
-    rm -f "$file"
-
-    if ! getESD "$TMP/esd" "$file"; then
+    if ! getESD "$TMP/esd" "$iso"; then
       return 1
     fi
 
@@ -331,7 +327,7 @@ downloadImage() {
   local msg="Downloading $desc..."
   info "$msg" && html "$msg"
 
-  /run/progress.sh "$file" "Downloading $desc ([P])..." &
+  /run/progress.sh "$iso" "Downloading $desc ([P])..." &
 
   # Check if running with interactive TTY or redirected to docker log
   if [ -t 1 ]; then
