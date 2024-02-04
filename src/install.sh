@@ -231,7 +231,7 @@ getESD() {
   local dir="$1"
   local file="$2"
   local architecture="ARM64"
-  local winCatalog space space_gb size
+  local winCatalog size
 
   case "${VERSION,,}" in
     win11arm)
@@ -252,17 +252,7 @@ getESD() {
   rm -rf "$dir"
   mkdir -p "$dir"
 
-  space=$(df --output=avail -B 1 "$dir" | tail -n 1)
-  space_gb=$(( (space + 1073741823)/1073741824 ))
-
-  if (( 12884901888 > space )); then
-    error "Not enough free space in $STORAGE, have $space_gb GB available but need at least 12 GB."
-    return 1
-  fi
-
   local wFile="catalog.cab"
-
-  mkdir -p "$dir"
 
   { wget "$winCatalog" -O "$dir/$wFile" -q --no-check-certificate; rc=$?; } || :
   (( rc != 0 )) && error "Failed to download $winCatalog , reason: $rc" && return 1
