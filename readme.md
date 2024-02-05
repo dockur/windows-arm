@@ -1,4 +1,4 @@
-<h1 align="center">Windows for ARM<br />
+<h1 align="center">Windows ARM64<br />
 <div align="center">
 <img src="https://github.com/dockur/windows-arm/raw/master/.github/logo.png" title="Logo" style="max-width:100%;" width="128" />
 </div>
