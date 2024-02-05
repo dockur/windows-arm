@@ -203,6 +203,7 @@ startInstall() {
 
     if skipInstall; then
       BASE=""
+      VGA="virtio-gpu"
       return 1
     fi
 
