@@ -119,7 +119,7 @@ _graceful_shutdown() {
   local remove_iso=""
 
   if [ ! -f "$STORAGE/windows.boot" ] && [ -f "$QEMU_PTY" ]; then
-    if grep -Fq "Windows Boot Manager" "$QEMU_PTY"; then
+    if grep -Fq "starting Boot0002" "$QEMU_PTY"; then
       [ -f "$STORAGE/$BASE" ] && remove_iso="y"
     else
       info "Cannot send ACPI signal during Windows setup, aborting..."
