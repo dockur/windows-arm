@@ -11,6 +11,7 @@ QEMU_PTY="/run/shm/qemu.pty"
 QEMU_LOG="/run/shm/qemu.log"
 QEMU_OUT="/run/shm/qemu.out"
 QEMU_END="/run/shm/qemu.end"
+
 BOOT_LINE="Windows Boot Manager"
 
 rm -f /run/shm/qemu.*
@@ -41,9 +42,9 @@ finish() {
     done
   fi
 
-  if [ ! -f "$STORAGE/windows.boot" ] && [ -f "$QEMU_PTY" ]; then
-    if grep -Fq "$BOOT_LINE" "$QEMU_PTY"; then
-      if [ -f "$STORAGE/$BASE" ]; then
+  if [ -f "$STORAGE/$BASE" ] && [ ! -f "$STORAGE/windows.boot" ]; then
+    if [ -f "$QEMU_PTY" ]; then
+      if grep -Fq "$BOOT_LINE" "$QEMU_PTY"; then
         rm -f "$STORAGE/$BASE"
         touch "$STORAGE/windows.boot"
       fi
@@ -126,10 +127,11 @@ _graceful_shutdown() {
     finish "$code" && return "$code"
   fi
 
-  if [ ! -f "$STORAGE/windows.boot" ] && [ -f "$QEMU_PTY" ]; then
+  local abort="Cannot send ACPI signal during Windows setup, aborting..."
+
+  if [ -f "$QEMU_PTY" ] && [ ! -f "$STORAGE/windows.boot" ]; then
     if ! grep -Fq "$BOOT_LINE" "$QEMU_PTY"; then
-      info "Cannot send ACPI signal during Windows setup, aborting..."
-      finish "$code" && return "$code"
+      info "$abort" && finish "$code" && return "$code"
     fi
   fi
 
