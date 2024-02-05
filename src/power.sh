@@ -11,6 +11,7 @@ QEMU_PTY="/run/shm/qemu.pty"
 QEMU_LOG="/run/shm/qemu.log"
 QEMU_OUT="/run/shm/qemu.out"
 QEMU_END="/run/shm/qemu.end"
+BOOT_LINE="starting Boot0002"
 
 rm -f /run/shm/qemu.*
 touch "$QEMU_LOG"
@@ -38,6 +39,15 @@ finish() {
       # Workaround for zombie pid
       [ ! -f "$QEMU_PID" ] && break
     done
+  fi
+
+  if [ ! -f "$STORAGE/windows.boot" ] && [ -f "$QEMU_PTY" ]; then
+    if grep -Fq "$BOOT_LINE" "$QEMU_PTY"; then
+      if [ -f "$STORAGE/$BASE" ]; then
+        rm -f "$STORAGE/$BASE"
+        touch "$STORAGE/windows.boot"
+      fi
+    fi
   fi
 
   pid="/var/run/tpm.pid"
@@ -116,12 +126,8 @@ _graceful_shutdown() {
     finish "$code" && return "$code"
   fi
 
-  local remove_iso=""
-
   if [ ! -f "$STORAGE/windows.boot" ] && [ -f "$QEMU_PTY" ]; then
-    if grep -Fq "starting Boot0002" "$QEMU_PTY"; then
-      [ -f "$STORAGE/$BASE" ] && remove_iso="y"
-    else
+    if ! grep -Fq "$BOOT_LINE" "$QEMU_PTY"; then
       info "Cannot send ACPI signal during Windows setup, aborting..."
       finish "$code" && return "$code"
     fi
@@ -149,11 +155,6 @@ _graceful_shutdown() {
 
   if [ "$cnt" -ge "$QEMU_TIMEOUT" ]; then
     error "Shutdown timeout reached, aborting..."
-  else
-    if [ -n "$remove_iso" ]; then
-      rm -f "$STORAGE/$BASE"
-      touch "$STORAGE/windows.boot"
-    fi
   fi
 
   finish "$code" && return "$code"
