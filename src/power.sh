@@ -11,7 +11,7 @@ QEMU_PTY="/run/shm/qemu.pty"
 QEMU_LOG="/run/shm/qemu.log"
 QEMU_OUT="/run/shm/qemu.out"
 QEMU_END="/run/shm/qemu.end"
-BOOT_LINE="starting Boot0002"
+BOOT_LINE="Windows Boot Manager"
 
 rm -f /run/shm/qemu.*
 touch "$QEMU_LOG"
