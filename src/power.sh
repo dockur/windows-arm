@@ -12,8 +12,6 @@ QEMU_LOG="/run/shm/qemu.log"
 QEMU_OUT="/run/shm/qemu.out"
 QEMU_END="/run/shm/qemu.end"
 
-BOOT_LINE="Windows Boot Manager"
-
 rm -f /run/shm/qemu.*
 touch "$QEMU_LOG"
 
@@ -22,6 +20,19 @@ _trap() {
   for sig ; do
     trap "$func $sig" "$sig"
   done
+}
+
+ready() {
+
+  [ -f "$STORAGE/windows.boot" ] && return 0
+  [ ! -f "$QEMU_PTY" ] && return 1
+
+  local line="Windows Boot Manager"
+  if grep -Fq "$line" "$QEMU_PTY"; then
+    return 0
+  fi
+
+  return 1
 }
 
 finish() {
@@ -42,12 +53,11 @@ finish() {
     done
   fi
 
-  if [ -f "$STORAGE/$BASE" ] && [ ! -f "$STORAGE/windows.boot" ]; then
-    if [ -f "$QEMU_PTY" ]; then
-      if grep -Fq "$BOOT_LINE" "$QEMU_PTY"; then
-        rm -f "$STORAGE/$BASE"
-        touch "$STORAGE/windows.boot"
-      fi
+  if [ ! -f "$STORAGE/windows.boot" ] && [ -f "$STORAGE/$BASE" ]; then
+    # Remove CD-ROM ISO after install
+    if ready; then
+      rm -f "$STORAGE/$BASE"
+      touch "$STORAGE/windows.boot"
     fi
   fi
 
@@ -127,12 +137,9 @@ _graceful_shutdown() {
     finish "$code" && return "$code"
   fi
 
-  local abort="Cannot send ACPI signal during Windows setup, aborting..."
-
-  if [ -f "$QEMU_PTY" ] && [ ! -f "$STORAGE/windows.boot" ]; then
-    if ! grep -Fq "$BOOT_LINE" "$QEMU_PTY"; then
-      info "$abort" && finish "$code" && return "$code"
-    fi
+  if ! ready; then
+    info "Cannot send ACPI signal during Windows setup, aborting..."
+    finish "$code" && return "$code"
   fi
 
   # Send ACPI shutdown signal
