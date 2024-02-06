@@ -124,33 +124,6 @@ docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-ti
 
   Alternatively, you can also rename a local file to `custom.iso` and place it in an empty `/storage` folder to skip the download.
 
-* ### How do I perform a manual installation?
-
-  It's best to use the automatic installation, as it optimizes various settings for use with this container.
-
-  However, if you insist on performing the installation manually, start a clean container with the following environment variable:
-
-  ```yaml
-  environment:
-    MANUAL: "Y"
-  ```
-
-  Then follow these steps:
-
-  - Start the container and connect to [port 8006](http://localhost:8006) of the container in your web browser. After the download is finished, you will see the Windows installation screen.
-
-  - Start the installation by clicking `Install now`. On the next screen, press 'OK' when prompted to `Load driver` and select the `VirtIO SCSI` driver from the list that matches your Windows version. So for Windows 11, select `D:\ARM64\w11\vioscsi.inf` and click 'Next'.
-
-  - Accept the license agreement and select your preferred Windows edition, like Home or Pro.
-
-  - Choose `Custom: Install Windows only (advanced)`, and click `Load driver` on the next screen. Select 'Browse' and navigate to the `D:\NetKVM\w11\ARM64` folder, and click 'OK'. Select the `VirtIO Ethernet Adapter` from the list and click 'Next'.
-
-  - Select `Drive 0` and click 'Next'.
-
-  - Wait until Windows finishes copying files and completes the installation.
-
-  Enjoy your brand new machine, and don't forget to star this repo!
-
 * ### How do I assign an individual IP address to the container?
 
   By default, the container uses bridge networking, which shares the IP address with the host. 
