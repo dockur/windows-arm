@@ -3,17 +3,17 @@ set -Eeuo pipefail
 
 : "${MANUAL:=""}"
 : "${DETECTED:=""}"
-: "${VERSION:="win11arm"}"
+: "${VERSION:="win11arm64"}"
 
 if [[ "${VERSION}" == \"*\" || "${VERSION}" == \'*\' ]]; then
   VERSION="${VERSION:1:-1}"
 fi
 
-[[ "${VERSION,,}" == "11" ]] && VERSION="win11arm"
-[[ "${VERSION,,}" == "win11" ]] && VERSION="win11arm"
+[[ "${VERSION,,}" == "11" ]] && VERSION="win11arm64"
+[[ "${VERSION,,}" == "win11" ]] && VERSION="win11arm64"
 
-[[ "${VERSION,,}" == "10" ]] && VERSION="win10arm"
-[[ "${VERSION,,}" == "win10" ]] && VERSION="win10arm"
+[[ "${VERSION,,}" == "10" ]] && VERSION="win10arm64"
+[[ "${VERSION,,}" == "win10" ]] && VERSION="win10arm64"
 
 CUSTOM="custom.iso"
 
@@ -65,8 +65,8 @@ getVersion() {
   local name="$1"
   local detected=""
 
-  [[ "${name,,}" == *"windows 11"* ]] && detected="win11arm"
-  [[ "${name,,}" == *"windows 10"* ]] && detected="win10arm"
+  [[ "${name,,}" == *"windows 11"* ]] && detected="win11arm64"
+  [[ "${name,,}" == *"windows 10"* ]] && detected="win10arm64"
 
   echo "$detected"
   return 0
@@ -235,10 +235,10 @@ getESD() {
   local winCatalog size
 
   case "${VERSION,,}" in
-    win11arm)
+    win11arm64)
       winCatalog="https://go.microsoft.com/fwlink?linkid=2156292"
       ;;
-    win10arm)
+    win10arm64)
       winCatalog="https://go.microsoft.com/fwlink/?LinkId=841361"
       ;;
     *)
@@ -407,10 +407,10 @@ extractESD() {
   local edition imageIndex imageEdition
 
   case "${VERSION,,}" in
-    win11arm)
+    win11arm64)
       edition="11 pro"
       ;;
-    win10arm)
+    win10arm64)
       edition="10 pro"
       ;;
     *)
