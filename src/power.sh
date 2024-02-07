@@ -64,6 +64,9 @@ finish() {
   pid="/var/run/tpm.pid"
   [ -f "$pid" ] && pKill "$(<"$pid")"
 
+  fKill "wsdd"
+  fKill "smbd"
+
   closeNetwork
 
   sleep 0.5
