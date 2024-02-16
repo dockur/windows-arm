@@ -79,6 +79,14 @@ docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-ti
 
   To install x86 or x64 versions of Windows use [dockur/windows](https://github.com/dockur/windows/).
 
+* ### How do I connect using RDP?
+
+  The web-viewer is only ment to be used during installation, as its picture quality is low, and it has no audio or clipboard for example.
+
+  So for a better experience you can connect using any Microsoft Remote Desktop client to the IP of the container, using the username `docker` and by leaving the password empty.
+
+  There is a good RDP client for [Android](https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx) available from the Play Store. One for [iOS](https://apps.apple.com/nl/app/microsoft-remote-desktop/id714464092?l=en-GB) is in the Apple Store. For Linux you can use [rdesktop](http://www.rdesktop.org/) and for Windows you don't need to install anything as it is already ships as part of the operating system.
+
 * ### How do I increase the amount of CPU or RAM?
 
   By default, 2 CPU cores and 4 GB of RAM are allocated to the container, as those are the minimum requirements of Windows 11.
