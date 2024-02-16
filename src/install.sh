@@ -562,8 +562,15 @@ updateImage() {
   local path=$(find "$dir" -maxdepth 1 -type f -iname autounattend.xml | head -n 1)
   [ -n "$path" ] && cp "$asset" "$path"
 
-  local loc="$dir/sources/boot.wim"
-  [ ! -f "$loc" ] && loc="$dir/sources/boot.esd"
+  local src=$(find "$dir" -maxdepth 1 -type d -iname sources | head -n 1)
+
+  if [ ! -d "$src" ]; then
+    warn "failed to locate 'sources' folder in ISO image, $FB"
+    return 1
+  fi
+
+  local loc=$(find "$src" -maxdepth 1 -type f -iname boot.wim | head -n 1)
+  [ ! -f "$loc" ] && loc=$(find "$src" -maxdepth 1 -type f -iname boot.esd | head -n 1)
 
   if [ ! -f "$loc" ]; then
     warn "failed to locate 'boot.wim' or 'boot.esd' in ISO image, $FB"
