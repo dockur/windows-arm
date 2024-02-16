@@ -15,15 +15,9 @@ fi
 [[ "${VERSION,,}" == "10" ]] && VERSION="win10arm64"
 [[ "${VERSION,,}" == "win10" ]] && VERSION="win10arm64"
 
-CUSTOM="custom.iso"
-
-[ ! -f "$STORAGE/$CUSTOM" ] && CUSTOM="Custom.iso"
-[ ! -f "$STORAGE/$CUSTOM" ] && CUSTOM="custom.ISO"
-[ ! -f "$STORAGE/$CUSTOM" ] && CUSTOM="CUSTOM.ISO"
-[ ! -f "$STORAGE/$CUSTOM" ] && CUSTOM="custom.img"
-[ ! -f "$STORAGE/$CUSTOM" ] && CUSTOM="Custom.img"
-[ ! -f "$STORAGE/$CUSTOM" ] && CUSTOM="custom.IMG"
-[ ! -f "$STORAGE/$CUSTOM" ] && CUSTOM="CUSTOM.IMG"
+CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname custom.iso -printf "%f\n" | head -n 1)
+[ -z "$CUSTOM" ] && CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname boot.iso -printf "%f\n" | head -n 1)
+[ -z "$CUSTOM" ] && CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname custom.img -printf "%f\n" | head -n 1)
 
 ESD_URL=""
 TMP="$STORAGE/tmp"
@@ -69,31 +63,6 @@ getVersion() {
   [[ "${name,,}" == *"windows 10"* ]] && detected="win10arm64"
 
   echo "$detected"
-  return 0
-}
-
-replaceXML() {
-
-  local dir="$1"
-  local asset="$2"
-
-  local path="$dir/autounattend.xml"
-  [ -f "$path" ] && cp "$asset" "$path"
-  path="$dir/Autounattend.xml"
-  [ -f "$path" ] && cp "$asset" "$path"
-  path="$dir/AutoUnattend.xml"
-  [ -f "$path" ] && cp "$asset" "$path"
-  path="$dir/autounattend.XML"
-  [ -f "$path" ] && cp "$asset" "$path"
-  path="$dir/Autounattend.XML"
-  [ -f "$path" ] && cp "$asset" "$path"
-  path="$dir/AutoUnattend.XML"
-  [ -f "$path" ] && cp "$asset" "$path"
-  path="$dir/AUTOUNATTEND.xml"
-  [ -f "$path" ] && cp "$asset" "$path"
-  path="$dir/AUTOUNATTEND.XML"
-  [ -f "$path" ] && cp "$asset" "$path"
-
   return 0
 }
 
@@ -175,6 +144,7 @@ startInstall() {
 
     fi
 
+    [[ "${BASE,,}" == "boot."* ]] && BASE="windows.iso"
     [[ "${BASE,,}" == "custom."* ]] && BASE="windows.iso"
 
   fi
@@ -514,9 +484,16 @@ detectImage() {
 
   info "Detecting Windows version from ISO image..."
 
-  local tag result name name2 desc
-  local loc="$dir/sources/install.wim"
-  [ ! -f "$loc" ] && loc="$dir/sources/install.esd"
+  local src loc tag result name name2 desc
+  src=$(find "$dir" -maxdepth 1 -type d -iname sources | head -n 1)
+
+  if [ ! -d "$src" ]; then
+    warn "failed to locate 'sources' folder in ISO image, $FB"
+    return 0
+  fi
+
+  loc=$(find "$src" -maxdepth 1 -type f -iname install.wim | head -n 1)
+  [ ! -f "$loc" ] && loc=$(find "$src" -maxdepth 1 -type f -iname install.esd | head -n 1)
 
   if [ ! -f "$loc" ]; then
     warn "failed to locate 'install.wim' or 'install.esd' in ISO image, $FB"
@@ -578,13 +555,22 @@ updateImage() {
   local iso="$1"
   local dir="$2"
   local asset="/run/assets/$3"
-  local index result
+  local path src loc index result
 
   [ ! -f "$asset" ] && return 0
-  replaceXML "$dir" "$asset"
 
-  local loc="$dir/sources/boot.wim"
-  [ ! -f "$loc" ] && loc="$dir/sources/boot.esd"
+  path=$(find "$dir" -maxdepth 1 -type f -iname autounattend.xml | head -n 1)
+  [ -n "$path" ] && cp "$asset" "$path"
+
+  src=$(find "$dir" -maxdepth 1 -type d -iname sources | head -n 1)
+
+  if [ ! -d "$src" ]; then
+    warn "failed to locate 'sources' folder in ISO image, $FB"
+    return 1
+  fi
+
+  loc=$(find "$src" -maxdepth 1 -type f -iname boot.wim | head -n 1)
+  [ ! -f "$loc" ] && loc=$(find "$src" -maxdepth 1 -type f -iname boot.esd | head -n 1)
 
   if [ ! -f "$loc" ]; then
     warn "failed to locate 'boot.wim' or 'boot.esd' in ISO image, $FB"
