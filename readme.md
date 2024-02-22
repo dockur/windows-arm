@@ -11,7 +11,7 @@
 
 </div></h1>
 
-Windows for ARM in a docker container.
+Windows for ARM in a Docker container.
 
 ## Features
 
