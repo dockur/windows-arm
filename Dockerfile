@@ -1,7 +1,7 @@
 FROM scratch
-COPY --from=qemux/qemu-arm:1.05 / /
+COPY --from=qemux/qemu-arm:1.06 / /
 
-ARG DEBCONF_NOWARNINGS="yes"
+ARG DEBCONF_NOWARNINGS "yes"
 ARG DEBIAN_FRONTEND "noninteractive"
 ARG DEBCONF_NONINTERACTIVE_SEEN "true"
 
