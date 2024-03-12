@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+: "${SAMBA:="Y"}"
+
 [[ "$DHCP" == [Yy1]* ]] && return 0
+[[ "$SAMBA" != [Yy1]* ]] && return 0
+[[ "$NETWORK" != [Yy1]* ]] && return 0
 
 SHARE="$STORAGE/shared"
 
