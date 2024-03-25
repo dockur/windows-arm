@@ -15,9 +15,10 @@ RUN apt-get update && \
         cabextract \
         genisoimage \
         libxml2-utils && \
-    echo "deb http://deb.debian.org/debian/ bookworm main" >> /etc/apt/sources.list.d/bookworm.list && \
+    echo "deb http://deb.debian.org/debian/ sid main" >> /etc/apt/sources.list.d/sid.list && \
+    echo -e "Package: *\nPin: release n=trixie\nPin-Priority: 900\nPackage: *\nPin: release n=sid\nPin-Priority: 400" | tee /etc/apt/preferences.d/preferences > /dev/null && \
     apt-get update && \
-    apt-get -t bookworm --no-install-recommends -y install wimtools && \
+    apt-get -t sid --no-install-recommends -y install wimtools && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
