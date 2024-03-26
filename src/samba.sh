@@ -23,7 +23,7 @@ SAMBA="/etc/samba/smb.conf"
         echo "    security = user"
         echo "    guest account = nobody"
         echo "    map to guest = Bad User"
-        echo "    server min protocol = SMB2"
+        echo "    server min protocol = NT1"
         echo ""
         echo "    # disable printing services"
         echo "    load printers = no"
@@ -41,7 +41,7 @@ SAMBA="/etc/samba/smb.conf"
         echo "    force group = root"
 } > "$SAMBA"
 
-{      echo "--------------------------------------------------------" 
+{      echo "--------------------------------------------------------"
         echo " $APP for Docker v$(</run/version)..."
         echo " For support visit $SUPPORT"
         echo "--------------------------------------------------------"
@@ -61,7 +61,9 @@ SAMBA="/etc/samba/smb.conf"
         echo ""
 } | unix2dos > "$SHARE/readme.txt"
 
-smbd -D
+! smbd && smbd --debug-stdout
+
+# Enable Web Service Discovery
 wsdd -i dockerbridge -p -n "host.lan" &
 
 return 0
