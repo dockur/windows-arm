@@ -29,6 +29,8 @@ services:
   windows:
     container_name: windows
     image: dockurr/windows-arm
+    environment:
+      VERSION: "win11"
     devices:
       - /dev/kvm
     cap_add:
