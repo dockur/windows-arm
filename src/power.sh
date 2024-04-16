@@ -25,7 +25,7 @@ _trap() {
 ready() {
 
   [ -f "$STORAGE/windows.boot" ] && return 0
-  [ ! -f "$QEMU_PTY" ] && return 1
+  [ ! -s "$QEMU_PTY" ] && return 1
 
   local line="Windows Boot Manager"
   if grep -Fq "$line" "$QEMU_PTY"; then
@@ -42,7 +42,7 @@ finish() {
 
   touch "$QEMU_END"
 
-  if [ -f "$QEMU_PID" ]; then
+  if [ -s "$QEMU_PID" ]; then
 
     pid=$(<"$QEMU_PID")
     error "Forcefully terminating Windows, reason: $reason..."
@@ -51,7 +51,7 @@ finish() {
     while isAlive "$pid"; do
       sleep 1
       # Workaround for zombie pid
-      [ ! -f "$QEMU_PID" ] && break
+      [ ! -s "$QEMU_PID" ] && break
     done
   fi
 
@@ -64,7 +64,7 @@ finish() {
   fi
 
   pid="/var/run/tpm.pid"
-  [ -f "$pid" ] && pKill "$(<"$pid")"
+  [ -s "$pid" ] && pKill "$(<"$pid")"
 
   fKill "wsdd"
   fKill "smbd"
@@ -81,7 +81,7 @@ terminal() {
 
   local dev=""
 
-  if [ -f "$QEMU_OUT" ]; then
+  if [ -s "$QEMU_OUT" ]; then
 
     local msg
     msg=$(<"$QEMU_OUT")
@@ -129,7 +129,7 @@ _graceful_shutdown() {
   touch "$QEMU_END"
   info "Received $1, sending ACPI shutdown signal..."
 
-  if [ ! -f "$QEMU_PID" ]; then
+  if [ ! -s "$QEMU_PID" ]; then
     error "QEMU PID file does not exist?"
     finish "$code" && return "$code"
   fi
@@ -158,7 +158,7 @@ _graceful_shutdown() {
 
     ! isAlive "$pid" && break
     # Workaround for zombie pid
-    [ ! -f "$QEMU_PID" ] && break
+    [ ! -s "$QEMU_PID" ] && break
 
     info "Waiting for Windows to shutdown... ($cnt/$QEMU_TIMEOUT)"
 
