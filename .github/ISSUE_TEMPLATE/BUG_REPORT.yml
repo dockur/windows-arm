@@ -15,7 +15,7 @@ body:
     attributes:
       label: Machine specifications
       description: The processor and RAM amount in your machine.
-      placeholder: e.g. Intel N5105 / 16 GB 
+      placeholder: e.g. Raspberry Pi 5 / 8 GB 
     validations:
       required: true
   - type: input
