@@ -20,7 +20,9 @@ CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname custom.iso -printf "%f\n" | 
 [ -z "$CUSTOM" ] && CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname custom.img -printf "%f\n" | head -n 1)
 
 if [ -z "$CUSTOM" ] && [[ "${VERSION,,}" != "http"* ]]; then
-  CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname "${VERSION/\/storage\//}" -printf "%f\n" | head -n 1)
+  FN="${VERSION/\/storage\//}"
+  [[ "$FN" == "."* ]] && FN="${FN:1}"
+  CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname "$FN" -printf "%f\n" | head -n 1)
 fi
 
 ESD_URL=""
@@ -93,6 +95,7 @@ skipInstall() {
 finishInstall() {
 
   local iso="$1"
+  local aborted="$2"
 
   # Mark ISO as prepared via magic byte
   printf '\x16' | dd of="$iso" bs=1 seek=0 count=1 conv=notrunc status=none
@@ -113,7 +116,7 @@ abortInstall() {
     mv -f "$iso" "$STORAGE/$BASE"
   fi
 
-  finishInstall "$STORAGE/$BASE"
+  finishInstall "$STORAGE/$BASE" "Y"
   return 0
 }
 
@@ -164,7 +167,7 @@ startInstall() {
 
     if [[ "$magic" == "16" ]]; then
 
-      if hasDisk || [[ "$MANUAL" = [Yy1]* ]]; then
+      if hasDisk || [[ "$MANUAL" == [Yy1]* ]]; then
         return 1
       fi
 
@@ -317,7 +320,7 @@ downloadImage() {
   fKill "progress.sh"
   (( rc != 0 )) && error "Failed to download $url , reason: $rc" && exit 60
 
-  [ ! -s "$iso" ] && return 1
+  [ ! -s "$iso" ] || [ ! -f "$iso" ] && return 1
 
   html "Download finished successfully..."
   return 0
@@ -417,8 +420,8 @@ extractImage() {
 
   if [[ "${iso,,}" == *".esd" ]]; then
     if ! extractESD "$iso" "$dir"; then
-      error "Failed to extract ESD file!"
       rm -f "$iso"
+      error "Failed to extract ESD file!"
       exit 67
     fi
     return 0
@@ -449,8 +452,8 @@ extractImage() {
   rm -rf "$dir"
 
   if ! 7z x "$iso" -o"$dir" > /dev/null; then
-    error "Failed to extract ISO file!"
     rm -f "$iso"
+    error "Failed to extract ISO file!"
     exit 66
   fi
 
@@ -472,7 +475,7 @@ detectImage() {
 
   if [ -n "$DETECTED" ]; then
 
-    if [ -s "/run/assets/$DETECTED.xml" ]; then
+    if [ -f "/run/assets/$DETECTED.xml" ]; then
       [[ "$MANUAL" != [Yy1]* ]] && XML="$DETECTED.xml"
       return 0
     fi
@@ -500,9 +503,9 @@ detectImage() {
   fi
 
   loc=$(find "$src" -maxdepth 1 -type f -iname install.wim | head -n 1)
-  [ ! -s "$loc" ] && loc=$(find "$src" -maxdepth 1 -type f -iname install.esd | head -n 1)
+  [ ! -f "$loc" ] && loc=$(find "$src" -maxdepth 1 -type f -iname install.esd | head -n 1)
 
-  if [ ! -s "$loc" ]; then
+  if [ ! -f "$loc" ]; then
     warn "failed to locate 'install.wim' or 'install.esd' in ISO image, $FB"
     return 0
   fi
@@ -529,7 +532,7 @@ detectImage() {
   desc=$(printVersion "$DETECTED")
   [ -z "$desc" ] && desc="$DETECTED"
 
-  if [ -s "/run/assets/$DETECTED.xml" ]; then
+  if [ -f "/run/assets/$DETECTED.xml" ]; then
     [[ "$MANUAL" != [Yy1]* ]] && XML="$DETECTED.xml"
     info "Detected: $desc"
   else
@@ -544,7 +547,7 @@ prepareImage() {
   local iso="$1"
   local dir="$2"
 
-  if [ -s "$dir/$ETFS" ] && [ -s "$dir/$EFISYS" ]; then
+  if [ -f "$dir/$ETFS" ] && [ -f "$dir/$EFISYS" ]; then
     return 0
   fi
 
@@ -564,7 +567,7 @@ updateImage() {
   local asset="/run/assets/$3"
   local path src loc index result
 
-  [ ! -s "$asset" ] && return 0
+  [ ! -s "$asset" ] || [ ! -f "$asset" ] && return 0
 
   path=$(find "$dir" -maxdepth 1 -type f -iname autounattend.xml | head -n 1)
   [ -n "$path" ] && cp "$asset" "$path"
@@ -577,9 +580,9 @@ updateImage() {
   fi
 
   loc=$(find "$src" -maxdepth 1 -type f -iname boot.wim | head -n 1)
-  [ ! -s "$loc" ] && loc=$(find "$src" -maxdepth 1 -type f -iname boot.esd | head -n 1)
+  [ ! -f "$loc" ] && loc=$(find "$src" -maxdepth 1 -type f -iname boot.esd | head -n 1)
 
-  if [ ! -s "$loc" ]; then
+  if [ ! -f "$loc" ]; then
     warn "failed to locate 'boot.wim' or 'boot.esd' in ISO image, $FB"
     return 1
   fi
@@ -657,7 +660,7 @@ if ! startInstall; then
   return 0
 fi
 
-if [ ! -s "$ISO" ]; then
+if [ ! -s "$ISO" ] || [ ! -f "$ISO" ]; then
   rm -f "$ISO"
   if ! downloadImage "$ISO" "$VERSION"; then
     error "Failed to download $VERSION"
@@ -692,7 +695,7 @@ if ! buildImage "$DIR"; then
   exit 65
 fi
 
-finishInstall "$STORAGE/$BASE"
+finishInstall "$STORAGE/$BASE" "N"
 
 html "Successfully prepared image for installation..."
 return 0
