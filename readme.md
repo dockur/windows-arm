@@ -11,7 +11,9 @@
 
 </div></h1>
 
-Windows for ARM in a Docker container.
+Windows for ARM in a Docker container, for devices like the Raspberry Pi 5 and many others.
+
+Note: for KVM acceleration you need a Linux-based operating system, as it's not available on MacOS unfortunately.
 
 ## Features
 
