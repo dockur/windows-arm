@@ -15,7 +15,8 @@ fi
 [[ "${VERSION,,}" == "10" ]] && VERSION="win10arm64"
 [[ "${VERSION,,}" == "win10" ]] && VERSION="win10arm64"
 
-CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname custom.iso -printf "%f\n" | head -n 1)
+CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname windows.iso -printf "%f\n" | head -n 1)
+[ -z "$CUSTOM" ] && CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname custom.iso -printf "%f\n" | head -n 1)
 [ -z "$CUSTOM" ] && CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname boot.iso -printf "%f\n" | head -n 1)
 [ -z "$CUSTOM" ] && CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname custom.img -printf "%f\n" | head -n 1)
 
@@ -97,8 +98,18 @@ finishInstall() {
   local iso="$1"
   local aborted="$2"
 
-  # Mark ISO as prepared via magic byte
-  printf '\x16' | dd of="$iso" bs=1 seek=0 count=1 conv=notrunc status=none
+  if [ ! -s "$iso" ] || [ ! -f "$iso" ]; then
+    error "Failed to find ISO: $iso"
+    return 1
+  fi
+
+  if [ -w "$iso" ] && [[ "$aborted" != [Yy1]* ]]; then
+    # Mark ISO as prepared via magic byte
+    if ! printf '\x16' | dd of="$iso" bs=1 seek=0 count=1 conv=notrunc status=none; then
+      error "Failed to set magic byte!"
+      return 1
+    fi
+  fi
 
   rm -f "$STORAGE/windows.boot"
   cp /run/version "$STORAGE/windows.ver"
@@ -113,16 +124,25 @@ abortInstall() {
   local iso="$1"
 
   if [[ "$iso" != "$STORAGE/$BASE" ]]; then
-    mv -f "$iso" "$STORAGE/$BASE"
+    if ! mv -f "$iso" "$STORAGE/$BASE"; then
+      error "Failed to move ISO: $iso"
+      exit 69
+    fi
   fi
 
-  finishInstall "$STORAGE/$BASE" "Y"
+  if ! finishInstall "$STORAGE/$BASE" "Y"; then
+    error "Failed to finish installation!"
+    exit 69
+  fi
+
   return 0
 }
 
 startInstall() {
 
   html "Starting Windows..."
+
+  [ -z "$MANUAL" ] && MANUAL="N"
 
   if [ -f "$STORAGE/$CUSTOM" ]; then
 
@@ -150,13 +170,13 @@ startInstall() {
       BASE=$(echo "$BASE" | sed -e 's/[^A-Za-z0-9._-]/_/g')
 
     fi
-
-    [[ "${BASE,,}" == "boot."* ]] && BASE="windows.iso"
-    [[ "${BASE,,}" == "custom."* ]] && BASE="windows.iso"
-
   fi
 
-  [ -z "$MANUAL" ] && MANUAL="N"
+  if skipInstall; then
+    [ ! -f "$STORAGE/$BASE" ] && BASE=""
+    VGA="virtio-gpu"
+    return 1
+  fi
 
   if [ -f "$STORAGE/$BASE" ]; then
 
@@ -175,16 +195,6 @@ startInstall() {
 
     EXTERNAL="Y"
     CUSTOM="$BASE"
-
-  else
-
-    rm -f "$STORAGE/$BASE"
-
-    if skipInstall; then
-      BASE=""
-      VGA="virtio-gpu"
-      return 1
-    fi
 
   fi
 
@@ -653,10 +663,25 @@ buildImage() {
   return 0
 }
 
+bootWindows() {
+
+  if [ -s "$STORAGE/windows.mode" ] && [ -f "$STORAGE/windows.mode" ]; then
+    BOOT_MODE=$(<"$STORAGE/windows.mode")
+    rm -rf "$TMP"
+    return 0
+  fi
+
+  rm -rf "$TMP"
+  return 0
+}
+
 ######################################
 
 if ! startInstall; then
-  rm -rf "$TMP"
+  if ! bootWindows; then
+    error "Failed to boot Windows!"
+    exit 68
+  fi
   return 0
 fi
 
@@ -688,14 +713,21 @@ if ! updateImage "$ISO" "$DIR" "$XML"; then
   return 0
 fi
 
-rm -f "$ISO"
+if ! rm -f "$ISO" 2> /dev/null; then
+  BASE="windows.iso"
+  ISO="$STORAGE/$BASE"
+  rm -f  "$ISO"
+fi
 
 if ! buildImage "$DIR"; then
   error "Failed to build image!"
   exit 65
 fi
 
-finishInstall "$STORAGE/$BASE" "N"
+if ! finishInstall "$STORAGE/$BASE" "N"; then
+  error "Failed to finish installation!"
+  exit 69
+fi
 
 html "Successfully prepared image for installation..."
 return 0
