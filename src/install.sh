@@ -423,8 +423,7 @@ extractImage() {
   local size size_gb space space_gb
 
   if [[ "${iso,,}" == *".esd" ]]; then
-    extractESD "$iso" "$dir" && return 0
-    return 1
+    return extractESD "$iso" "$dir"
   fi
 
   if [[ "$EXTERNAL" != [Yy1]* ]] && [ -z "$CUSTOM" ]; then
