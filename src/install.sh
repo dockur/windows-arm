@@ -29,7 +29,7 @@ if [ -z "$CUSTOM" ] && [[ "${VERSION,,}" != "http"* ]]; then
 fi
 
 ESD_URL=""
-ARCHI="ARM64"
+PLATFORM="ARM64"
 TMP="$STORAGE/tmp"
 DIR="$TMP/unpack"
 FB="falling back to manual installation!"
@@ -219,14 +219,13 @@ startInstall() {
 getESD() {
 
   local dir="$1"
-  local file="$2"
   local winCatalog size
 
   case "${VERSION,,}" in
-    "win11${ARCHI,,}")
+    "win11${PLATFORM,,}")
       winCatalog="https://go.microsoft.com/fwlink?linkid=2156292"
       ;;
-    "win10${ARCHI,,}")
+    "win10${PLATFORM,,}")
       winCatalog="https://go.microsoft.com/fwlink/?LinkId=841361"
       ;;
     *)
@@ -260,7 +259,7 @@ getESD() {
 
   local esdLang="en-us"
   local editionName="Professional"
-  local edQuery='//File[Architecture="'${ARCHI}'"][Edition="'${editionName}'"]'
+  local edQuery='//File[Architecture="'${PLATFORM}'"][Edition="'${editionName}'"]'
 
   echo -e '<Catalog>' > "${dir}/products_filter.xml"
   xmllint --nonet --xpath "${edQuery}" "${dir}/products.xml" >> "${dir}/products_filter.xml" 2>/dev/null
@@ -282,12 +281,12 @@ getESD() {
   return 0
 }
 
-downloadImage() {
+downloadFile() {
 
   local iso="$1"
   local url="$2"
-  local rc=99
-  local msg desc progress
+  local desc="$3"
+  local rc progress
 
   rm -f "$iso"
 
@@ -297,6 +296,32 @@ downloadImage() {
   else
     progress="--progress=dot:giga"
   fi
+
+  local msg="Downloading $desc..."
+  info "$msg" && html "$msg"
+  /run/progress.sh "$iso" "Downloading $desc ([P])..." &
+
+  { wget "$url" -O "$iso" -q --no-check-certificate --show-progress "$progress"; rc=$?; } || :
+
+  fKill "progress.sh"
+
+  if (( rc == 0 )) && [ -f "$iso" ]; then
+    if [ $(stat -c%s "$iso") -gt 100000000 ]; then
+      html "Download finished successfully..." && return 0
+    fi
+  fi
+
+  rm -f "$iso"
+  error "Failed to download $url , reason: $rc"
+
+  return 1
+}
+
+downloadImage() {
+
+  local iso="$1"
+  local url="$2"
+  local rc desc
 
   if [[ "$EXTERNAL" != [Yy1]* ]]; then
 
@@ -310,74 +335,42 @@ downloadImage() {
 
   if [[ "$EXTERNAL" != [Yy1]* ]]; then
 
-    url=""
-
-    if getESD "$TMP/esd" "$iso"; then
+    if ! getESD "$TMP/esd"; then
+      url=""
+    else
       url="$ESD_URL"
     fi
 
   fi
 
   if [ -n "$url" ]; then
-
-    msg="Downloading $desc..."
-    info "$msg" && html "$msg"
-    /run/progress.sh "$iso" "Downloading $desc ([P])..." &
-
-    { wget "$url" -O "$iso" -q --no-check-certificate --show-progress "$progress"; rc=$?; } || :
-
-    fKill "progress.sh"
-
-    if (( rc == 0 )) && [ -f "$iso" ]; then
-      if [ $(stat -c%s "$iso") -gt 100000000 ]; then
-        html "Download finished successfully..." && return 0
-      fi
-    fi
-
+    downloadFile "$iso" "$url" "$desc" && return 0
   fi
 
-  if [[ "$EXTERNAL" != [Yy1]* ]]; then
+  [[ "$EXTERNAL" == [Yy1]* ]] && return 1
 
-    case "${VERSION,,}" in
-      "win11${ARCHI,,}")
-        url="https://dl.bobpony.com/windows/11/en-us_windows_11_23h2_${ARCHI,,}.iso"
-        ;;
-      "win10${ARCHI,,}")
-        url="https://dl.bobpony.com/windows/10/en-us_windows_10_22h2_${ARCHI,,}.iso"
-        ;;
-      *)
-        (( rc != 99 )) && error "Failed to download $url , reason: $rc"
-        return 1
-        ;;
-    esac
+  case "${VERSION,,}" in
+    "win11${PLATFORM,,}")
+      url="https://dl.bobpony.com/windows/11/en-us_windows_11_23h2_${PLATFORM,,}.iso"
+      ;;
+    "win10${PLATFORM,,}")
+      url="https://dl.bobpony.com/windows/10/en-us_windows_10_22h2_${PLATFORM,,}.iso"
+      ;;
+    *)
+      return 1
+      ;;
+  esac
 
-    info "Failed to download $desc from Microsoft, will try another mirror now..."
+  info "Failed to download $desc from Microsoft, will try another mirror now..."
 
-    rm -f "$iso"
-    rm -rf "$TMP"
-    mkdir -p "$TMP"
+  rm -rf "$TMP"
+  mkdir -p "$TMP"
 
-    ISO="$TMP/$BASE"
-    iso="$ISO"
-    rm -f "$iso"
+  ISO="$TMP/$BASE"
+  iso="$ISO"
 
-    msg="Downloading $desc..."
-    info "$msg" && html "$msg"
-    /run/progress.sh "$iso" "Downloading $desc ([P])..." &
+  downloadFile "$iso" "$url" "$desc" && return 0
 
-    { wget "$url" -O "$iso" -q --no-check-certificate --show-progress "$progress"; rc=$?; } || :
-
-    fKill "progress.sh"
-
-    if (( rc == 0 )) && [ -f "$iso" ]; then
-      if [ $(stat -c%s "$iso") -gt 100000000 ]; then
-        html "Download finished successfully..." && return 0
-      fi
-    fi
-
-  fi
-
-  (( rc != 99 )) && error "Failed to download $url , reason: $rc"
   return 1
 }
 
@@ -440,10 +433,10 @@ extractESD() {
   local edition imageIndex imageEdition
 
   case "${VERSION,,}" in
-    "win11${ARCHI,,}")
+    "win11${PLATFORM,,}")
       edition="11 pro"
       ;;
-    "win10${ARCHI,,}")
+    "win10${PLATFORM,,}")
       edition="10 pro"
       ;;
     *)
