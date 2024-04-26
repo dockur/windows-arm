@@ -137,6 +137,147 @@ docker run -it --rm --name windows -p 8006:8006 --device=/dev/kvm --cap-add NET_
 
 * ### How do I install a custom image?
 
+  In order to download a custom ISO image, start a fresh container with the URL of the ISO specified in the `VERSION` environment variable:
+  
+  ```yaml
+  environment:
+    VERSION: "https://example.com/win.iso"
+  ```
+
+  Alternatively, you can also use a local file directly, and skip the download, by binding it in your compose file in this way:
+  
+  ```yaml
+  volumes:
+    - /home/user/example.iso:/storage/custom.iso
+  ```
+
+  Replace the example path `/home/user/example.iso` with the filename of the desired ISO file.
+
+* ### How do I customize the installation?
+
+  You can customize any part of the automatic installation, and even execute certain commands at boot if needed.
+
+  Download the XML file corresponding to your Windows version, for example [win11x64.xml](https://raw.githubusercontent.com/dockur/windows-arm/master/assets/win11x64.xml). Then apply your modifications to it, and add this line to your compose file:
+
+  ```yaml
+  volumes:
+    -  /home/user/custom.xml:/run/assets/win11x64.xml
+  ```
+
+  Replace the example path `/home/user/custom.xml` with the filename of the modified XML file.
+
+* ### How do I assign an individual IP address to the container?
+
+  By default, the container uses bridge networking, which shares the IP address with the host. 
+
+  If you want to assign an individual IP address to the container, you can create a macvlan network as follows:
+
+  ```bash
+  docker network create -d macvlan \
+      --subnet=192.168.0.0/24 \
+      --gateway=192.168.0.1 \
+      --ip-range=192.168.0.100/28 \
+      -o parent=eth0 vlan
+  ```
+  
+  Be sure to modify these values to match your local subnet. 
+
+  Once you have created the network, change your compose file to look as follows:
+
+  ```yaml
+  services:
+    windows:
+      container_name: windows
+      ..<snip>..
+      networks:
+        vlan:
+          ipv4_address: 192.168.0.100
+
+  networks:
+    vlan:
+      external: true
+  ```
+ 
+  An added benefit of this approach is that you won't have to perform any port mapping anymore, since all ports will be exposed by default.
+
+  Please note that this IP address won't be accessible from the Docker host due to the design of macvlan, which doesn't permit communication between the two. If this is a concern, you need to create a [second macvlan](https://blog.oddbit.com/post/2018-03-12-using-docker-macvlan-networks/#host-access) as a workaround.
+
+* ### How can Windows acquire an IP address from my router?
+
+  After configuring the container for macvlan (see above), it is possible for Windows to become part of your home network by requesting an IP from your router, just like a real PC.
+
+  To enable this mode, add the following lines to your compose file:
+
+  ```yaml
+  environment:
+    DHCP: "Y"
+  devices:
+    - /dev/vhost-net
+  device_cgroup_rules:
+    - 'c *:* rwm'
+  ```
+
+  Please note that in this mode, the container and Windows will each have their own separate IPs. The container will keep the macvlan IP, and Windows will use the DHCP IP.
+  
+* ### How do I pass-through a disk?
+
+  It is possible to pass-through disk devices directly by adding them to your compose file in this way:
+
+  ```yaml
+  environment:
+    DEVICE: "/dev/sda"
+    DEVICE2: "/dev/sdb"
+  devices:
+    - /dev/sda
+    - /dev/sdb
+  ```
+
+  Use `DEVICE` if you want it to become your main drive, and use `DEVICE2` and higher to add them as secondary drives.
+
+* ### How do I pass-through a USB device?
+
+  To pass-through a USB device, first lookup its vendor and product id via the `lsusb` command, then add them to your compose file like this:
+
+  ```yaml
+  environment:
+    ARGUMENTS: "-device usb-host,vendorid=0x1234,productid=0x1234"
+  devices:
+    - /dev/bus/usb
+  ```
+  
+* ### How do I verify if my system supports KVM?
+
+  To verify if your system supports KVM, run the following commands:
+
+  ```bash
+  sudo apt install cpu-checker
+  sudo kvm-ok
+  ```
+
+  If you receive an error from `kvm-ok` indicating that KVM acceleration can't be used, check the virtualization settings in the BIOS.
+
+* ### Is this project legal?
+
+  Yes, this project contains only open-source code and does not distribute any copyrighted material. Any product keys found in the code are just generic placeholders provided by Microsoft for trial purposes. So under all applicable laws, this project would be considered legal.
+
+
+
+
+
+* #
+    - /var/win:/storage
+  ```
+
+  Replace the example path `/var/win` with the desired storage folder.
+
+* ### How do I share files with the host?
+
+  Open File Explorer and click on the Network section, you will see a computer called `host.lan`, double-click it and it will show a folder called `Data`.
+
+  Inside this folder you can access any files that are placed in `/storage/shared` (see above) on the host.
+
+* ### How do I install a custom image?
+
   In order to download a custom ISO image, start a clean container with the URL of the ISO specified in the `VERSION` environment variable:
   
   ```yaml
