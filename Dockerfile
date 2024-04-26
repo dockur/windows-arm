@@ -1,5 +1,5 @@
 FROM scratch
-COPY --from=qemux/qemu-arm:1.13 / /
+COPY --from=qemux/qemu-arm:1.14 / /
 
 ARG DEBCONF_NOWARNINGS "yes"
 ARG DEBIAN_FRONTEND "noninteractive"
