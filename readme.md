@@ -138,7 +138,7 @@ docker run -it --rm --name windows -p 8006:8006 --device=/dev/kvm --cap-add NET_
 * ### How do I install a custom image?
 
   In order to download a custom ISO image, start a fresh container with the URL of the ISO specified in the `VERSION` environment variable:
-  
+
   ```yaml
   environment:
     VERSION: "https://example.com/win.iso"
@@ -157,11 +157,11 @@ docker run -it --rm --name windows -p 8006:8006 --device=/dev/kvm --cap-add NET_
 
   You can customize any part of the automatic installation, and even execute certain commands at boot if needed.
 
-  Download the XML file corresponding to your Windows version, for example [win11x64.xml](https://raw.githubusercontent.com/dockur/windows-arm/master/assets/win11x64.xml). Then apply your modifications to it, and add this line to your compose file:
+  Download the XML file corresponding to your Windows version, for example [win11arm64.xml](https://raw.githubusercontent.com/dockur/windows-arm/master/assets/win11arm64.xml). Then apply your modifications to it, and add this line to your compose file:
 
   ```yaml
   volumes:
-    -  /home/user/custom.xml:/run/assets/win11x64.xml
+    -  /home/user/custom.xml:/run/assets/win11arm64.xml
   ```
 
   Replace the example path `/home/user/custom.xml` with the filename of the modified XML file.
@@ -255,10 +255,6 @@ docker run -it --rm --name windows -p 8006:8006 --device=/dev/kvm --cap-add NET_
   ```
 
   If you receive an error from `kvm-ok` indicating that KVM acceleration can't be used, check the virtualization settings in the BIOS.
-
-* ### Is this project legal?
-
-  Yes, this project contains only open-source code and does not distribute any copyrighted material. Any product keys found in the code are just generic placeholders provided by Microsoft for trial purposes. So under all applicable laws, this project would be considered legal.
 
 * ### Is this project legal?
 
