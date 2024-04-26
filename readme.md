@@ -137,21 +137,34 @@ docker run -it --rm --name windows -p 8006:8006 --device=/dev/kvm --cap-add NET_
 
 * ### How do I install a custom image?
 
-  In order to download a custom ISO image, start a clean container with the URL of the ISO specified in the `VERSION` environment variable:
-  
+  In order to download a custom ISO image, start a fresh container with the URL of the ISO specified in the `VERSION` environment variable:
+
   ```yaml
   environment:
     VERSION: "https://example.com/win.iso"
   ```
 
-    Alternatively, you can also use a local file directly, and skip the download, by binding it in your compose file in this way:
-
+  Alternatively, you can also use a local file directly, and skip the download, by binding it in your compose file in this way:
+  
   ```yaml
   volumes:
     - /home/user/example.iso:/storage/custom.iso
   ```
 
   Replace the example path `/home/user/example.iso` with the filename of the desired ISO file.
+
+* ### How do I customize the installation?
+
+  You can customize any part of the automatic installation, and even execute certain commands at boot if needed.
+
+  Download the XML file corresponding to your Windows version, for example [win11arm64.xml](https://raw.githubusercontent.com/dockur/windows-arm/master/assets/win11arm64.xml). Then apply your modifications to it, and add this line to your compose file:
+
+  ```yaml
+  volumes:
+    -  /home/user/custom.xml:/run/assets/win11arm64.xml
+  ```
+
+  Replace the example path `/home/user/custom.xml` with the filename of the modified XML file.
 
 * ### How do I assign an individual IP address to the container?
 
