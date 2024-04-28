@@ -44,9 +44,12 @@ finishInstall() {
     fi
   fi
 
-  rm -f "$STORAGE/windows.boot"
-  cp /run/version "$STORAGE/windows.ver"
+  rm -f "$STORAGE/windows.ver"
   rm -f "$STORAGE/windows.old"
+  rm -f "$STORAGE/windows.boot"
+  rm -f "$STORAGE/windows.mode"
+
+  cp /run/version "$STORAGE/windows.ver"
 
   rm -rf "$TMP"
   return 0
