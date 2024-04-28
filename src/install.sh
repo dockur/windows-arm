@@ -2,7 +2,6 @@
 set -Eeuo pipefail
 
 ESD_URL=""
-PLATFORM="ARM64"
 TMP="$STORAGE/tmp"
 DIR="$TMP/unpack"
 FB="falling back to manual installation!"
@@ -672,7 +671,8 @@ bootWindows() {
 
 ######################################
 
-TODO
+! parseVersion && exit 58
+! detectCustom && exit 59
 
 if ! startInstall; then
   bootWindows && return 0
