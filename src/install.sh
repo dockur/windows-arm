@@ -269,7 +269,7 @@ downloadImage() {
 
   if [[ "$EXTERNAL" != [Yy1]* ]]; then
 
-    desc=$(printVersion "$VERSION" "Windows for ARM")
+    desc=$(printVersion "$VERSION" "Windows for ${PLATFORM}")
 
   else
 
@@ -324,7 +324,7 @@ extractESD() {
   local dir="$2"
   local size size_gb space space_gb desc
 
-  desc=$(printVersion "$VERSION" "Windows for ARM")
+  desc=$(printVersion "$VERSION" "Windows for ${PLATFORM}")
   local msg="Extracting $desc bootdisk..."
   info "$msg" && html "$msg"
 
