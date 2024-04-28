@@ -45,17 +45,33 @@ parseVersion() {
   return 0
 }
 
+isESD() {
+
+  local id="$1"
+
+  case "${id,,}" in
+    "win11${PLATFORM,,}")
+      return 0
+      ;;
+    "win10${PLATFORM,,}")
+      return 0
+      ;;
+  esac
+
+  return 1
+}
+
 printVersion() {
 
   local id="$1"
   local desc="$2"
 
-  [[ "$id" == "win10"* ]] && desc="Windows 10 for ${PLATFORM}"
-  [[ "$id" == "win11"* ]] && desc="Windows 11 for ${PLATFORM}"
+  [[ "$id" == "win10"* ]] && desc="Windows 10"
+  [[ "$id" == "win11"* ]] && desc="Windows 11"
 
-  [ -z "$desc" ] && desc="Windows for ${PLATFORM}"
+  [ -z "$desc" ] && desc="Windows"
 
-  echo "$desc"
+  echo "$desc for ${PLATFORM}"
   return 0
 }
 
@@ -64,16 +80,26 @@ getName() {
   local file="$1"
   local desc="$2"
 
-  [[ "${file,,}" == "win11"* ]] && desc="Windows 11 for ${PLATFORM}"
-  [[ "${file,,}" == "win10"* ]] && desc="Windows 10 for ${PLATFORM}"
-  [[ "${file,,}" == *"windows11"* ]] && desc="Windows 11 for ${PLATFORM}"
-  [[ "${file,,}" == *"windows10"* ]] && desc="Windows 10 for ${PLATFORM}"
-  [[ "${file,,}" == *"windows_11"* ]] && desc="Windows 11 for ${PLATFORM}"
-  [[ "${file,,}" == *"windows_10"* ]] && desc="Windows 10 for ${PLATFORM}"
+  [[ "${file,,}" == "win11"* ]] && desc="Windows 11"
+  [[ "${file,,}" == "win10"* ]] && desc="Windows 10"
+  [[ "${file,,}" == *"windows11"* ]] && desc="Windows 11"
+  [[ "${file,,}" == *"windows10"* ]] && desc="Windows 10"
+  [[ "${file,,}" == *"windows_11"* ]] && desc="Windows 11"
+  [[ "${file,,}" == *"windows_10"* ]] && desc="Windows 10"
 
-  [ -z "$desc" ] && desc="Windows for ${PLATFORM}"
+  if [ -z "$desc" ]; then
+    desc="Windows"
+  else
+    if [[ "$desc" == "Windows 1"* ]] && [[ "${file,,}" == *"_iot_"* ]]; then
+      desc="$desc IoT"
+    else
+      if [[ "$desc" == "Windows 1"* ]] && [[ "${file,,}" == *"_ltsc_"* ]]; then
+        desc="$desc LTSC"
+      fi
+    fi
+  fi
 
-  echo "$desc"
+  echo "$desc for ${PLATFORM}"
   return 0
 }
 
