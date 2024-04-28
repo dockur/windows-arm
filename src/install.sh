@@ -1,33 +1,6 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-: "${MANUAL:=""}"
-: "${VERSION:=""}"
-: "${DETECTED:=""}"
-
-[ -z "$VERSION" ] && VERSION="win11arm64"
-
-if [[ "${VERSION}" == \"*\" || "${VERSION}" == \'*\' ]]; then
-  VERSION="${VERSION:1:-1}"
-fi
-
-[[ "${VERSION,,}" == "11" ]] && VERSION="win11arm64"
-[[ "${VERSION,,}" == "win11" ]] && VERSION="win11arm64"
-
-[[ "${VERSION,,}" == "10" ]] && VERSION="win10arm64"
-[[ "${VERSION,,}" == "win10" ]] && VERSION="win10arm64"
-
-CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname windows.iso -printf "%f\n" | head -n 1)
-[ -z "$CUSTOM" ] && CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname custom.iso -printf "%f\n" | head -n 1)
-[ -z "$CUSTOM" ] && CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname boot.iso -printf "%f\n" | head -n 1)
-[ -z "$CUSTOM" ] && CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname custom.img -printf "%f\n" | head -n 1)
-
-if [ -z "$CUSTOM" ] && [[ "${VERSION,,}" != "http"* ]]; then
-  FN="${VERSION/\/storage\//}"
-  [[ "$FN" == "."* ]] && FN="${FN:1}"
-  CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname "$FN" -printf "%f\n" | head -n 1)
-fi
-
 ESD_URL=""
 PLATFORM="ARM64"
 TMP="$STORAGE/tmp"
@@ -35,50 +8,6 @@ DIR="$TMP/unpack"
 FB="falling back to manual installation!"
 ETFS="boot/etfsboot.com"
 EFISYS="efi/microsoft/boot/efisys_noprompt.bin"
-
-printVersion() {
-
-  local id="$1"
-  local desc="$2"
-
-  [[ "$id" == "win10"* ]] && desc="Windows 10 for ARM"
-  [[ "$id" == "win11"* ]] && desc="Windows 11 for ARM"
-
-  [ -z "$desc" ] && desc="Windows for ARM"
-
-  echo "$desc"
-  return 0
-}
-
-getName() {
-
-  local file="$1"
-  local desc="$2"
-
-  [[ "${file,,}" == "win11"* ]] && desc="Windows 11 for ARM"
-  [[ "${file,,}" == "win10"* ]] && desc="Windows 10 for ARM"
-  [[ "${file,,}" == *"windows11"* ]] && desc="Windows 11 for ARM"
-  [[ "${file,,}" == *"windows10"* ]] && desc="Windows 10 for ARM"
-  [[ "${file,,}" == *"windows_11"* ]] && desc="Windows 11 for ARM"
-  [[ "${file,,}" == *"windows_10"* ]] && desc="Windows 10 for ARM"
-
-  [ -z "$desc" ] && desc="Windows for ARM"
-
-  echo "$desc"
-  return 0
-}
-
-getVersion() {
-
-  local name="$1"
-  local detected=""
-
-  [[ "${name,,}" == *"windows 11"* ]] && detected="win11arm64"
-  [[ "${name,,}" == *"windows 10"* ]] && detected="win10arm64"
-
-  echo "$detected"
-  return 0
-}
 
 hasDisk() {
 
@@ -211,6 +140,22 @@ startInstall() {
     fi
   else
     ISO="$STORAGE/$CUSTOM"
+  fi
+
+  return 0
+}
+
+detectCustom() {
+
+  CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname windows.iso -printf "%f\n" | head -n 1)
+  [ -z "$CUSTOM" ] && CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname custom.iso -printf "%f\n" | head -n 1)
+  [ -z "$CUSTOM" ] && CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname boot.iso -printf "%f\n" | head -n 1)
+  [ -z "$CUSTOM" ] && CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname custom.img -printf "%f\n" | head -n 1)
+
+  if [ -z "$CUSTOM" ] && [[ "${VERSION,,}" != "http"* ]]; then
+    FN="${VERSION/\/storage\//}"
+    [[ "$FN" == "."* ]] && FN="${FN:1}"
+    CUSTOM=$(find "$STORAGE" -maxdepth 1 -type f -iname "$FN" -printf "%f\n" | head -n 1)
   fi
 
   return 0
@@ -726,6 +671,8 @@ bootWindows() {
 }
 
 ######################################
+
+TODO
 
 if ! startInstall; then
   bootWindows && return 0
