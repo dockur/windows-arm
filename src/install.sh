@@ -166,9 +166,10 @@ detectCustom() {
 getESD() {
 
   local dir="$1"
+  local version="$2"
   local winCatalog size
 
-  case "${VERSION,,}" in
+  case "${version,,}" in
     "win11${PLATFORM,,}")
       winCatalog="https://go.microsoft.com/fwlink?linkid=2156292"
       ;;
@@ -176,7 +177,7 @@ getESD() {
       winCatalog="https://go.microsoft.com/fwlink/?LinkId=841361"
       ;;
     *)
-      error "Invalid version specified: $VERSION" && return 1
+      error "Invalid version specified: $version" && return 1
       ;;
   esac
 
@@ -267,54 +268,49 @@ downloadFile() {
 downloadImage() {
 
   local iso="$1"
-  local url="$2"
+  local version="$2"
+  local url=""
   local rc desc
 
-  if [[ "$EXTERNAL" != [Yy1]* ]]; then
+  if [[ "${version,,}" != "http"* ]]; then
 
-    desc=$(printVersion "$VERSION" "Windows for ${PLATFORM}")
+    desc=$(printVersion "$version" "Windows for ${PLATFORM}")
 
   else
 
+    url="$version"
     desc=$(getName "$BASE" "$BASE")
 
   fi
 
-  if [[ "$EXTERNAL" != [Yy1]* ]]; then
+  if [ -z "$url" ]; then
+    if isESD "$version"; then
 
-    if ! getESD "$TMP/esd"; then
-      url=""
-    else
-      url="$ESD_URL"
+      getESD "$TMP/esd" "$version" && url="$ESD_URL"
+
     fi
-
   fi
 
   if [ -n "$url" ]; then
     downloadFile "$iso" "$url" "$desc" && return 0
   fi
 
-  [[ "$EXTERNAL" == [Yy1]* ]] && return 1
+  [[ "${version,,}" == "http"* ]] && return 1
 
-  case "${VERSION,,}" in
-    "win11${PLATFORM,,}")
-      url="https://dl.bobpony.com/windows/11/en-us_windows_11_23h2_${PLATFORM,,}.iso"
-      ;;
-    "win10${PLATFORM,,}")
-      url="https://dl.bobpony.com/windows/10/en-us_windows_10_22h2_${PLATFORM,,}.iso"
-      ;;
-    *)
-      return 1
-      ;;
-  esac
-
+  url=$(getLink "$version")
+  
+  if [ -z "$url" ]; then
+    ! isESD "$version" && error "Invalid version specified: $version"
+    return 1
+  fi
+    
   info "Failed to download $desc from Microsoft, will try another mirror now..."
-
-  rm -rf "$TMP"
-  mkdir -p "$TMP"
 
   ISO="$TMP/$BASE"
   iso="$ISO"
+
+  rm -rf "$TMP"
+  mkdir -p "$TMP"
 
   downloadFile "$iso" "$url" "$desc" && return 0
 
