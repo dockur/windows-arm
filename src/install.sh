@@ -582,17 +582,37 @@ prepareImage() {
   local iso="$1"
   local dir="$2"
 
-  if [ -f "$dir/$ETFS" ] && [ -f "$dir/$EFISYS" ]; then
-    return 0
+  if [[ "${BOOT_MODE,,}" != "windows_legacy" ]]; then
+    if [[ "${DETECTED,,}" != "winxp"* ]] && [[ "${DETECTED,,}" != "win2008"* ]]; then
+      if [[ "${DETECTED,,}" != "winvista"* ]] && [[ "${DETECTED,,}" != "win7"* ]]; then
+
+        if [ -f "$dir/$ETFS" ] && [ -f "$dir/$EFISYS" ]; then
+          return 0
+        fi
+
+        if [ ! -f "$dir/$ETFS" ]; then
+          warn "failed to locate file 'etfsboot.com' in ISO image, falling back to legacy boot!"
+        else
+          warn "failed to locate file 'efisys_noprompt.bin' in ISO image, falling back to legacy boot!"
+        fi
+
+      fi
+    fi
   fi
 
-  if [ ! -f "$dir/$ETFS" ]; then
-    warn "failed to locate file 'etfsboot.com' in ISO image!"
+  [[ "${PLATFORM,,}" == "arm64" ]] && return 1
+
+  if [[ "${DETECTED,,}" == "winxp"* ]]; then
+    if ! prepareXP "$iso" "$dir"; then
+      error "Failed to prepare Windows XP ISO!" && return 1
+    fi
   else
-    warn "failed to locate file 'efisys_noprompt.bin' in ISO image!"
+    if ! prepareLegacy "$iso" "$dir"; then
+      error "Failed to prepare Windows ISO!" && return 1
+    fi
   fi
 
-  return 1
+  return 0
 }
 
 updateImage() {
