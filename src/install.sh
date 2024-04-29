@@ -690,6 +690,7 @@ copyOEM() {
 buildImage() {
 
   local dir="$1"
+  local failed="N"
   local cat="BOOT.CAT"
   local label="${BASE%.*}"
   local log="/run/shm/iso.log"
@@ -713,8 +714,33 @@ buildImage() {
     error "Not enough free space in $STORAGE, have $space_gb GB available but need at least $size_gb GB." && return 1
   fi
 
-  if ! genisoimage -o "$out" -b "$ETFS" -no-emul-boot -c "$cat" -iso-level 4 -J -l -D -N -joliet-long -relaxed-filenames -V "$label" \
-                    -udf -boot-info-table -eltorito-alt-boot -eltorito-boot "$EFISYS" -no-emul-boot -allow-limited-size -quiet "$dir" 2> "$log"; then
+  if [[ "${BOOT_MODE,,}" != "windows_legacy" ]]; then
+
+    if ! genisoimage -o "$out" -b "$ETFS" -no-emul-boot -c "$cat" -iso-level 4 -J -l -D -N -joliet-long -relaxed-filenames -V "$label" \
+                     -udf -boot-info-table -eltorito-alt-boot -eltorito-boot "$EFISYS" -no-emul-boot -allow-limited-size -quiet "$dir" 2> "$log"; then
+      failed="Y"
+    fi
+
+  else
+
+    if [[ "${DETECTED,,}" != "winxp"* ]]; then
+
+      if ! genisoimage -o "$out" -b "$ETFS" -no-emul-boot -c "$cat" -iso-level 2 -J -l -D -N -joliet-long -relaxed-filenames -V "$label" \
+                       -udf -allow-limited-size -quiet "$dir" 2> "$log"; then
+        failed="Y"
+      fi
+
+    else
+
+      if ! genisoimage -o "$out" -b "$ETFS" -no-emul-boot -boot-load-seg 1984 -boot-load-size 4 -c "$cat" -iso-level 2 -J -l -D -N -joliet-long \
+                       -relaxed-filenames -V "$label" -quiet "$dir" 2> "$log"; then
+        failed="Y"
+      fi
+
+    fi
+  fi
+
+  if [[ "$failed" != "N" ]]; then
     [ -s "$log" ] && echo "$(<"$log")"
     error "Failed to build image!" && return 1
   fi
