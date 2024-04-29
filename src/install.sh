@@ -269,36 +269,32 @@ downloadImage() {
 
   local iso="$1"
   local version="$2"
-  local url=""
   local tried="n"
-  local rc desc
+  local url rc desc
 
   if [[ "${version,,}" == "http"* ]]; then
 
-    url="$version"
     desc=$(getName "$BASE" "$BASE")
+    downloadFile "$iso" "$version" "$desc" && return 0
+    return 1
 
-  else
-
-    if ! validVersion "$version"; then
-      error "Invalid VERSION value: $version" && return 1
-    fi
-
-    desc=$(printVersion "$version" "Windows for ${PLATFORM}")
-
-    if isESD "$version"; then
-
-      tried="y"
-      getESD "$TMP/esd" "$version" && url="$ESD_URL"
-
-    fi
   fi
 
-  if [ -n "$url" ]; then
-    downloadFile "$iso" "$url" "$desc" && return 0
+  if ! validVersion "$version"; then
+    error "Invalid VERSION value: $version" && return 1
   fi
 
-  [[ "${version,,}" == "http"* ]] && return 1
+  desc=$(printVersion "$version" "Windows for ${PLATFORM}")
+
+  if isESD "$version"; then
+
+    tried="y"
+
+    if getESD "$TMP/esd" "$version"; then
+      downloadFile "$iso" "$ESD_URL" "$desc" && return 0
+    fi
+
+  fi
 
   ISO="$TMP/$BASE"
   iso="$ISO"
