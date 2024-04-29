@@ -270,7 +270,7 @@ downloadImage() {
   local iso="$1"
   local version="$2"
   local tried="n"
-  local url rc desc
+  local url desc
 
   if [[ "${version,,}" == "http"* ]]; then
 
