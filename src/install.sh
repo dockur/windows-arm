@@ -270,22 +270,25 @@ downloadImage() {
   local iso="$1"
   local version="$2"
   local url=""
+  local tried="n"
   local rc desc
 
-  if [[ "${version,,}" != "http"* ]]; then
-
-    desc=$(printVersion "$version" "Windows for ${PLATFORM}")
-
-  else
+  if [[ "${version,,}" == "http"* ]]; then
 
     url="$version"
     desc=$(getName "$BASE" "$BASE")
 
-  fi
+  else
 
-  if [ -z "$url" ]; then
+    if ! validVersion "$version"; then
+      error "Invalid VERSION value: $version" && return 1
+    fi
+
+    desc=$(printVersion "$version" "Windows for ${PLATFORM}")
+
     if isESD "$version"; then
 
+      tried="y"
       getESD "$TMP/esd" "$version" && url="$ESD_URL"
 
     fi
@@ -297,22 +300,40 @@ downloadImage() {
 
   [[ "${version,,}" == "http"* ]] && return 1
 
-  url=$(getLink "$version")
-  
-  if [ -z "$url" ]; then
-    ! isESD "$version" && error "Invalid version specified: $version"
-    return 1
-  fi
-    
-  isESD "$version" && info "Failed to download $desc from Microsoft, will try another mirror now..."
-
   ISO="$TMP/$BASE"
   iso="$ISO"
 
-  rm -rf "$TMP"
-  mkdir -p "$TMP"
+  url=$(getLink "$version")
 
-  downloadFile "$iso" "$url" "$desc" && return 0
+  if [ -n "$url" ]; then
+
+    if [[ "$tried" != "n" ]]; then
+      info "Failed to download $desc from Microsoft, will try another mirror now..."
+    fi
+
+    tried="y"
+    rm -rf "$TMP"
+    mkdir -p "$TMP"
+
+    downloadFile "$iso" "$url" "$desc" && return 0
+
+  fi
+
+  url=$(secondLink "$version")
+
+  if [ -n "$url" ]; then
+
+    if [[ "$tried" != "n" ]]; then
+      info "Failed to download $desc, will try another mirror now..."
+    fi
+
+    tried="y"
+    rm -rf "$TMP"
+    mkdir -p "$TMP"
+
+    downloadFile "$iso" "$url" "$desc" && return 0
+
+  fi
 
   return 1
 }
