@@ -6,25 +6,6 @@ set -Eeuo pipefail
 : "${DETECTED:=""}"
 : "${PLATFORM:="ARM64"}"
 
-getLink() {
-
-  local id="$1"
-  local url=""
-  local host="https://dl.bobpony.com"
-
-  case "${id,,}" in
-    "win11${PLATFORM,,}")
-      url="$host/windows/11/en-us_windows_11_23h2_${PLATFORM,,}.iso"
-      ;;
-    "win10${PLATFORM,,}")
-      url="$host/windows/10/en-us_windows_10_22h2_${PLATFORM,,}.iso"
-      ;;
-  esac
-
-  echo "$url"
-  return 0
-}
-
 parseVersion() {
 
   [ -z "$VERSION" ] && VERSION="win11"
@@ -43,6 +24,22 @@ parseVersion() {
   esac
 
   return 0
+}
+
+validVersion() {
+
+  local id="$1"
+
+  case "${id,,}" in
+    "win11${PLATFORM,,}")
+      return 0
+      ;;
+    "win10${PLATFORM,,}")
+      return 0
+      ;;
+  esac
+
+  return 1
 }
 
 isESD() {
@@ -112,6 +109,25 @@ getVersion() {
   [[ "${name,,}" == *"windows 10"* ]] && detected="win10${PLATFORM,,}"
 
   echo "$detected"
+  return 0
+}
+
+getLink() {
+
+  local id="$1"
+  local url=""
+  local host="https://dl.bobpony.com"
+
+  case "${id,,}" in
+    "win11${PLATFORM,,}")
+      url="$host/windows/11/en-us_windows_11_23h2_${PLATFORM,,}.iso"
+      ;;
+    "win10${PLATFORM,,}")
+      url="$host/windows/10/en-us_windows_10_22h2_${PLATFORM,,}.iso"
+      ;;
+  esac
+
+  echo "$url"
   return 0
 }
 
