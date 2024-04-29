@@ -313,7 +313,24 @@ downloadImage() {
     desc=$(printVersion "$version" "Windows for ${PLATFORM}")
   fi
 
+  if [[ "${PLATFORM,,}" == "x64" ]]; then
+    if isMido "$version"; then
+      tried="y"
+      doMido "$iso" "$version" "$desc" && return 0
+    fi
+  fi
+
   if isESD "$version"; then
+
+    if [[ "${PLATFORM,,}" == "x64" ]]; then
+
+      [[ "$tried" != "n" ]] && info "Failed to download $desc using Mido, will try a different method now..."
+
+      ISO="$TMP/$version.esd"
+      iso="$ISO"
+      rm -rf "$TMP"
+      mkdir -p "$TMP"
+    fi
 
     tried="y"
 
