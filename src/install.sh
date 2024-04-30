@@ -34,13 +34,13 @@ finishInstall() {
   local aborted="$2"
 
   if [ ! -s "$iso" ] || [ ! -f "$iso" ]; then
-    error "Failed to find ISO: $iso" && return 1
+    error "Failed to find ISO file: $iso" && return 1
   fi
 
   if [ -w "$iso" ] && [[ "$aborted" != [Yy1]* ]]; then
     # Mark ISO as prepared via magic byte
     if ! printf '\x16' | dd of="$iso" bs=1 seek=0 count=1 conv=notrunc status=none; then
-      error "Failed to set magic byte!" && return 1
+      error "Failed to set magic byte in ISO file: $iso" && return 1
     fi
   fi
 
@@ -53,10 +53,10 @@ finishInstall() {
 
   if [[ "${PLATFORM,,}" == "x64" ]]; then
     if [[ "${BOOT_MODE,,}" == "windows_legacy" ]]; then
+      echo "$BOOT_MODE" > "$STORAGE/windows.mode"
       if [[ "${MACHINE,,}" != "q35" ]]; then
         echo "$MACHINE" > "$STORAGE/windows.old"
       fi
-      echo "$BOOT_MODE" > "$STORAGE/windows.mode"
     else
       # Enable secure boot + TPM on manual installs as Win11 requires
       if [[ "$MANUAL" == [Yy1]* ]] || [[ "$aborted" == [Yy1]* ]]; then
@@ -78,7 +78,7 @@ abortInstall() {
 
   if [[ "$iso" != "$STORAGE/$BASE" ]]; then
     if ! mv -f "$iso" "$STORAGE/$BASE"; then
-      error "Failed to move ISO: $iso" && return 1
+      error "Failed to move ISO file: $iso" && return 1
     fi
   fi
 
@@ -102,18 +102,14 @@ startInstall() {
 
     CUSTOM=""
 
-    if [[ "${VERSION,,}" == "http"* ]]; then
-      EXTERNAL="Y"
-    else
+    if [[ "${VERSION,,}" != "http"* ]]; then
+
       EXTERNAL="N"
-    fi
-
-    if [[ "$EXTERNAL" != [Yy1]* ]]; then
-
       BASE="$VERSION.iso"
 
     else
 
+      EXTERNAL="Y"
       BASE=$(basename "${VERSION%%\?*}")
       : "${BASE//+/ }"; printf -v BASE '%b' "${_//%/\\x}"
       BASE=$(echo "$BASE" | sed -e 's/[^A-Za-z0-9._-]/_/g')
@@ -157,9 +153,6 @@ startInstall() {
   if [ ! -f "$STORAGE/$CUSTOM" ]; then
     CUSTOM=""
     ISO="$TMP/$BASE"
-    if [[ "${PLATFORM,,}" == "arm64" ]]; then
-      [[ "$EXTERNAL" != [Yy1]* ]] && ISO="$TMP/$VERSION.esd"
-    fi
   else
     ISO="$STORAGE/$CUSTOM"
   fi
@@ -268,9 +261,11 @@ downloadFile() {
     progress="--progress=dot:giga"
   fi
 
+  local msg="Downloading $desc..."
+
   domain=$(echo "$url" | awk -F/ '{print $3}')
-  domain=$(expr match "$domain" '.*\.\(.*\..*\)')
-  local msg="Downloading $desc from $domain..."
+  domain=$(expr "$domain" : '.*\.\(.*\..*\)')
+  [[ "${domain,,}" != *"microsoft.com" ]] && msg="Downloading $desc from $domain..."
 
   info "$msg" && html "$msg"
   /run/progress.sh "$iso" "Downloading $desc ([P])..." &
@@ -326,26 +321,19 @@ downloadImage() {
 
   if isESD "$version"; then
 
-    if [[ "${PLATFORM,,}" == "x64" ]]; then
-
-      [[ "$tried" != "n" ]] && info "Failed to download $desc using Mido, will try a different method now..."
-
-      ISO="$TMP/$version.esd"
-      iso="$ISO"
-      rm -rf "$TMP"
-      mkdir -p "$TMP"
+    if [[ "$tried" != "n" ]]; then
+      info "Failed to download $desc using Mido, will try a diferent method now..."
     fi
 
     tried="y"
 
     if getESD "$TMP/esd" "$version"; then
-      downloadFile "$iso" "$ESD_URL" "$desc" && return 0
+      ISO="$TMP/$version.esd"
+      downloadFile "$ISO" "$ESD_URL" "$desc" && return 0
+      ISO="$TMP/$BASE"
     fi
 
   fi
-
-  ISO="$TMP/$BASE"
-  iso="$ISO"
 
   url=$(getLink "$version")
 
@@ -356,9 +344,6 @@ downloadImage() {
     fi
 
     tried="y"
-    rm -rf "$TMP"
-    mkdir -p "$TMP"
-
     downloadFile "$iso" "$url" "$desc" && return 0
 
   fi
@@ -372,9 +357,6 @@ downloadImage() {
     fi
 
     tried="y"
-    rm -rf "$TMP"
-    mkdir -p "$TMP"
-
     downloadFile "$iso" "$url" "$desc" && return 0
 
   fi
@@ -515,6 +497,7 @@ extractImage() {
 detectImage() {
 
   XML=""
+  local dsc
   local dir="$1"
 
   if [ -n "$CUSTOM" ]; then
@@ -534,10 +517,9 @@ detectImage() {
 
     if [[ "${DETECTED,,}" != "winxp"* ]]; then
 
-      local dsc
       dsc=$(printVersion "$DETECTED" "$DETECTED")
 
-      warn "got $dsc, but no matching $DETECTED.xml file exists, $FB."
+      warn "got $dsc, but no matching file called $DETECTED.xml exists, $FB."
     fi
 
     return 0
@@ -547,8 +529,14 @@ detectImage() {
 
   if [[ "${PLATFORM,,}" == "x64" ]]; then
     if [ -f "$dir/WIN51" ] || [ -f "$dir/SETUPXP.HTM" ]; then
-      DETECTED="winxpx86"
-      info "Detected: Windows XP" && return 0
+      if [ -d "$dir/AMD64" ]; then
+        DETECTED="winxpx64"
+      else
+        DETECTED="winxpx86"
+      fi
+      dsc=$(printVersion "$DETECTED" "$DETECTED")
+      info "Detected: $dsc"
+      return 0
     fi
   fi
 
@@ -592,7 +580,7 @@ detectImage() {
     [[ "$MANUAL" != [Yy1]* ]] && XML="$DETECTED.xml"
     info "Detected: $desc"
   else
-    warn "detected $desc, but no matching $DETECTED.xml file exists, $FB."
+    warn "detected $desc, but no matching file called $DETECTED.xml exists, $FB."
   fi
 
   return 0
@@ -641,7 +629,7 @@ updateImage() {
   local iso="$1"
   local dir="$2"
   local asset="/run/assets/$3"
-  local path src loc index result
+  local path src loc xml index result
 
   [ ! -s "$asset" ] || [ ! -f "$asset" ] && return 0
 
@@ -663,7 +651,8 @@ updateImage() {
     warn "failed to locate 'boot.wim' or 'boot.esd' in ISO image, $FB" && return 1
   fi
 
-  info "Adding "$(basename $asset)" for automatic installation..."
+  xml=$(basename "$asset")
+  info "Adding $xml for automatic installation..."
 
   index="1"
   result=$(wimlib-imagex info -xml "$loc" | tr -d '\000')
@@ -673,7 +662,7 @@ updateImage() {
   fi
 
   if ! wimlib-imagex update "$loc" "$index" --command "add $asset /autounattend.xml" > /dev/null; then
-    warn "failed to add "$(basename $asset)" to ISO image, $FB" && return 1
+    warn "failed to add $xml to ISO image, $FB" && return 1
   fi
 
   return 0
@@ -841,13 +830,13 @@ fi
 
 if [ ! -s "$ISO" ] || [ ! -f "$ISO" ]; then
   if ! downloadImage "$ISO" "$VERSION"; then
-    rm -f "$ISO"
+    rm -f "$ISO" 2> /dev/null || true
     exit 61
   fi
 fi
 
 if ! extractImage "$ISO" "$DIR" "$VERSION"; then
-  rm -f "$ISO"
+  rm -f "$ISO" 2> /dev/null || true
   exit 62
 fi
 
