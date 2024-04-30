@@ -269,6 +269,7 @@ downloadFile() {
   fi
 
   domain=$(echo "$url" | awk -F/ '{print $3}')
+  domain=$(expr match "$domain" '.*\.\(.*\..*\)')
   local msg="Downloading $desc from $domain..."
 
   info "$msg" && html "$msg"
@@ -320,6 +321,7 @@ downloadImage() {
       tried="y"
       doMido "$iso" "$version" "$desc" && return 0
     fi
+    switchEdition "$version"
   fi
 
   if isESD "$version"; then
