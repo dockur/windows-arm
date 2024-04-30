@@ -112,7 +112,7 @@ getVersion() {
   return 0
 }
 
-getLink() {
+secondLink() {
 
   local id="$1"
   local url=""
