@@ -112,7 +112,30 @@ getVersion() {
   return 0
 }
 
+getLink() {
+
+  # Fallbacks for users who cannot connect to the Microsoft servers
+
+  local id="$1"
+  local url=""
+  local host="https://drive.massgrave.dev"
+
+  case "${id,,}" in
+    "win11${PLATFORM,,}")
+      url="$host/SW_DVD9_Win_Pro_11_23H2.2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-68023.ISO"
+      ;;
+    "win10${PLATFORM,,}")
+      url="$host/SW_DVD9_Win_Pro_10_22H2.15_Arm64_English_Pro_Ent_EDU_N_MLF_X23-67223.ISO"
+      ;;
+  esac
+
+  echo "$url"
+  return 0
+}
+
 secondLink() {
+
+  # Fallbacks for users who cannot connect to the Microsoft servers
 
   local id="$1"
   local url=""
