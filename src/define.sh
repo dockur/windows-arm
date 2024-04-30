@@ -15,10 +15,10 @@ parseVersion() {
   fi
 
   case "${VERSION,,}" in
-    "11" | "win11")
+    "11" | "win11" | "windows11" | "windows 11")
       VERSION="win11${PLATFORM,,}"
       ;;
-    "10" | "win10")
+    "10" | "win10" | "windows10" | "windows 10")
       VERSION="win10${PLATFORM,,}"
       ;;
   esac
