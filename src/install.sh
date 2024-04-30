@@ -257,7 +257,7 @@ downloadFile() {
   local iso="$1"
   local url="$2"
   local desc="$3"
-  local rc progress
+  local rc progress domain
 
   rm -f "$iso"
 
@@ -268,7 +268,9 @@ downloadFile() {
     progress="--progress=dot:giga"
   fi
 
-  local msg="Downloading $desc..."
+  domain=$(echo "$url" | awk -F/ '{print $3}')
+  local msg="Downloading $desc from $domain..."
+
   info "$msg" && html "$msg"
   /run/progress.sh "$iso" "Downloading $desc ([P])..." &
 
