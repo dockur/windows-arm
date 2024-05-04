@@ -149,20 +149,28 @@ getLink1() {
   local ret="$2"
   local url=""
   local sum=""
+  local size=""
   local host="https://dl.bobpony.com/windows"
 
   case "${id,,}" in
     "win11${PLATFORM,,}")
+      size=5946128384
       sum="0c8edeae3202cf6f4bf8bb65c9f6176374c48fdcbcc8d0effa8547be75e9fd20"
-      url="$host/windows/11/en-us_windows_11_23h2_${PLATFORM,,}.iso"
+      url="$host/11/en-us_windows_11_23h2_${PLATFORM,,}.iso"
       ;;
     "win10${PLATFORM,,}")
+      size=4957009920
       sum="64461471292b79d18cd9cced6cc141d7773b489a9b3e12de7b120312e63bfaf1"
-      url="$host/windows/10/en-us_windows_10_22h2_${PLATFORM,,}.iso"
+      url="$host/10/en-us_windows_10_22h2_${PLATFORM,,}.iso"
       ;;
   esac
 
-  [ -z "$ret" ] && echo "$url" || echo "$sum"
+  case "${ret,,}" in
+    "sum" ) echo "$sum" ;;
+    "size" ) echo "$size" ;;
+    *) echo "$url";;
+  esac
+
   return 0
 }
 
@@ -174,32 +182,50 @@ getLink2() {
   local ret="$2"
   local url=""
   local sum=""
+  local size=""
   local host="https://drive.massgrave.dev"
 
   case "${id,,}" in
     "win11${PLATFORM,,}")
+      size=7010680832
       sum="3da19e8c8c418091081186e362fb53a1aa68dad255d1d28ace81e2c88c3f99ba"
       url="$host/SW_DVD9_Win_Pro_11_23H2.2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-68023.ISO"
       ;;
     "win10${PLATFORM,,}")
+      size=5190453248
       sum="bd96b342193f81c0a2e6595d8d8b8dc01dbf789d19211699f6299fec7b712197"
       url="$host/SW_DVD9_Win_Pro_10_22H2.15_Arm64_English_Pro_Ent_EDU_N_MLF_X23-67223.ISO"
       ;;
   esac
 
-  [ -z "$ret" ] && echo "$url" || echo "$sum"
+  case "${ret,,}" in
+    "sum" ) echo "$sum" ;;
+    "size" ) echo "$size" ;;
+    *) echo "$url";;
+  esac
+
+  return 0
+}
+
+getValue() {
+
+  local val=""
+  local id="$3"
+  local type="$2"
+  local func="getLink$1"
+
+  if [ "$1" -gt 0 ] && [ "$1" -le "$MIRRORS" ]; then
+    val=$($func "$id" "$type")
+  fi
+
+  echo "$val"
   return 0
 }
 
 getLink() {
 
   local url=""
-  local id="$2"
-  local func="getLink$1"
-
-  if [ "$1" -gt 0 ] && [ "$1" -le "$MIRRORS" ]; then
-    url=$($func "$id" "")
-  fi
+  url=$(getValue "$1" "" "$2")
 
   echo "$url"
   return 0
@@ -208,14 +234,18 @@ getLink() {
 getHash() {
 
   local sum=""
-  local id="$2"
-  local func="getLink$1"
-
-  if [ "$1" -gt 0 ] && [ "$1" -le "$MIRRORS" ]; then
-    sum=$($func "$id" "sum")
-  fi
+  sum=$(getValue "$1" "sum" "$2")
 
   echo "$sum"
+  return 0
+}
+
+getSize() {
+
+  local size=""
+  size=$(getValue "$1" "size" "$2")
+
+  echo "$size"
   return 0
 }
 
@@ -225,7 +255,6 @@ validVersion() {
   local url
 
   isESD "$id" && return 0
-  isMido "$id" && return 0
 
   for ((i=1;i<=MIRRORS;i++)); do
 
