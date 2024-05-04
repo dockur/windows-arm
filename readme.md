@@ -85,7 +85,7 @@ docker run -it --rm --name windows -p 8006:8006 --device=/dev/kvm --cap-add NET_
   | `win11`   | Windows 11 Pro   | ARM64 | 4.6 GB    |
   | `win10`   | Windows 10 Pro   | ARM64 | 3.9 GB    |
 
-  To install x86 or x64 versions of Windows use [dockur/windows](https://github.com/dockur/windows/).
+  To install x86 and x64 versions of Windows,  use [dockur/windows](https://github.com/dockur/windows/).
 
 * ### How do I change the storage location?
 
