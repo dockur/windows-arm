@@ -153,11 +153,11 @@ getLink1() {
 
   case "${id,,}" in
     "win11${PLATFORM,,}")
-      sum=""
+      sum="0c8edeae3202cf6f4bf8bb65c9f6176374c48fdcbcc8d0effa8547be75e9fd20"
       url="$host/windows/11/en-us_windows_11_23h2_${PLATFORM,,}.iso"
       ;;
     "win10${PLATFORM,,}")
-      sum=""
+      sum="64461471292b79d18cd9cced6cc141d7773b489a9b3e12de7b120312e63bfaf1"
       url="$host/windows/10/en-us_windows_10_22h2_${PLATFORM,,}.iso"
       ;;
   esac
@@ -178,11 +178,11 @@ getLink2() {
 
   case "${id,,}" in
     "win11${PLATFORM,,}")
-      sum=""
+      sum="3da19e8c8c418091081186e362fb53a1aa68dad255d1d28ace81e2c88c3f99ba"
       url="$host/SW_DVD9_Win_Pro_11_23H2.2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-68023.ISO"
       ;;
     "win10${PLATFORM,,}")
-      sum=""
+      sum="bd96b342193f81c0a2e6595d8d8b8dc01dbf789d19211699f6299fec7b712197"
       url="$host/SW_DVD9_Win_Pro_10_22H2.15_Arm64_English_Pro_Ent_EDU_N_MLF_X23-67223.ISO"
       ;;
   esac
