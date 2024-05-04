@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+: "${VERIFY:=""}"
 : "${MANUAL:=""}"
 : "${VERSION:=""}"
 : "${DETECTED:=""}"
 : "${PLATFORM:="ARM64"}"
+
+MIRRORS=2
 
 parseVersion() {
 
@@ -15,10 +18,10 @@ parseVersion() {
   fi
 
   case "${VERSION,,}" in
-    "11" | "win11" | "windows11" | "windows 11")
+    "11" | "win11" | "windows11" | "windows 11" )
       VERSION="win11${PLATFORM,,}"
       ;;
-    "10" | "win10" | "windows10" | "windows 10")
+    "10" | "win10" | "windows10" | "windows 10" )
       VERSION="win10${PLATFORM,,}"
       ;;
   esac
@@ -31,44 +34,94 @@ printVersion() {
   local id="$1"
   local desc="$2"
 
-  [[ "$id" == "win10"* ]] && desc="Windows 10"
-  [[ "$id" == "win11"* ]] && desc="Windows 11"
+  case "${id,,}" in
+    "win10"* ) desc="Windows 10" ;;
+    "win11"* ) desc="Windows 11" ;;
+  esac
 
-  [ -z "$desc" ] && desc="Windows"
+  if [ -z "$desc" ]; then
+    desc="Windows"
+    [[ "${PLATFORM,,}" != "x64" ]] && desc="$desc for ${PLATFORM}"
+  fi
 
-  echo "$desc for ${PLATFORM}"
+  echo "$desc"
   return 0
 }
 
-getName() {
+printEdition() {
 
-  local file="$1"
+  local id="$1"
   local desc="$2"
+  local result=""
+  local edition=""
 
-  [[ "${file,,}" == "win11"* ]] && desc="Windows 11"
-  [[ "${file,,}" == "win10"* ]] && desc="Windows 10"
-  [[ "${file,,}" == *"windows11"* ]] && desc="Windows 11"
-  [[ "${file,,}" == *"windows10"* ]] && desc="Windows 10"
-  [[ "${file,,}" == *"windows_11"* ]] && desc="Windows 11"
-  [[ "${file,,}" == *"windows_10"* ]] && desc="Windows 10"
-  [[ "${file,,}" == *"windows 11"* ]] && desc="Windows 11"
-  [[ "${file,,}" == *"windows 10"* ]] && desc="Windows 10"
+  result=$(printVersion "$id" "x")
+  [[ "$result" == "x" ]] && echo "$desc" && return 0
 
-  [ -z "$desc" ] && desc="Windows"
+  case "${id,,}" in
+    "win10"* )
+      edition="Pro"
+      ;;
+    "win11"* )
+      edition="Pro"
+      ;;
+  esac
 
-  echo "$desc for ${PLATFORM}"
+  [ -n "$edition" ] && result="$result $edition"
+
+  echo "$result"
+  return 0
+}
+
+fromFile() {
+
+  local id=""
+  local desc="$1"
+  local file="${1,,}"
+
+  case "${file/ /_}" in
+    "win10"*| "win_10"* | *"windows10"* | *"windows_10"* )
+      id="win10${PLATFORM,,}"
+      ;;
+    "win11"* | "win_11"* | *"windows11"* | *"windows_11"* )
+      id="win11${PLATFORM,,}"
+      ;;
+  esac
+
+  if [ -n "$id" ]; then
+    desc=$(printVersion "$id" "$desc")
+  fi
+
+  echo "$desc"
+  return 0
+}
+
+fromName() {
+
+  local id=""
+  local name="$1"
+
+  case "${name,,}" in
+    *"windows 10"* ) id="win10${PLATFORM,,}" ;;
+    *"windows 11"* ) id="win11${PLATFORM,,}" ;;
+  esac
+
+  echo "$id"
   return 0
 }
 
 getVersion() {
 
+  local id
   local name="$1"
-  local detected=""
 
-  [[ "${name,,}" == *"windows 11"* ]] && detected="win11${PLATFORM,,}"
-  [[ "${name,,}" == *"windows 10"* ]] && detected="win10${PLATFORM,,}"
+  id=$(fromName "$name")
 
-  echo "$detected"
+  echo "$id"
+  return 0
+}
+
+switchEdition() {
   return 0
 }
 
@@ -77,56 +130,92 @@ isESD() {
   local id="$1"
 
   case "${id,,}" in
-    "win11${PLATFORM,,}")
-      return 0
-      ;;
-    "win10${PLATFORM,,}")
-      return 0
-      ;;
+    "win11${PLATFORM,,}" ) return 0 ;;
+    "win10${PLATFORM,,}" ) return 0 ;;
   esac
 
   return 1
 }
 
-getLink() {
+isMido() {
+  return 1
+}
+
+getLink1() {
 
   # Fallbacks for users who cannot connect to the Microsoft servers
 
   local id="$1"
+  local ret="$2"
   local url=""
-  local host="https://dl.bobpony.com"
+  local sum=""
+  local host="https://dl.bobpony.com/windows"
 
   case "${id,,}" in
     "win11${PLATFORM,,}")
+      sum="0c8edeae3202cf6f4bf8bb65c9f6176374c48fdcbcc8d0effa8547be75e9fd20"
       url="$host/windows/11/en-us_windows_11_23h2_${PLATFORM,,}.iso"
       ;;
     "win10${PLATFORM,,}")
+      sum="64461471292b79d18cd9cced6cc141d7773b489a9b3e12de7b120312e63bfaf1"
       url="$host/windows/10/en-us_windows_10_22h2_${PLATFORM,,}.iso"
       ;;
   esac
+
+  [ -z "$ret" ] && echo "$url" || echo "$sum"
+  return 0
+}
+
+getLink2() {
+
+  # Fallbacks for users who cannot connect to the Microsoft servers
+
+  local id="$1"
+  local ret="$2"
+  local url=""
+  local sum=""
+  local host="https://drive.massgrave.dev"
+
+  case "${id,,}" in
+    "win11${PLATFORM,,}")
+      sum="3da19e8c8c418091081186e362fb53a1aa68dad255d1d28ace81e2c88c3f99ba"
+      url="$host/SW_DVD9_Win_Pro_11_23H2.2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-68023.ISO"
+      ;;
+    "win10${PLATFORM,,}")
+      sum="bd96b342193f81c0a2e6595d8d8b8dc01dbf789d19211699f6299fec7b712197"
+      url="$host/SW_DVD9_Win_Pro_10_22H2.15_Arm64_English_Pro_Ent_EDU_N_MLF_X23-67223.ISO"
+      ;;
+  esac
+
+  [ -z "$ret" ] && echo "$url" || echo "$sum"
+  return 0
+}
+
+getLink() {
+
+  local url=""
+  local id="$2"
+  local func="getLink$1"
+
+  if [ "$1" -gt 0 ] && [ "$1" -le "$MIRRORS" ]; then
+    url=$($func "$id" "")
+  fi
 
   echo "$url"
   return 0
 }
 
-secondLink() {
+getHash() {
 
-  # Fallbacks for users who cannot connect to the Microsoft servers
+  local sum=""
+  local id="$2"
+  local func="getLink$1"
 
-  local id="$1"
-  local url=""
-  local host="https://drive.massgrave.dev"
+  if [ "$1" -gt 0 ] && [ "$1" -le "$MIRRORS" ]; then
+    sum=$($func "$id" "sum")
+  fi
 
-  case "${id,,}" in
-    "win11${PLATFORM,,}")
-      url="$host/SW_DVD9_Win_Pro_11_23H2.2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-68023.ISO"
-      ;;
-    "win10${PLATFORM,,}")
-      url="$host/SW_DVD9_Win_Pro_10_22H2.15_Arm64_English_Pro_Ent_EDU_N_MLF_X23-67223.ISO"
-      ;;
-  esac
-
-  echo "$url"
+  echo "$sum"
   return 0
 }
 
@@ -136,12 +225,16 @@ validVersion() {
   local url
 
   isESD "$id" && return 0
+  isMido "$id" && return 0
 
-  url=$(getLink "$id")
-  [ -n "$url" ] && return 0
+  for ((i=1;i<=MIRRORS;i++)); do
 
-  url=$(secondLink "$id")
-  [ -n "$url" ] && return 0
+    url=$(getLink "$i" "$id")
+    [ -n "$url" ] && return 0
+
+  done
 
   return 1
 }
+
+return 0

@@ -1,5 +1,5 @@
 FROM scratch
-COPY --from=qemux/qemu-arm:1.16 / /
+COPY --from=qemux/qemu-arm:1.18 / /
 
 ARG DEBCONF_NOWARNINGS "yes"
 ARG DEBIAN_FRONTEND "noninteractive"
@@ -11,14 +11,11 @@ RUN apt-get update && \
         7zip \
         wsdd \
         samba \
+        wimtools \
         dos2unix \
         cabextract \
         genisoimage \
         libxml2-utils && \
-    echo "deb http://deb.debian.org/debian/ sid main" >> /etc/apt/sources.list.d/sid.list && \
-    echo -e "Package: *\nPin: release n=trixie\nPin-Priority: 900\nPackage: *\nPin: release n=sid\nPin-Priority: 400" | tee /etc/apt/preferences.d/preferences > /dev/null && \
-    apt-get update && \
-    apt-get -t sid --no-install-recommends -y install wimtools && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
