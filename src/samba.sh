@@ -70,5 +70,6 @@ mkdir -p "$share"
 
 # Enable Web Service Discovery
 wsdd -i "$interface" -p -n "$hostname" &
+echo "$!" > /var/run/wsdd.pid
 
 return 0
