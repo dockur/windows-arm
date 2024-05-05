@@ -266,4 +266,8 @@ validVersion() {
   return 1
 }
 
+migrateFiles() {
+  return 0
+}
+
 return 0
