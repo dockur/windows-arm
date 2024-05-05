@@ -3,6 +3,7 @@ set -Eeuo pipefail
 
 : "${VERIFY:=""}"
 : "${MANUAL:=""}"
+: "${REMOVE:=""}"
 : "${VERSION:=""}"
 : "${DETECTED:=""}"
 : "${PLATFORM:="ARM64"}"
@@ -11,17 +12,19 @@ MIRRORS=2
 
 parseVersion() {
 
-  [ -z "$VERSION" ] && VERSION="win11"
+  VERSION="${VERSION/\//}"
 
   if [[ "${VERSION}" == \"*\" || "${VERSION}" == \'*\' ]]; then
     VERSION="${VERSION:1:-1}"
   fi
 
+  [ -z "$VERSION" ] && VERSION="win11"
+
   case "${VERSION,,}" in
-    "11" | "win11" | "windows11" | "windows 11" )
+    "11" | "11p" | "win11" | "win11p" | "windows11" | "windows 11" )
       VERSION="win11${PLATFORM,,}"
       ;;
-    "10" | "win10" | "windows10" | "windows 10" )
+    "10" | "10p" | "win10" | "win10p" | "windows10" | "windows 10" )
       VERSION="win10${PLATFORM,,}"
       ;;
   esac
@@ -125,20 +128,35 @@ switchEdition() {
   return 0
 }
 
-isESD() {
+getCatalog() {
 
   local id="$1"
+  local ret="$2"
+  local url=""
+  local name=""
+  local edition=""
 
   case "${id,,}" in
-    "win11${PLATFORM,,}" ) return 0 ;;
-    "win10${PLATFORM,,}" ) return 0 ;;
+    "win11${PLATFORM,,}" )
+      edition="Professional"
+      name="Windows 11 Pro"
+      url="https://go.microsoft.com/fwlink?linkid=2156292"
+      ;;
+    "win10${PLATFORM,,}" )
+      edition="Professional"
+      name="Windows 10 Pro"
+      url="https://go.microsoft.com/fwlink/?LinkId=841361"
+      ;;
   esac
 
-  return 1
-}
+  case "${ret,,}" in
+    "url" ) echo "$url" ;;
+    "name" ) echo "$name" ;;
+    "edition" ) echo "$edition" ;;
+    *) echo "";;
+  esac
 
-isMido() {
-  return 1
+  return 0
 }
 
 getLink1() {
@@ -249,12 +267,28 @@ getSize() {
   return 0
 }
 
+isMido() {
+  return 1
+}
+
+isESD() {
+
+  local id="$1"
+  local url
+
+  url=$(getCatalog "$id" "url")
+  [ -n "$url" ] && return 0
+
+  return 1
+}
+
 validVersion() {
 
   local id="$1"
   local url
 
   isESD "$id" && return 0
+  isMido "$id" && return 0
 
   for ((i=1;i<=MIRRORS;i++)); do
 
