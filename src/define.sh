@@ -6,9 +6,9 @@ set -Eeuo pipefail
 : "${REMOVE:=""}"
 : "${VERSION:=""}"
 : "${DETECTED:=""}"
-: "${PLATFORM:="ARM64"}"
 
 MIRRORS=2
+PLATFORM="ARM64"
 
 parseVersion() {
 
