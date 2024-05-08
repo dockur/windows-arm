@@ -6,9 +6,9 @@ set -Eeuo pipefail
 : "${REMOVE:=""}"
 : "${VERSION:=""}"
 : "${DETECTED:=""}"
-: "${PLATFORM:="ARM64"}"
 
 MIRRORS=2
+PLATFORM="ARM64"
 
 parseVersion() {
 
@@ -62,10 +62,7 @@ printEdition() {
   [[ "$result" == "x" ]] && echo "$desc" && return 0
 
   case "${id,,}" in
-    "win10"* )
-      edition="Pro"
-      ;;
-    "win11"* )
+    "win10"* | "win11"* )
       edition="Pro"
       ;;
   esac
@@ -81,13 +78,26 @@ fromFile() {
   local id=""
   local desc="$1"
   local file="${1,,}"
+  local arch="${PLATFORM,,}"
+
+  case "${file/ /_}" in
+    *"_x64_"* | *"_x64."*)
+      arch="x64"
+      ;;
+    *"_x86_"* | *"_x86."*)
+      arch="x86"
+      ;;
+    *"_arm64_"* | *"_arm64."*)
+      arch="arm64"
+      ;;
+  esac
 
   case "${file/ /_}" in
     "win10"*| "win_10"* | *"windows10"* | *"windows_10"* )
-      id="win10${PLATFORM,,}"
+      id="win10${arch}"
       ;;
     "win11"* | "win_11"* | *"windows11"* | *"windows_11"* )
-      id="win11${PLATFORM,,}"
+      id="win11${arch}"
       ;;
   esac
 
@@ -103,10 +113,11 @@ fromName() {
 
   local id=""
   local name="$1"
+  local arch="$2"
 
   case "${name,,}" in
-    *"windows 10"* ) id="win10${PLATFORM,,}" ;;
-    *"windows 11"* ) id="win11${PLATFORM,,}" ;;
+    *"windows 10"* ) id="win10${arch}" ;;
+    *"windows 11"* ) id="win11${arch}" ;;
   esac
 
   echo "$id"
@@ -117,8 +128,9 @@ getVersion() {
 
   local id
   local name="$1"
+  local arch="$2"
 
-  id=$(fromName "$name")
+  id=$(fromName "$arch")
 
   echo "$id"
   return 0
