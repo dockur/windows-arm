@@ -625,13 +625,13 @@ selectVersion() {
   return 0
 }
 
-detectVersion() {
+checkPlatform() {
 
   local xml="$1"
-  local id arch
   local tag="ARCH"
   local platform="x64"
   local compat="$platform"
+  local arch
 
   arch=$(sed -n "/$tag/{s/.*<$tag>\(.*\)<\/$tag>.*/\1/;p}" <<< "$xml")
 
@@ -641,16 +641,22 @@ detectVersion() {
     "12" )platform="arm64"; compat="$platform" ;;
   esac
 
-  if [[ "${compat,,}" != "${PLATFORM,,}" ]]; then
-    error "You cannot boot ${platform^^} images on a $PLATFORM cpu!"
-    exit 67
-  fi
+  [[ "${compat,,}" == "${PLATFORM,,}" ]] && return 0
+
+  error "You cannot boot ${platform^^} images on a $PLATFORM cpu!"
+  return 1
+}
+
+detectVersion() {
+
+  local xml="$1"
+  local id
 
   id=$(selectVersion "DISPLAYNAME" "$xml" "$platform")
   [ -z "$id" ] && id=$(selectVersion "PRODUCTNAME" "$xml" "$platform")
   [ -z "$id" ] && id=$(selectVersion "NAME" "$xml" "$platform")
-  [ -n "$id" ] && [[ "${id,,}" != *"unknown"* ]] && echo "$id" && return 0
 
+  echo "$id"
   return 0
 }
 
@@ -703,6 +709,8 @@ detectImage() {
   fi
 
   info=$(wimlib-imagex info -xml "$loc" | tr -d '\000')
+  ! checkPlatform "$info" && exit 67
+
   DETECTED=$(detectVersion "$info")
 
   if [ -z "$DETECTED" ]; then
