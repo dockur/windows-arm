@@ -43,7 +43,7 @@ ready() {
   [ -f "$STORAGE/windows.boot" ] && return 0
   [ ! -s "$QEMU_PTY" ] && return 1
 
-  local line="Windows Boot Manager"
+  local line="\"Windows Boot Manager\""
   if grep -Fq "$line" "$QEMU_PTY"; then
     return 0
   fi
