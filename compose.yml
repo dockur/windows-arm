@@ -1,4 +1,3 @@
-version: "3"
 services:
   windows:
     container_name: windows
