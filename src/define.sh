@@ -140,37 +140,6 @@ switchEdition() {
   return 0
 }
 
-getCatalog() {
-
-  local id="$1"
-  local ret="$2"
-  local url=""
-  local name=""
-  local edition=""
-
-  case "${id,,}" in
-    "win11${PLATFORM,,}" )
-      edition="Professional"
-      name="Windows 11 Pro"
-      url="https://go.microsoft.com/fwlink?linkid=2156292"
-      ;;
-    "win10${PLATFORM,,}" )
-      edition="Professional"
-      name="Windows 10 Pro"
-      url="https://go.microsoft.com/fwlink/?LinkId=841361"
-      ;;
-  esac
-
-  case "${ret,,}" in
-    "url" ) echo "$url" ;;
-    "name" ) echo "$name" ;;
-    "edition" ) echo "$edition" ;;
-    *) echo "";;
-  esac
-
-  return 0
-}
-
 getLink1() {
 
   # Fallbacks for users who cannot connect to the Microsoft servers
@@ -286,10 +255,12 @@ isMido() {
 isESD() {
 
   local id="$1"
-  local url
 
-  url=$(getCatalog "$id" "url")
-  [ -n "$url" ] && return 0
+  case "${id,,}" in
+    "win11${PLATFORM,,}" | "win10${PLATFORM,,}" )
+      return 0
+      ;;
+  esac
 
   return 1
 }
