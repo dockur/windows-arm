@@ -101,10 +101,14 @@ kubectl apply -f kubernetes.yml
     LANGUAGE: "Chinese"
   ```
 
-  You can choose between `Arabic`, `Bulgarian`, `Chinese`, `Croatian`, `Czech`, `Danish`, `Dutch`, `Estonian`, `Finnish`, `French`, `German`, `Greek`, `Hebrew`, `Hungarian`, `Italian`, `Japanese`, `Korean`, `Latvian`, `Lithuanian`, `Norwegian`, `Polish`, `Portuguese`, `Romanian`, `Russian`, `Serbian`, `Slovak`, `Slovenian`, `Spanish`, `Swedish`, `Turkish`, `Thai` and `Ukrainian`.
+  If you want to use a keyboard layout or locale that is not the default for the above language, you can add the `KEYBOARD` and `REGION` variables with a culture code, like this:
 
-  If you want to use a keyboard layout or region/locale that is not the default for the selected language, you can add the `KEYBOARD` and `REGION` variables with a culture code, like `en-US`.
-
+  ```yaml
+  environment:
+    REGION: "en-US"
+    KEYBOARD: "en-US"
+  ```
+  
 * ### How do I change the storage location?
 
   To change the storage location, include the following bind mount in your compose file:
