@@ -85,10 +85,10 @@ kubectl apply -f kubernetes.yml
 
   Select from the values below:
   
-  | **Value**  | **Version**  | **Platform**  | **Size**  |
+  | **Value** | **Version**      | **Platform** | **Size** |
   |---|---|---|---|
-  | `win11`   | Windows 11 Pro   | ARM64 | 4.6 GB    |
-  | `win10`   | Windows 10 Pro   | ARM64 | 3.9 GB    |
+  | `win11`   | Windows 11 Pro   | ARM64        | 4.6 GB   |
+  | `win10`   | Windows 10 Pro   | ARM64        | 3.9 GB   |
 
   To install x86 and x64 versions of Windows,  use [dockur/windows](https://github.com/dockur/windows/).
 
