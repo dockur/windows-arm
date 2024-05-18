@@ -2,10 +2,15 @@
 set -Eeuo pipefail
 
 : "${VERIFY:=""}"
+: "${REGION:=""}"
 : "${MANUAL:=""}"
 : "${REMOVE:=""}"
 : "${VERSION:=""}"
 : "${DETECTED:=""}"
+: "${KEYBOARD:=""}"
+: "${LANGUAGE:=""}"
+: "${USERNAME:=""}"
+: "${PASSWORD:=""}"
 
 MIRRORS=2
 PLATFORM="ARM64"
@@ -22,14 +27,241 @@ parseVersion() {
 
   case "${VERSION,,}" in
     "11" | "11p" | "win11" | "win11p" | "windows11" | "windows 11" )
-      VERSION="win11${PLATFORM,,}"
+      VERSION="win11arm64"
       ;;
     "10" | "10p" | "win10" | "win10p" | "windows10" | "windows 10" )
-      VERSION="win10${PLATFORM,,}"
+      VERSION="win10arm64"
       ;;
   esac
 
   return 0
+}
+
+getLanguage() {
+
+  local id="$1"
+  local ret="$2"
+  local lang=""
+  local desc=""
+  local culture=""
+
+  case "${id,,}" in
+    "ar" | "ar-"* )
+      lang="Arabic"
+      desc="$lang"
+      culture="ar-SA" ;;
+    "bg" | "bg-"* )
+      lang="Bulgarian"
+      desc="$lang"
+      culture="bg-BG" ;;
+    "cs" | "cs-"* | "cz" | "cz-"* )
+      lang="Czech"
+      desc="$lang"
+      culture="cs-CZ" ;;
+    "da" | "da-"* | "dk" | "dk-"* )
+      lang="Danish"
+      desc="$lang"
+      culture="da-DK" ;;
+    "de" | "de-"* )
+      lang="German"
+      desc="$lang"
+      culture="de-DE" ;;
+    "el" | "el-"* | "gr" | "gr-"* )
+      lang="Greek"
+      desc="$lang"
+      culture="el-GR" ;;
+    "gb" | "en-gb" )
+      lang="English International"
+      desc="English"
+      culture="en-GB" ;;
+    "en" | "en-"* )
+      lang="English (United States)"
+      desc="English"
+      culture="en-US" ;;
+    "mx" | "es-mx" )
+      lang="Spanish (Mexico)"
+      desc="Spanish"
+      culture="es-MX" ;;
+    "es" | "es-"* )
+      lang="Spanish"
+      desc="$lang"
+      culture="es-ES" ;;
+    "et" | "et-"* )
+      lang="Estonian"
+      desc="$lang"
+      culture="et-EE" ;;
+    "fi" | "fi-"* )
+      lang="Finnish"
+      desc="$lang"
+      culture="fi-FI" ;;
+    "ca" | "fr-ca" )
+      lang="French Canadian"
+      desc="French"
+      culture="fr-CA" ;;
+    "fr" | "fr-"* )
+      lang="French"
+      desc="$lang"
+      culture="fr-FR" ;;
+    "he" | "he-"* | "il" | "il-"* )
+      lang="Hebrew"
+      desc="$lang"
+      culture="he-IL" ;;
+    "hr" | "hr-"* | "cr" | "cr-"* )
+      lang="Croatian"
+      desc="$lang"
+      culture="hr-HR" ;;      
+    "hu" | "hu-"* )
+      lang="Hungarian"
+      desc="$lang"
+      culture="hu-HU" ;;
+    "it" | "it-"* )
+      lang="Italian"
+      desc="$lang"
+      culture="it-IT" ;;
+    "ja" | "ja-"* | "jp" | "jp-"* )
+      lang="Japanese"
+      desc="$lang"
+      culture="ja-JP" ;;
+    "ko" | "ko-"* | "kr" | "kr-"* )
+      lang="Korean"
+      desc="$lang"
+      culture="ko-KR" ;;
+    "lt" | "lt-"* )
+      lang="Lithuanian"
+      desc="$lang"
+      culture="lv-LV" ;;
+    "lv" | "lv-"* )
+      lang="Latvian"
+      desc="$lang"
+      culture="lt-LT" ;;      
+    "nb" | "nb-"* |"nn" | "nn-"* | "no" | "no-"* )
+      lang="Norwegian"
+      desc="$lang"
+      culture="nb-NO" ;;
+    "nl" | "nl-"* )
+      lang="Dutch"
+      desc="$lang"
+      culture="nl-NL" ;;
+    "pl" | "pl-"* )
+      lang="Polish"
+      desc="$lang"
+      culture="pl-PL" ;;
+    "br" | "pt-br" )
+      lang="Brazilian Portuguese"
+      desc="Portuguese"
+      culture="pt-BR" ;;
+    "pt" | "pt-"* )
+      lang="Portuguese"
+      desc="$lang"
+      culture="pt-BR" ;;
+    "ro" | "ro-"* )
+      lang="Romanian"
+      desc="$lang"
+      culture="ro-RO" ;;
+    "ru" | "ru-"* )
+      lang="Russian"
+      desc="$lang"
+      culture="ru-RU" ;;
+    "sk" | "sk-"* )
+      lang="Slovak"
+      desc="$lang"
+      culture="sk-SK" ;;
+    "sl" | "sl-"* | "si" | "si-"* )
+      lang="Slovenian"
+      desc="$lang"
+      culture="sl-SI" ;;
+    "sr" | "sr-"* )
+      lang="Serbian Latin"
+      desc="Serbian"
+      culture="sr-Latn-RS" ;;
+    "sv" | "sv-"* | "se" | "se-"* )
+      lang="Swedish"
+      desc="$lang"
+      culture="sv-SE" ;;
+    "th" | "th-"* )
+      lang="Thai"
+      desc="$lang"
+      culture="th-TH" ;;
+    "tr" | "tr-"* )
+      lang="Turkish"
+      desc="$lang"
+      culture="tr-TR" ;;
+    "ua" | "ua-"* | "uk" | "uk-"* )
+      lang="Ukrainian"
+      desc="$lang"
+      culture="uk-UA" ;;
+    "hk" | "zh-hk" | "cn-hk" )
+      lang="Chinese (Traditional)"
+      desc="Chinese HK"
+      culture="zh-TW" ;;
+    "tw" | "zh-tw" | "cn-tw" )
+      lang="Chinese (Traditional)"
+      desc="Chinese TW"
+      culture="zh-TW" ;;
+    "zh" | "zh-"* | "cn" | "cn-"* )
+      lang="Chinese (Simplified)"
+      desc="Chinese"
+      culture="zh-CN" ;;
+  esac
+
+  case "${ret,,}" in
+    "desc" ) echo "$desc" ;;
+    "name" ) echo "$lang" ;;
+    "culture" ) echo "$culture" ;;
+    *) echo "$desc";;
+  esac
+
+  return 0
+}
+
+parseLanguage() {
+
+  LANGUAGE="${LANGUAGE/_/-/}"
+  [ -z "$LANGUAGE" ] && LANGUAGE="en"
+
+  case "${LANGUAGE,,}" in
+    "arabic" | "arab" ) LANGUAGE="ar" ;;
+    "bulgarian" | "bu" ) LANGUAGE="bg" ;;
+    "chinese" | "cn" ) LANGUAGE="zh" ;;
+    "croatian" | "cr" | "hrvatski" ) LANGUAGE="hr" ;;
+    "czech" | "cz" | "cesky" ) LANGUAGE="cs" ;;
+    "danish" | "dk" | "danske" ) LANGUAGE="da" ;;
+    "dutch" | "nederlands" ) LANGUAGE="nl" ;;
+    "english" | "gb" | "british" ) LANGUAGE="en" ;;
+    "estonian" | "eesti" ) LANGUAGE="et" ;;
+    "finnish" | "suomi" ) LANGUAGE="fi" ;;
+    "french" | "français" | "francais" ) LANGUAGE="fr" ;;
+    "german" | "deutsch" ) LANGUAGE="de" ;;
+    "greek" | "gr" ) LANGUAGE="el" ;;
+    "hebrew" | "il" ) LANGUAGE="he" ;;
+    "hungarian" | "magyar" ) LANGUAGE="hu" ;;
+    "italian" | "italiano" ) LANGUAGE="it" ;;
+    "japanese" | "jp" ) LANGUAGE="ja" ;;
+    "korean" | "kr" ) LANGUAGE="ko" ;;
+    "latvian" | "latvijas" ) LANGUAGE="lv" ;;
+    "lithuanian" | "lietuvos" ) LANGUAGE="lt" ;;
+    "norwegian" | "no" | "nb" | "norsk" ) LANGUAGE="nn" ;;
+    "polish" | "polski" ) LANGUAGE="pl" ;;
+    "portuguese" | "pt" | "br" ) LANGUAGE="pt-br" ;;
+    "português" | "portugues" ) LANGUAGE="pt-br" ;;
+    "romanian" | "română" | "romana" ) LANGUAGE="ro" ;;
+    "russian" | "ruski" ) LANGUAGE="ru" ;;
+    "serbian" | "serbian latin" ) LANGUAGE="sr" ;;
+    "slovak" | "slovenský" | "slovensky" ) LANGUAGE="sk" ;;
+    "slovenian" | "si" | "slovenski" ) LANGUAGE="sl" ;;
+    "spanish" | "espanol" | "español" ) LANGUAGE="es" ;;
+    "swedish" | "se" | "svenska" ) LANGUAGE="sv" ;;
+    "turkish" | "türk" | "turk" ) LANGUAGE="tr" ;;
+    "thai" ) LANGUAGE="th" ;;
+    "ukrainian" | "ua" ) LANGUAGE="uk" ;;
+  esac
+
+  local culture
+  culture=$(getLanguage "$LANGUAGE" "culture")
+  [ -n "$culture" ] && return 0
+
+  error "Invalid LANGUAGE specified, value \"$LANGUAGE\" is not recognized!"
+  return 1
 }
 
 printVersion() {
@@ -130,7 +362,7 @@ getVersion() {
   local name="$1"
   local arch="$2"
 
-  id=$(fromName "$arch")
+  id=$(fromName "$name" "$arch")
 
   echo "$id"
   return 0
@@ -155,15 +387,15 @@ getLink1() {
   [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
-    "win11${PLATFORM,,}")
+    "win11arm64")
       size=5946128384
       sum="0c8edeae3202cf6f4bf8bb65c9f6176374c48fdcbcc8d0effa8547be75e9fd20"
-      url="$host/11/en-us_windows_11_23h2_${PLATFORM,,}.iso"
+      url="$host/11/en-us_windows_11_23h2_arm64.iso"
       ;;
-    "win10${PLATFORM,,}")
+    "win10arm64")
       size=4957009920
       sum="64461471292b79d18cd9cced6cc141d7773b489a9b3e12de7b120312e63bfaf1"
-      url="$host/10/en-us_windows_10_22h2_${PLATFORM,,}.iso"
+      url="$host/10/en-us_windows_10_22h2_arm64.iso"
       ;;
   esac
 
@@ -295,12 +527,13 @@ getLink2() {
 getValue() {
 
   local val=""
-  local id="$3"
-  local type="$2"
+  local id="$2"
+  local lang="$3"
+  local type="$4"
   local func="getLink$1"
 
   if [ "$1" -gt 0 ] && [ "$1" -le "$MIRRORS" ]; then
-    val=$($func "$id" "$type")
+    val=$($func "$id" "$lang" "$type")
   fi
 
   echo "$val"
@@ -309,8 +542,8 @@ getValue() {
 
 getLink() {
 
-  local url=""
-  url=$(getValue "$1" "" "$2")
+  local url
+  url=$(getValue "$1" "$2" "$3" "")
 
   echo "$url"
   return 0
@@ -318,8 +551,8 @@ getLink() {
 
 getHash() {
 
-  local sum=""
-  sum=$(getValue "$1" "sum" "$2")
+  local sum
+  sum=$(getValue "$1" "$2" "$3" "sum")
 
   echo "$sum"
   return 0
@@ -327,8 +560,8 @@ getHash() {
 
 getSize() {
 
-  local size=""
-  size=$(getValue "$1" "size" "$2")
+  local size
+  size=$(getValue "$1" "$2" "$3" "size")
 
   echo "$size"
   return 0
@@ -341,6 +574,7 @@ isMido() {
 isESD() {
 
   local id="$1"
+  local lang="$2"
 
   case "${id,,}" in
     "win11${PLATFORM,,}" | "win10${PLATFORM,,}" )
@@ -354,14 +588,15 @@ isESD() {
 validVersion() {
 
   local id="$1"
+  local lang="$2"
   local url
 
-  isESD "$id" && return 0
-  isMido "$id" && return 0
+  isESD "$id" "$lang" && return 0
+  isMido "$id" "$lang" && return 0
 
   for ((i=1;i<=MIRRORS;i++)); do
 
-    url=$(getLink "$i" "$id")
+    url=$(getLink "$i" "$id" "$lang")
     [ -n "$url" ] && return 0
 
   done
