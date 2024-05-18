@@ -390,19 +390,19 @@ getLink1() {
     "win11arm64")
       size=5946128384
       sum="0c8edeae3202cf6f4bf8bb65c9f6176374c48fdcbcc8d0effa8547be75e9fd20"
-      url="$host/11/en-us_windows_11_23h2_arm64.iso"
+      url="11/en-us_windows_11_23h2_arm64.iso"
       ;;
     "win10arm64")
       size=4957009920
       sum="64461471292b79d18cd9cced6cc141d7773b489a9b3e12de7b120312e63bfaf1"
-      url="$host/10/en-us_windows_10_22h2_arm64.iso"
+      url="10/en-us_windows_10_22h2_arm64.iso"
       ;;
   esac
 
   case "${ret,,}" in
     "sum" ) echo "$sum" ;;
     "size" ) echo "$size" ;;
-    *) echo "$url";;
+    *) [ -n "$url" ] && echo "$host/$url";;
   esac
 
   return 0
@@ -518,7 +518,7 @@ getLink2() {
   case "${ret,,}" in
     "sum" ) echo "$sum" ;;
     "size" ) echo "$size" ;;
-    *) echo "$url";;
+    *) [ -n "$url" ] && echo "$host/$url";;
   esac
 
   return 0
