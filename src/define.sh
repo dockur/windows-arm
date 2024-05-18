@@ -145,11 +145,14 @@ getLink1() {
   # Fallbacks for users who cannot connect to the Microsoft servers
 
   local id="$1"
-  local ret="$2"
+  local lang="$2"
+  local ret="$3"
   local url=""
   local sum=""
   local size=""
   local host="https://dl.bobpony.com/windows"
+
+  [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
     "win11${PLATFORM,,}")
@@ -178,22 +181,105 @@ getLink2() {
   # Fallbacks for users who cannot connect to the Microsoft servers
 
   local id="$1"
-  local ret="$2"
+  local lang="$2"
+  local ret="$3"
   local url=""
   local sum=""
   local size=""
   local host="https://drive.massgrave.dev"
 
+  culture=$(getLanguage "$lang" "culture")
+
   case "${id,,}" in
-    "win11${PLATFORM,,}")
-      size=7010680832
-      sum="3da19e8c8c418091081186e362fb53a1aa68dad255d1d28ace81e2c88c3f99ba"
-      url="$host/SW_DVD9_Win_Pro_11_23H2.2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-68023.ISO"
+    "win11arm64")
+      case "${culture,,}" in
+        "ar" | "ar-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Arabic_Pro_Ent_EDU_N_MLF_X23-68013.ISO" ;;
+        "bg" | "bg-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Bulgarian_Pro_Ent_EDU_N_MLF_X23-68015.ISO" ;;
+        "cs" | "cs-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Czech_Pro_Ent_EDU_N_MLF_X23-68019.ISO" ;;
+        "da" | "da-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Danish_Pro_Ent_EDU_N_MLF_X23-68020.ISO" ;;
+        "de" | "de-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_German_Pro_Ent_EDU_N_MLF_X23-68028.ISO" ;;
+        "el" | "el-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Greek_Pro_Ent_EDU_N_MLF_X23-68029.ISO" ;;
+        "gb" | "en-gb" ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Eng_Intl_Pro_Ent_EDU_N_MLF_X23-68022.ISO" ;;
+        "en" | "en-"* )
+          size=7010680832
+          sum="3da19e8c8c418091081186e362fb53a1aa68dad255d1d28ace81e2c88c3f99ba"
+          url="$host/SW_DVD9_Win_Pro_11_23H2.2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-68023.ISO" ;;        
+        "mx" | "es-mx" ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Spanish_Latam_Pro_Ent_EDU_N_MLF_X23-68045.ISO" ;;
+        "es" | "es-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Spanish_Pro_Ent_EDU_N_MLF_X23-68046.ISO" ;;
+        "et" | "et-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Estonian_Pro_Ent_EDU_N_MLF_X23-68024.ISO" ;;
+        "fi" | "fi-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Finnish_Pro_Ent_EDU_N_MLF_X23-68025.ISO" ;;
+        "ca" | "fr-ca" ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_FrenchCanadian_Pro_Ent_EDU_N_MLF_X23-68027.ISO" ;;
+        "fr" | "fr-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_French_Pro_Ent_EDU_N_MLF_X23-68026.ISO" ;;
+        "he" | "he-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Hebrew_Pro_Ent_EDU_N_MLF_X23-68030.ISO" ;;
+        "hr" | "hr-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Croatian_Pro_Ent_EDU_N_MLF_X23-68018.ISO" ;;
+        "hu" | "hu-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Hungarian_Pro_Ent_EDU_N_MLF_X23-68031.ISO" ;;
+        "it" | "it-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Italian_Pro_Ent_EDU_N_MLF_X23-68032.ISO" ;;
+        "ja" | "ja-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Japanese_Pro_Ent_EDU_N_MLF_X23-68033.ISO" ;;
+        "ko" | "ko-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Korean_Pro_Ent_EDU_N_MLF_X23-68034.ISO" ;;
+        "lt" | "lt-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Lithuanian_Pro_Ent_EDU_N_MLF_X23-68036.ISO" ;;
+        "lv" | "lv-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Latvian_Pro_Ent_EDU_N_MLF_X23-68035.ISO" ;;
+        "nb" | "nb-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Norwegian_Pro_Ent_EDU_N_MLF_X23-68037.ISO" ;;
+        "nl" | "nl-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Dutch_Pro_Ent_EDU_N_MLF_X23-68021.ISO" ;;
+        "pl" | "pl-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Polish_Pro_Ent_EDU_N_MLF_X23-68038.ISO" ;;
+        "br" | "pt-br" ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Brazilian_Pro_Ent_EDU_N_MLF_X23-68014.ISO" ;;
+        "pt" | "pt-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Portuguese_Pro_Ent_EDU_N_MLF_X23-68039.ISO" ;;
+        "ro" | "ro-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Romanian_Pro_Ent_EDU_N_MLF_X23-68040.ISO" ;;
+        "ru" | "ru-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Russian_Pro_Ent_EDU_N_MLF_X23-68041.ISO" ;;
+        "sk" | "sk-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Slovak_Pro_Ent_EDU_N_MLF_X23-68043.ISO" ;;
+        "sl" | "sl-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Slovenian_Pro_Ent_EDU_N_MLF_X23-68044.ISO" ;;
+        "sr" | "sr-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Serbian_Latin_Pro_Ent_EDU_N_MLF_X23-68042.ISO" ;;
+        "sv" | "sv-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Swedish_Pro_Ent_EDU_N_MLF_X23-68047.ISO" ;;
+        "th" | "th-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Thai_Pro_Ent_EDU_N_MLF_X23-68048.ISO" ;;
+        "tr" | "tr-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Turkish_Pro_Ent_EDU_N_MLF_X23-68049.ISO" ;;
+        "uk" | "uk-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Ukrainian_Pro_Ent_EDU_N_MLF_X23-68050.ISO" ;;
+        "zh-hk" | "zh-tw" ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_ChnTrad_Pro_Ent_EDU_N_MLF_X23-68017.ISO" ;;
+        "zh" | "zh-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_ChnSimp_Pro_Ent_EDU_N_MLF_X23-68016.ISO" ;;
+      esac
       ;;
-    "win10${PLATFORM,,}")
-      size=5190453248
-      sum="bd96b342193f81c0a2e6595d8d8b8dc01dbf789d19211699f6299fec7b712197"
-      url="$host/SW_DVD9_Win_Pro_10_22H2.15_Arm64_English_Pro_Ent_EDU_N_MLF_X23-67223.ISO"
+    "win10arm64")
+      case "${culture,,}" in
+        "ar" | "ar-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Arabic_Pro_Ent_EDU_N_MLF_X23-67213.ISO" ;;
+        "bg" | "bg-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Bulgarian_Pro_Ent_EDU_N_MLF_X23-67215.ISO" ;;
+        "cs" | "cs-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Czech_Pro_Ent_EDU_N_MLF_X23-67219.ISO" ;;
+        "da" | "da-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Danish_Pro_Ent_EDU_N_MLF_X23-67220.ISO" ;;
+        "de" | "de-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_German_Pro_Ent_EDU_N_MLF_X23-67228.ISO" ;;
+        "el" | "el-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Greek_Pro_Ent_EDU_N_MLF_X23-67229.ISO" ;;
+        "gb" | "en-gb" ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Eng_Intl_Pro_Ent_EDU_N_MLF_X23-67222.ISO" ;;
+        "en" | "en-"* )
+          size=5190453248
+          sum="bd96b342193f81c0a2e6595d8d8b8dc01dbf789d19211699f6299fec7b712197"
+          url="$host/SW_DVD9_Win_Pro_10_22H2.15_Arm64_English_Pro_Ent_EDU_N_MLF_X23-67223.ISO" ;;        
+        "mx" | "es-mx" ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Spanish_Latam_Pro_Ent_EDU_N_MLF_X23-67245.ISO" ;;
+        "es" | "es-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Spanish_Pro_Ent_EDU_N_MLF_X23-67246.ISO" ;;
+        "et" | "et-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Estonian_Pro_Ent_EDU_N_MLF_X23-67224.ISO" ;;
+        "fi" | "fi-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Finnish_Pro_Ent_EDU_N_MLF_X23-67225.ISO" ;;
+        "ca" | "fr-ca" ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_FrenchCanadian_Pro_Ent_EDU_N_MLF_X23-67227.ISO" ;;
+        "fr" | "fr-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_French_Pro_Ent_EDU_N_MLF_X23-67226.ISO" ;;
+        "he" | "he-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Hebrew_Pro_Ent_EDU_N_MLF_X23-67230.ISO" ;;
+        "hr" | "hr-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Croatian_Pro_Ent_EDU_N_MLF_X23-67218.ISO" ;;
+        "hu" | "hu-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Hungarian_Pro_Ent_EDU_N_MLF_X23-67231.ISO" ;;
+        "it" | "it-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Italian_Pro_Ent_EDU_N_MLF_X23-67232.ISO" ;;
+        "ja" | "ja-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Japanese_Pro_Ent_EDU_N_MLF_X23-67233.ISO" ;;
+        "ko" | "ko-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Korean_Pro_Ent_EDU_N_MLF_X23-67234.ISO" ;;
+        "lt" | "lt-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Lithuanian_Pro_Ent_EDU_N_MLF_X23-67236.ISO" ;;
+        "lv" | "lv-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Latvian_Pro_Ent_EDU_N_MLF_X23-67235.ISO" ;;
+        "nb" | "nb-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Norwegian_Pro_Ent_EDU_N_MLF_X23-67237.ISO" ;;
+        "nl" | "nl-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Dutch_Pro_Ent_EDU_N_MLF_X23-67221.ISO" ;;
+        "pl" | "pl-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Polish_Pro_Ent_EDU_N_MLF_X23-67238.ISO" ;;
+        "br" | "pt-br" ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Brazilian_Pro_Ent_EDU_N_MLF_X23-67214.ISO" ;;
+        "pt" | "pt-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Portuguese_Pro_Ent_EDU_N_MLF_X23-67239.ISO" ;;
+        "ro" | "ro-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Romanian_Pro_Ent_EDU_N_MLF_X23-67240.ISO" ;;
+        "ru" | "ru-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Russian_Pro_Ent_EDU_N_MLF_X23-67241.ISO" ;;
+        "sk" | "sk-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Slovak_Pro_Ent_EDU_N_MLF_X23-67243.ISO" ;;
+        "sl" | "sl-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Slovenian_Pro_Ent_EDU_N_MLF_X23-67244.ISO" ;;
+        "sr" | "sr-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Serbian_Latin_Pro_Ent_EDU_N_MLF_X23-67242.ISO" ;;
+        "sv" | "sv-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Swedish_Pro_Ent_EDU_N_MLF_X23-67247.ISO" ;;
+        "th" | "th-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Thai_Pro_Ent_EDU_N_MLF_X23-67248.ISO" ;;
+        "tr" | "tr-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Turkish_Pro_Ent_EDU_N_MLF_X23-67249.ISO" ;;
+        "uk" | "uk-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Ukrainian_Pro_Ent_EDU_N_MLF_X23-67250.ISO" ;;
+        "zh-hk" | "zh-tw" ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_ChnTrad_Pro_Ent_EDU_N_MLF_X23-67217.ISO" ;;
+        "zh" | "zh-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_ChnSimp_Pro_Ent_EDU_N_MLF_X23-67216.ISO" ;;
+      esac
       ;;
   esac
 
