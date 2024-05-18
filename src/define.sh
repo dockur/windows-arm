@@ -109,7 +109,7 @@ getLanguage() {
     "hr" | "hr-"* | "cr" | "cr-"* )
       lang="Croatian"
       desc="$lang"
-      culture="hr-HR" ;;      
+      culture="hr-HR" ;;
     "hu" | "hu-"* )
       lang="Hungarian"
       desc="$lang"
@@ -133,7 +133,7 @@ getLanguage() {
     "lv" | "lv-"* )
       lang="Latvian"
       desc="$lang"
-      culture="lt-LT" ;;      
+      culture="lt-LT" ;;
     "nb" | "nb-"* |"nn" | "nn-"* | "no" | "no-"* )
       lang="Norwegian"
       desc="$lang"
@@ -435,7 +435,7 @@ getLink2() {
         "en" | "en-"* )
           size=7010680832
           sum="3da19e8c8c418091081186e362fb53a1aa68dad255d1d28ace81e2c88c3f99ba"
-          url="$host/SW_DVD9_Win_Pro_11_23H2.2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-68023.ISO" ;;        
+          url="$host/SW_DVD9_Win_Pro_11_23H2.2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-68023.ISO" ;;
         "mx" | "es-mx" ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Spanish_Latam_Pro_Ent_EDU_N_MLF_X23-68045.ISO" ;;
         "es" | "es-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Spanish_Pro_Ent_EDU_N_MLF_X23-68046.ISO" ;;
         "et" | "et-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Estonian_Pro_Ent_EDU_N_MLF_X23-68024.ISO" ;;
@@ -480,7 +480,7 @@ getLink2() {
         "en" | "en-"* )
           size=5190453248
           sum="bd96b342193f81c0a2e6595d8d8b8dc01dbf789d19211699f6299fec7b712197"
-          url="$host/SW_DVD9_Win_Pro_10_22H2.15_Arm64_English_Pro_Ent_EDU_N_MLF_X23-67223.ISO" ;;        
+          url="$host/SW_DVD9_Win_Pro_10_22H2.15_Arm64_English_Pro_Ent_EDU_N_MLF_X23-67223.ISO" ;;
         "mx" | "es-mx" ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Spanish_Latam_Pro_Ent_EDU_N_MLF_X23-67245.ISO" ;;
         "es" | "es-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Spanish_Pro_Ent_EDU_N_MLF_X23-67246.ISO" ;;
         "et" | "et-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Estonian_Pro_Ent_EDU_N_MLF_X23-67224.ISO" ;;
