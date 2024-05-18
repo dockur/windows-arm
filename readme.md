@@ -17,6 +17,7 @@ Note: for KVM acceleration you need a Linux-based operating system, as it's not 
 
 ## Features
 
+ - Multi-language
  - ISO downloader
  - KVM acceleration
  - Web-based viewer
