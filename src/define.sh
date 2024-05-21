@@ -17,8 +17,6 @@ PLATFORM="ARM64"
 
 parseVersion() {
 
-  VERSION="${VERSION/\//}"
-
   if [[ "${VERSION}" == \"*\" || "${VERSION}" == \'*\' ]]; then
     VERSION="${VERSION:1:-1}"
   fi
@@ -216,7 +214,7 @@ getLanguage() {
 
 parseLanguage() {
 
-  LANGUAGE="${LANGUAGE/_/-/}"
+  LANGUAGE="${LANGUAGE//_/-/}"
   [ -z "$LANGUAGE" ] && LANGUAGE="en"
 
   case "${LANGUAGE,,}" in
@@ -312,7 +310,7 @@ fromFile() {
   local file="${1,,}"
   local arch="${PLATFORM,,}"
 
-  case "${file/ /_}" in
+  case "${file// /_}" in
     *"_x64_"* | *"_x64."*)
       arch="x64"
       ;;
@@ -324,7 +322,7 @@ fromFile() {
       ;;
   esac
 
-  case "${file/ /_}" in
+  case "${file// /_}" in
     "win10"*| "win_10"* | *"windows10"* | *"windows_10"* )
       id="win10${arch}"
       ;;
