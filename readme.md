@@ -51,7 +51,7 @@ services:
 Via Docker CLI:
 
 ```bash
-docker run -it --name windows -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-timeout 120 dockurr/windows-arm
+docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-timeout 120 dockurr/windows-arm
 ```
 
 Via Kubernetes:
