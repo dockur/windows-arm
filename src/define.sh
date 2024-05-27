@@ -27,8 +27,22 @@ parseVersion() {
     "11" | "11p" | "win11" | "win11p" | "windows11" | "windows 11" )
       VERSION="win11arm64"
       ;;
+    "11e" | "win11e" | "windows11e" | "windows 11e" )
+      VERSION="win11arm64-enterprise-eval"
+      ;;
+    "ltsc11" | "11ltsc" | "win11-ltsc" | "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+      VERSION="win11arm64-enterprise-ltsc-eval"
+      [ -z "$DETECTED" ] && DETECTED="win11arm64-ltsc"
+      ;;      
     "10" | "10p" | "win10" | "win10p" | "windows10" | "windows 10" )
       VERSION="win10arm64"
+      ;;
+    "10e" | "win10e" | "windows10e" | "windows 10e" )
+      VERSION="win10arm64-enterprise-eval"
+      ;;
+    "ltsc10" | "10ltsc" | "win10-ltsc" | "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
+      VERSION="win10arm64-enterprise-ltsc-eval"
+      [ -z "$DETECTED" ] && DETECTED="win10arm64-ltsc"
       ;;
   esac
 
@@ -295,6 +309,18 @@ printEdition() {
   [[ "$result" == "x" ]] && echo "$desc" && return 0
 
   case "${id,,}" in
+    *"-enterprise" )
+      edition="Enterprise"
+      ;;
+    *"-iot" | *"-iot-eval" )
+      edition="LTSC"
+      ;;
+    *"-ltsc" | *"-ltsc-eval" )
+      edition="LTSC"
+      ;;
+    *"-enterprise-eval" )
+      edition="Enterprise (Evaluation)"
+      ;;
     "win10"* | "win11"* )
       edition="Pro"
       ;;
@@ -365,51 +391,38 @@ getVersion() {
 
   id=$(fromName "$name" "$arch")
 
+  case "${id,,}" in
+    "win10"* | "win11"* )
+       case "${name,,}" in
+          *" iot"* ) id="$id-ltsc" ;;
+          *" ltsc"* ) id="$id-ltsc" ;;
+          *" enterprise evaluation"* ) id="$id-enterprise-eval" ;;
+          *" enterprise"* ) id="$id-enterprise" ;;
+        esac
+      ;;
+  esac
+
   echo "$id"
   return 0
 }
 
 switchEdition() {
+
+  local id="$1"
+
+  case "${id,,}" in
+    "win11${PLATFORM,,}-enterprise-eval" )
+      DETECTED="win11${PLATFORM,,}-enterprise"
+      ;;
+    "win10${PLATFORM,,}-enterprise-eval" )
+      DETECTED="win10${PLATFORM,,}-enterprise"
+      ;;
+  esac
+
   return 0
 }
 
 getLink1() {
-
-  # Fallbacks for users who cannot connect to the Microsoft servers
-
-  local id="$1"
-  local lang="$2"
-  local ret="$3"
-  local url=""
-  local sum=""
-  local size=""
-  local host="https://dl.bobpony.com/windows"
-
-  [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
-
-  case "${id,,}" in
-    "win11arm64")
-      size=5946128384
-      sum="0c8edeae3202cf6f4bf8bb65c9f6176374c48fdcbcc8d0effa8547be75e9fd20"
-      url="11/en-us_windows_11_23h2_arm64.iso"
-      ;;
-    "win10arm64")
-      size=4957009920
-      sum="64461471292b79d18cd9cced6cc141d7773b489a9b3e12de7b120312e63bfaf1"
-      url="10/en-us_windows_10_22h2_arm64.iso"
-      ;;
-  esac
-
-  case "${ret,,}" in
-    "sum" ) echo "$sum" ;;
-    "size" ) echo "$size" ;;
-    *) [ -n "$url" ] && echo "$host/$url";;
-  esac
-
-  return 0
-}
-
-getLink2() {
 
   # Fallbacks for users who cannot connect to the Microsoft servers
 
@@ -424,7 +437,7 @@ getLink2() {
   culture=$(getLanguage "$lang" "culture")
 
   case "${id,,}" in
-    "win11arm64")
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
       case "${culture,,}" in
         "ar" | "ar-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Arabic_Pro_Ent_EDU_N_MLF_X23-68013.ISO" ;;
         "bg" | "bg-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Bulgarian_Pro_Ent_EDU_N_MLF_X23-68015.ISO" ;;
@@ -436,7 +449,7 @@ getLink2() {
         "en" | "en-"* )
           size=7010680832
           sum="3da19e8c8c418091081186e362fb53a1aa68dad255d1d28ace81e2c88c3f99ba"
-          url="$host/SW_DVD9_Win_Pro_11_23H2.2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-68023.ISO" ;;
+          url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-68023.ISO" ;;
         "mx" | "es-mx" ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Spanish_Latam_Pro_Ent_EDU_N_MLF_X23-68045.ISO" ;;
         "es" | "es-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Spanish_Pro_Ent_EDU_N_MLF_X23-68046.ISO" ;;
         "et" | "et-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Estonian_Pro_Ent_EDU_N_MLF_X23-68024.ISO" ;;
@@ -469,7 +482,13 @@ getLink2() {
         "zh" | "zh-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_ChnSimp_Pro_Ent_EDU_N_MLF_X23-68016.ISO" ;;
       esac
       ;;
-    "win10arm64")
+    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+      [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
+      size=4821989376
+      sum="e8f1431c4e6289b3997c20eadbb2576670300bb6e1cf8948b5d7af179010a962"
+      url="26100.1.240331-1435.ge_release_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
+      ;;
+    "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
       case "${culture,,}" in
         "ar" | "ar-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Arabic_Pro_Ent_EDU_N_MLF_X23-67213.ISO" ;;
         "bg" | "bg-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Bulgarian_Pro_Ent_EDU_N_MLF_X23-67215.ISO" ;;
@@ -481,7 +500,7 @@ getLink2() {
         "en" | "en-"* )
           size=5190453248
           sum="bd96b342193f81c0a2e6595d8d8b8dc01dbf789d19211699f6299fec7b712197"
-          url="$host/SW_DVD9_Win_Pro_10_22H2.15_Arm64_English_Pro_Ent_EDU_N_MLF_X23-67223.ISO" ;;
+          url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_English_Pro_Ent_EDU_N_MLF_X23-67223.ISO" ;;
         "mx" | "es-mx" ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Spanish_Latam_Pro_Ent_EDU_N_MLF_X23-67245.ISO" ;;
         "es" | "es-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Spanish_Pro_Ent_EDU_N_MLF_X23-67246.ISO" ;;
         "et" | "et-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Estonian_Pro_Ent_EDU_N_MLF_X23-67224.ISO" ;;
@@ -513,6 +532,59 @@ getLink2() {
         "zh-hk" | "zh-tw" ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_ChnTrad_Pro_Ent_EDU_N_MLF_X23-67217.ISO" ;;
         "zh" | "zh-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_ChnSimp_Pro_Ent_EDU_N_MLF_X23-67216.ISO" ;;
       esac
+      ;;
+    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
+      [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
+      size=4430471168
+      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
+      url="en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"      
+      ;;
+  esac
+
+  case "${ret,,}" in
+    "sum" ) echo "$sum" ;;
+    "size" ) echo "$size" ;;
+    *) [ -n "$url" ] && echo "$host/$url";;
+  esac
+
+  return 0
+}
+
+getLink2() {
+
+  # Fallbacks for users who cannot connect to the Microsoft servers
+
+  local id="$1"
+  local lang="$2"
+  local ret="$3"
+  local url=""
+  local sum=""
+  local size=""
+  local host="https://dl.bobpony.com/windows"
+
+  [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
+
+  case "${id,,}" in
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
+      size=6326812672
+      sum="464c75909b9c37864e144886445a2faa67ac86f0845a68cca3f017b97f810e8d"
+      url="11/en-us_windows_11_23h2_arm64.iso"
+      ;;
+    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+      [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
+      size=4821989376
+      sum="e8f1431c4e6289b3997c20eadbb2576670300bb6e1cf8948b5d7af179010a962"
+      url="11/26100.1.240331-1435.ge_release_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
+      ;;      
+    "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
+      size=4846794752
+      sum="6d2688f95fa1d359d68ed0c38c3f38de7b3713c893410e15be9d1e706a4a58c7"
+      url="10/en-us_windows_10_22h2_arm64.iso"
+      ;;      
+    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
+      size=4430471168
+      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
+      url="10/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
       ;;
   esac
 
@@ -581,6 +653,12 @@ isESD() {
     "win11${PLATFORM,,}" | "win10${PLATFORM,,}" )
       return 0
       ;;
+    "win11${PLATFORM,,}-enterprise" | "win11${PLATFORM,,}-enterprise-eval")
+      return 0
+      ;;
+    "win10${PLATFORM,,}-enterprise" | "win10${PLATFORM,,}-enterprise-eval" )
+      return 0
+      ;;
   esac
 
   return 1
@@ -607,6 +685,10 @@ validVersion() {
 
 migrateFiles() {
   return 0
+}
+
+detectLegacy() {
+  return 1
 }
 
 return 0
