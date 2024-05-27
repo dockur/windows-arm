@@ -432,53 +432,6 @@ getLink1() {
   local url=""
   local sum=""
   local size=""
-  local host="https://dl.bobpony.com/windows"
-
-  [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
-
-  case "${id,,}" in
-    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
-      size=6326812672
-      sum="464c75909b9c37864e144886445a2faa67ac86f0845a68cca3f017b97f810e8d"
-      url="11/en-us_windows_11_23h2_arm64.iso"
-      ;;
-    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
-      [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
-      size=4821989376
-      sum="e8f1431c4e6289b3997c20eadbb2576670300bb6e1cf8948b5d7af179010a962"
-      url="11/26100.1.240331-1435.ge_release_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
-      ;;      
-    "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
-      size=4846794752
-      sum="6d2688f95fa1d359d68ed0c38c3f38de7b3713c893410e15be9d1e706a4a58c7"
-      url="10/en-us_windows_10_22h2_arm64.iso"
-      ;;      
-    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
-      size=4430471168
-      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
-      url="10/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
-      ;;
-  esac
-
-  case "${ret,,}" in
-    "sum" ) echo "$sum" ;;
-    "size" ) echo "$size" ;;
-    *) [ -n "$url" ] && echo "$host/$url";;
-  esac
-
-  return 0
-}
-
-getLink2() {
-
-  # Fallbacks for users who cannot connect to the Microsoft servers
-
-  local id="$1"
-  local lang="$2"
-  local ret="$3"
-  local url=""
-  local sum=""
-  local size=""
   local host="https://drive.massgrave.dev"
 
   culture=$(getLanguage "$lang" "culture")
@@ -585,6 +538,53 @@ getLink2() {
       size=4430471168
       sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"      
+      ;;
+  esac
+
+  case "${ret,,}" in
+    "sum" ) echo "$sum" ;;
+    "size" ) echo "$size" ;;
+    *) [ -n "$url" ] && echo "$host/$url";;
+  esac
+
+  return 0
+}
+
+getLink2() {
+
+  # Fallbacks for users who cannot connect to the Microsoft servers
+
+  local id="$1"
+  local lang="$2"
+  local ret="$3"
+  local url=""
+  local sum=""
+  local size=""
+  local host="https://dl.bobpony.com/windows"
+
+  [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
+
+  case "${id,,}" in
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
+      size=6326812672
+      sum="464c75909b9c37864e144886445a2faa67ac86f0845a68cca3f017b97f810e8d"
+      url="11/en-us_windows_11_23h2_arm64.iso"
+      ;;
+    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+      [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
+      size=4821989376
+      sum="e8f1431c4e6289b3997c20eadbb2576670300bb6e1cf8948b5d7af179010a962"
+      url="11/26100.1.240331-1435.ge_release_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
+      ;;      
+    "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
+      size=4846794752
+      sum="6d2688f95fa1d359d68ed0c38c3f38de7b3713c893410e15be9d1e706a4a58c7"
+      url="10/en-us_windows_10_22h2_arm64.iso"
+      ;;      
+    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
+      size=4430471168
+      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
+      url="10/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
       ;;
   esac
 
