@@ -481,7 +481,7 @@ getLink2() {
   culture=$(getLanguage "$lang" "culture")
 
   case "${id,,}" in
-    "win11arm64")
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
       case "${culture,,}" in
         "ar" | "ar-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Arabic_Pro_Ent_EDU_N_MLF_X23-68013.ISO" ;;
         "bg" | "bg-"* ) url="SW_DVD9_Win_Pro_11_23H2.2_Arm64_Bulgarian_Pro_Ent_EDU_N_MLF_X23-68015.ISO" ;;
@@ -538,7 +538,7 @@ getLink2() {
       sum="e8f1431c4e6289b3997c20eadbb2576670300bb6e1cf8948b5d7af179010a962"
       url="26100.1.240331-1435.ge_release_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
       ;;
-    "win10arm64")
+    "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
       case "${culture,,}" in
         "ar" | "ar-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Arabic_Pro_Ent_EDU_N_MLF_X23-67213.ISO" ;;
         "bg" | "bg-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Bulgarian_Pro_Ent_EDU_N_MLF_X23-67215.ISO" ;;
