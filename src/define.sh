@@ -449,8 +449,8 @@ getLink1() {
       url="11/26100.1.240331-1435.ge_release_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
       ;;      
     "win10arm64")
-      size=4957009920
-      sum="64461471292b79d18cd9cced6cc141d7773b489a9b3e12de7b120312e63bfaf1"
+      size=4846794752
+      sum="6d2688f95fa1d359d68ed0c38c3f38de7b3713c893410e15be9d1e706a4a58c7"
       url="10/en-us_windows_10_22h2_arm64.iso"
       ;;      
     "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
