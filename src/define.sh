@@ -27,8 +27,30 @@ parseVersion() {
     "11" | "11p" | "win11" | "win11p" | "windows11" | "windows 11" )
       VERSION="win11arm64"
       ;;
+    "11e" | "win11e" | "windows11e" | "windows 11e" )
+      VERSION="win11arm64-enterprise-eval"
+      ;;
     "10" | "10p" | "win10" | "win10p" | "windows10" | "windows 10" )
       VERSION="win10arm64"
+      ;;
+    "10e" | "win10e" | "windows10e" | "windows 10e" )
+      VERSION="win10arm64-enterprise-eval"
+      ;;
+    "iot11" | "11iot" | "win11-iot" | "win11arm64-iot" | "win11arm64-enterprise-iot-eval" )
+      VERSION="win11arm64-enterprise-iot-eval"
+      [ -z "$DETECTED" ] && DETECTED="win11arm64-iot"
+      ;;
+    "iot10" | "10iot" | "win10-iot" | "win10arm64-iot" | "win10arm64-enterprise-iot-eval" )
+      VERSION="win10arm64-enterprise-iot-eval"
+      [ -z "$DETECTED" ] && DETECTED="win10arm64-iot"
+      ;;
+    "ltsc11" | "11ltsc" | "win11-ltsc" | "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+      VERSION="win11arm64-enterprise-ltsc-eval"
+      [ -z "$DETECTED" ] && DETECTED="win11arm64-iot"
+      ;;
+    "ltsc10" | "10ltsc" | "win10-ltsc" | "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
+      VERSION="win10arm64-enterprise-ltsc-eval"
+      [ -z "$DETECTED" ] && DETECTED="win10arm64-ltsc"
       ;;
   esac
 
@@ -295,6 +317,18 @@ printEdition() {
   [[ "$result" == "x" ]] && echo "$desc" && return 0
 
   case "${id,,}" in
+    *"-enterprise" )
+      edition="Enterprise"
+      ;;
+    *"-iot" | *"-iot-eval" )
+      edition="IoT"
+      ;;
+    *"-ltsc" | *"-ltsc-eval" )
+      edition="LTSC"
+      ;;
+    *"-enterprise-eval" )
+      edition="Enterprise (Evaluation)"
+      ;;
     "win10"* | "win11"* )
       edition="Pro"
       ;;
@@ -365,11 +399,34 @@ getVersion() {
 
   id=$(fromName "$name" "$arch")
 
+  case "${id,,}" in
+    "win10"* | "win11"* )
+       case "${name,,}" in
+          *" iot"* ) id="$id-iot" ;;
+          *" ltsc"* ) id="$id-ltsc" ;;
+          *" enterprise evaluation"* ) id="$id-enterprise-eval" ;;
+          *" enterprise"* ) id="$id-enterprise" ;;
+        esac
+      ;;
+  esac
+
   echo "$id"
   return 0
 }
 
 switchEdition() {
+
+  local id="$1"
+
+  case "${id,,}" in
+    "win11${PLATFORM,,}-enterprise-eval" )
+      DETECTED="win11${PLATFORM,,}-enterprise"
+      ;;
+    "win10${PLATFORM,,}-enterprise-eval" )
+      DETECTED="win10${PLATFORM,,}-enterprise"
+      ;;
+  esac
+
   return 0
 }
 
@@ -579,6 +636,12 @@ isESD() {
 
   case "${id,,}" in
     "win11${PLATFORM,,}" | "win10${PLATFORM,,}" )
+      return 0
+      ;;
+    "win11${PLATFORM,,}-enterprise" | "win11${PLATFORM,,}-enterprise-eval")
+      return 0
+      ;;
+    "win10${PLATFORM,,}-enterprise" | "win10${PLATFORM,,}-enterprise-eval" )
       return 0
       ;;
   esac
