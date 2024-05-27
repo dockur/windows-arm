@@ -455,7 +455,7 @@ getLink1() {
       ;;      
     "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       size=4430471168
-      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea"
+      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="10/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
       ;;
   esac
@@ -583,7 +583,7 @@ getLink2() {
     "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
       size=4430471168
-      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea"
+      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"      
       ;;
   esac
