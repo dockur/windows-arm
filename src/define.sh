@@ -687,6 +687,10 @@ migrateFiles() {
   return 0
 }
 
+skipVersion() {
+  return 1
+}
+
 detectLegacy() {
   return 1
 }
