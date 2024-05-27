@@ -18,6 +18,14 @@ getCatalog() {
       edition="Professional"
       name="Windows 10 Pro"
       url="https://go.microsoft.com/fwlink/?LinkId=841361" ;;
+    "win11${PLATFORM,,}-enterprise" | "win11${PLATFORM,,}-enterprise-eval")
+      edition="Enterprise"
+      name="Windows 11 Enterprise"
+      url="https://go.microsoft.com/fwlink?linkid=2156292" ;;
+    "win10${PLATFORM,,}-enterprise" | "win10${PLATFORM,,}-enterprise-eval" )
+      edition="Enterprise"
+      name="Windows 10 Enterprise"
+      url="https://go.microsoft.com/fwlink/?LinkId=841361" ;;
   esac
 
   case "${ret,,}" in
@@ -87,8 +95,9 @@ getESD() {
 
   size=$(stat -c%s "$dir/$eFile")
   if ((size<20)); then
+    desc=$(printEdition "$version" "$desc")
     language=$(getLanguage "$lang" "desc")
-    error "the $language language is not supported by this download method!" && return 1
+    error "No download in the $language language available for $desc!" && return 1
   fi
 
   local tag="FilePath"
