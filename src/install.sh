@@ -606,7 +606,7 @@ prepareImage() {
     "winxp"* )
       DISK_TYPE="blk"
       prepareXP "$iso" "$dir" "$desc" && return 0
-      error "Failed to prepare $desc ISO!" && return 1 ;;      
+      error "Failed to prepare $desc ISO!" && return 1 ;;
     "win2003"* )
       DISK_TYPE="blk"
       prepare2k3 "$iso" "$dir" "$desc" && return 0
@@ -624,7 +624,7 @@ prepareImage() {
     return 1
   fi
 
-  prepareLegacy "$iso" "$dir" && return 0
+  prepareLegacy "$iso" "$dir" "$desc" && return 0
 
   error "Failed to extract boot image from $desc ISO image!"
   return 1
@@ -695,7 +695,7 @@ addDriver() {
     "win81x64"* ) folder="w10/amd64" ;;
     "win10x64"* ) folder="w10/amd64" ;;
     "win11x64"* ) folder="w11/amd64" ;;
-    "win2025"* ) folder="2k22/amd64" ;;    
+    "win2025"* ) folder="2k22/amd64" ;;
     "win2022"* ) folder="2k22/amd64" ;;
     "win2019"* ) folder="2k19/amd64" ;;
     "win2016"* ) folder="2k16/amd64" ;;
