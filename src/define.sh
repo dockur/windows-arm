@@ -605,9 +605,7 @@ getLink2() {
 
   return 0
 }
-value was:  bytes. Please report this at https://github.com/dockur/windows-arm/issues
-❯ Verifying downloaded ISO...
-❯ ERROR: The downloaded file has an invalid SHA256 checksum:  , while expected value was: e8f1431c4e6289b3997c20eadbb2576670300bb6e1cf8948b5d7af179010a962. Please report this at https://github.com/dockur/windows-arm/issues
+
 getValue() {
 
   local val=""
