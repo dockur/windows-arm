@@ -528,6 +528,7 @@ detectImage() {
   fi
 
   info "Detecting version from ISO image..."
+  detectLegacy "$dir" && return 0
 
   local src wim info
   src=$(find "$dir" -maxdepth 1 -type d -iname sources | head -n 1)
