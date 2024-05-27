@@ -585,14 +585,14 @@ getLink2() {
       ;;
     "win10arm64-iot" | "win10arm64-enterprise-iot-eval" )
       [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
-      size=4821989376
-      sum="e8f1431c4e6289b3997c20eadbb2576670300bb6e1cf8948b5d7af179010a962"
-      url="en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
+      size=4430471168
+      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
+      url="en-us_windows_10_iot_enterprise_version_22h2_arm64_dvd_39566b6b.iso"
       ;;
     "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
-      size=4821989376
-      sum="e8f1431c4e6289b3997c20eadbb2576670300bb6e1cf8948b5d7af179010a962"
+      size=4430471168
+      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
       ;;
   esac
@@ -605,7 +605,9 @@ getLink2() {
 
   return 0
 }
-
+value was:  bytes. Please report this at https://github.com/dockur/windows-arm/issues
+❯ Verifying downloaded ISO...
+❯ ERROR: The downloaded file has an invalid SHA256 checksum:  , while expected value was: e8f1431c4e6289b3997c20eadbb2576670300bb6e1cf8948b5d7af179010a962. Please report this at https://github.com/dockur/windows-arm/issues
 getValue() {
 
   local val=""
