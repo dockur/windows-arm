@@ -238,6 +238,8 @@ downloadImage() {
     desc="$desc in $language"
   fi
 
+  switchEdition "$version"
+
   if isESD "$version" "$lang"; then
 
     if [[ "$tried" != "n" ]]; then
