@@ -437,7 +437,7 @@ getLink1() {
   [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
-    "win11arm64")
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
       size=6326812672
       sum="464c75909b9c37864e144886445a2faa67ac86f0845a68cca3f017b97f810e8d"
       url="11/en-us_windows_11_23h2_arm64.iso"
@@ -448,14 +448,14 @@ getLink1() {
       sum="e8f1431c4e6289b3997c20eadbb2576670300bb6e1cf8948b5d7af179010a962"
       url="11/26100.1.240331-1435.ge_release_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
       ;;      
-    "win10arm64")
+    "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
       size=4846794752
       sum="6d2688f95fa1d359d68ed0c38c3f38de7b3713c893410e15be9d1e706a4a58c7"
       url="10/en-us_windows_10_22h2_arm64.iso"
       ;;      
     "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
-      size=1
-      sum="xxx"
+      size=4430471168
+      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea"
       url="10/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
       ;;
   esac
@@ -582,8 +582,8 @@ getLink2() {
       ;;
     "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
-      size=1
-      sum="xx"
+      size=4430471168
+      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea"
       url="en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"      
       ;;
   esac
