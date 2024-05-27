@@ -609,4 +609,8 @@ migrateFiles() {
   return 0
 }
 
+detectLegacy() {
+  return 1
+}
+
 return 0
