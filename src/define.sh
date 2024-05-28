@@ -687,16 +687,20 @@ migrateFiles() {
   return 0
 }
 
-skipVersion() {
-  return 1
-}
-
 detectLegacy() {
   return 1
 }
 
 prepareLegacy() {
   return 1
+}
+
+skipVersion() {
+  return 1
+}
+
+setMachine() {
+  return 0
 }
 
 return 0
