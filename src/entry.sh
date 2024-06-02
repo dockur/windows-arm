@@ -25,7 +25,12 @@ trap - ERR
 
 info "Booting ${APP}${BOOT_DESC}..."
 
-{ qemu-system-aarch64 ${ARGS:+ $ARGS} >"$QEMU_OUT" 2>"$QEMU_LOG"; rc=$?; } || :
+if [ -z "$CPU_PIN" ]; then
+  { qemu-system-aarch64 ${ARGS:+ $ARGS} >"$QEMU_OUT" 2>"$QEMU_LOG"; rc=$?; } || :
+else
+  { taskset -c "$CPU_PIN" qemu-system-aarch64 ${ARGS:+ $ARGS} >"$QEMU_OUT" 2>"$QEMU_LOG"; rc=$?; } || :
+fi
+
 (( rc != 0 )) && error "$(<"$QEMU_LOG")" && exit 15
 
 terminal
