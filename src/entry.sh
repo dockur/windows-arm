@@ -23,7 +23,8 @@ cd /run
 
 trap - ERR
 
-info "Booting ${APP}${BOOT_DESC}..."
+version=$(qemu-system-aarch64 --version | head -n 1 | cut -d '(' -f 1 | awk '{ print $NF }')
+info "Booting ${APP}${BOOT_DESC} using QEMU v$version..."
 
 if [ -z "$CPU_PIN" ]; then
   { qemu-system-aarch64 ${ARGS:+ $ARGS} >"$QEMU_OUT" 2>"$QEMU_LOG"; rc=$?; } || :
