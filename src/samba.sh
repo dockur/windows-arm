@@ -75,7 +75,10 @@ fi
         echo "    force group = root"
 } > "/etc/samba/smb.conf"
 
-! smbd && smbd --debug-stdout
+if ! smbd; then
+  error "Samba daemon failed to start!"
+  smbd -i --debug-stdout || true
+fi
 
 # Enable Web Service Discovery
 wsdd -i "$interface" -p -n "$hostname" &
