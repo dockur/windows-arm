@@ -187,17 +187,6 @@ kubectl apply -f kubernetes.yml
     MANUAL: "Y"
   ```
 
-* ### How do I verify if my system supports KVM?
-
-  To verify if your system supports KVM, run the following commands:
-
-  ```bash
-  sudo apt install cpu-checker
-  sudo kvm-ok
-  ```
-
-  If you receive an error from `kvm-ok` indicating that KVM acceleration can't be used, check the virtualization settings in the BIOS.
-
 * ### How do I change the amount of CPU or RAM?
 
   By default, the container will be allowed to use a maximum of 2 CPU cores and 4 GB of RAM.
@@ -320,6 +309,19 @@ kubectl apply -f kubernetes.yml
   ```
   
   In case the device is a USB disk drive, please wait until after the installation is completed before connecting it. Otherwise the installation may fail, as the order of the disks can get rearranged.
+
+* ### How do I verify if my system supports KVM?
+
+  To verify that your system supports KVM, run the following commands:
+
+  ```bash
+  sudo apt install cpu-checker
+  sudo kvm-ok
+  ```
+
+  If you receive an error from `kvm-ok` indicating that KVM acceleration can't be used, check whether virtualization extensions are enabled in your BIOS. If you are running the container inside a VM instead of directly on the host, you will also need to enable nested virtualization in its settings. If you are using a cloud provider, you may be out of luck as most of them do not allow nested virtualization for their VPS's. If you are using MacOS, you are also out of luck, as only Linux and Windows support KVM.
+
+  If you don't receive any error from `kvm-ok` at all, but the container still complains that `/dev/kvm` is missing, it might help to add `privileged: true` to your compose file (or `--privileged` to your `run` command), to rule out any permission issue.
 
 * ### Is this project legal?
 
