@@ -7,6 +7,7 @@
 [![Build]][build_url]
 [![Version]][tag_url]
 [![Size]][tag_url]
+[![Package]][pkg_url]
 [![Pulls]][hub_url]
 
 </div></h1>
@@ -382,8 +383,10 @@ kubectl apply -f kubernetes.yml
 [build_url]: https://github.com/dockur/windows-arm/
 [hub_url]: https://hub.docker.com/r/dockurr/windows-arm/
 [tag_url]: https://hub.docker.com/r/dockurr/windows-arm/tags
+[pkg_url]: https://github.com/dockur/windows/pkgs/container/windows-arm
 
 [Build]: https://github.com/dockur/windows-arm/actions/workflows/build.yml/badge.svg
 [Size]: https://img.shields.io/docker/image-size/dockurr/windows-arm/latest?color=066da5&label=size
 [Pulls]: https://img.shields.io/docker/pulls/dockurr/windows-arm.svg?style=flat&label=pulls&logo=docker
 [Version]: https://img.shields.io/docker/v/dockurr/windows-arm/latest?arch=amd64&sort=semver&color=066da5
+[Package]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fipitio%2Fghcr-pulls%2Fmaster%2Findex.json&query=%24%5B%3F(%40.owner%3D%3D%22dockur%22%20%26%26%20%40.repo%3D%3D%22windows-arm%22%20%26%26%20%40.image%3D%3D%22windows-arm%22)%5D.pulls&logo=github&style=flat&color=066da5&label=pulls
