@@ -383,7 +383,7 @@ kubectl apply -f kubernetes.yml
 [build_url]: https://github.com/dockur/windows-arm/
 [hub_url]: https://hub.docker.com/r/dockurr/windows-arm/
 [tag_url]: https://hub.docker.com/r/dockurr/windows-arm/tags
-[pkg_url]: https://github.com/dockur/windows/pkgs/container/windows-arm
+[pkg_url]: https://github.com/dockur/windows-arm/pkgs/container/windows-arm
 
 [Build]: https://github.com/dockur/windows-arm/actions/workflows/build.yml/badge.svg
 [Size]: https://img.shields.io/docker/image-size/dockurr/windows-arm/latest?color=066da5&label=size
