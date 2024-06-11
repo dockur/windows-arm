@@ -13,7 +13,7 @@
 
 Windows for ARM in a Docker container, for devices like the Raspberry Pi 5 and many others.
 
-Note: for KVM acceleration you need a Linux-based operating system, as it's not available on MacOS unfortunately.
+*Note: for KVM acceleration you need a Linux-based operating system, as it's not available on MacOS unfortunately.*
 
 ## Features ✨
 
@@ -377,7 +377,7 @@ kubectl apply -f kubernetes.yml
 
 ## Disclaimer ⚖️
 
-The product names, logos, brands, and other trademarks referred to within this project are the property of their respective trademark holders. This project is not affiliated, sponsored, or endorsed by Microsoft Corporation.
+*The product names, logos, brands, and other trademarks referred to within this project are the property of their respective trademark holders. This project is not affiliated, sponsored, or endorsed by Microsoft Corporation.*
 
 [build_url]: https://github.com/dockur/windows-arm/
 [hub_url]: https://hub.docker.com/r/dockurr/windows-arm/
