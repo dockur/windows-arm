@@ -322,7 +322,7 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
   ```
   
 > [!IMPORTANT]
-> In case the device is a USB disk drive, please wait until after the installation is completed before connecting it. Otherwise the installation may fail, as the order of the disks can get rearranged.
+> If the device is a USB disk drive, please wait until after the installation is completed before connecting it. Otherwise the installation may fail, as the order of the disks can get rearranged.
 
 ### How do I verify if my system supports KVM?
 
