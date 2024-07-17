@@ -223,54 +223,6 @@ kubectl apply -f kubernetes.yml
     PASSWORD: "gates"
   ```
 
-create -d macvlan \
-      --subnet=192.168.0### How do I connect using RDP?
-
-  Our web-viewer's mainly meant to using during installation, as picture quality are low, and has no audio or clipboard for example.
-
-  For better experience, connecting using any Microsoftample.
-
-  For better experience, connecting using any Microsoft
-  ```bash
-  docker network create -d macvlan \
-      --subnet=192.168.0### How do I connect using RDP?
-
-  Our web-viewer's mainly meant to using during installation, as picture quality are low, and has no audio or clipboard for example.
-
-  For better experience, connecting using any Microsoftate -d macvlan \
-      --subnet=192.168.0### How do I connect using RDP?
-
-  Our web-viewer's mainly meant to using during installation, as picture quality are low, and has no audio or clipboard for example.
-
-  For better experience, connecting using any Microsoftft Remote Desktop apps client to your IP of the container, using the username `Docker` and leaving password empty.
-
-  There's a RDP client for [Android](https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx) available from the Play Store and one for [iOS](https://apps.apple.com/app/microsoft-remote-desktop/id714464092) in the Apple App Store. For Linux feel free using [FreeRDP](https://www.freerdp.com/) and on Windows just type `mstsc` in the search box.
-
-### How do I assign an individual IP address to the container?
-
-  By default, you use bridged networking, which shares the IP address with the host. 
-
-  Want assigning an individual IP address to container? Create macvlan network as follows:
-
-  ```bash
-  docker network create -d macvlan \
-      --subnet=192.168.0.0.0/24 \
-      --gateway=192.168.0.1 \
-      --ip-range=192.168.0.100/28 \
-      -o parent=eth0 vlan
-  ```
-  
-  Be sure modifying these values, matching your local subnet. 
-
-  Once created your network, change your compose file to look as follows:
-
-  ```yaml
-  services:
-    windows:
-      container_name: windows
-      ..<snip>..
-      networks:
-        vlan:
 ### How do I connect using RDP?
 
   Our web-viewer's mainly meant to be used during installation, as our picture quality are low, and has no audio or clipboard for example.
@@ -316,7 +268,7 @@ create -d macvlan \
 > [!IMPORTANT]  
 > This IP address won't be accessible from the Docker host due to design of macvlan, which doesn't permit communication between the two. If this is a concern, you need to create a [second macvlan](https://blog.oddbit.com/post/2018-03-12-using-docker-macvlan-networks/#host-access) as current workaround.
 
-### How can Windows acquire an IP addre### How my Windows acquiring an IP address from my router?
+### How my Windows acquiring an IP address from my router?
 
   After configuring your container for [macvlan](#how-do-i-assign-an-individual-ip-address-to-the-container), possibles for Windows becoming part of your home network by requesting an IP from your router, just like a real PC.
 
@@ -351,7 +303,7 @@ create -d macvlan \
 
 ### How do I pass-through a disk?
 
-  Possibles passing-through disk devices directly, adding them in your compose file on this way:
+  Possibles passing-through disk devices directly, adding them in your compose file this way:
 
   ```yaml
   devices:
@@ -360,11 +312,11 @@ create -d macvlan \
 ...
   ```
 
-  Use `/disk1` if you wanted to becoming your main drive, and use `/disk2` and higher, adding them as further drives.
+  Use `/disk1` if you want it to become your main drive, and use `/disk2` and higher, adding them as futher drives.
 
 ### How do I pass-through a USB device?
 
-  Passing-through USB device? First lookup your vendor and product id via the `lsusb` command, then add them in your compose file like this:
+  Passing-through some USB device? First, lookup its vendor and product id via the `lsusb` command, then add them to your compose file like this:
 
   ```yaml
   environment:
@@ -372,28 +324,28 @@ create -d macvlan \
   devices:
     - /dev/bus/usb
   ```
-  
+
 > [!IMPORTANT]
-> If the device is a USB disk drive, please wait until after the installation is completed before connecting it. Or you may fail, as ordering the disks can get rearranged.
+> If your device is USB disk drive, please wait until after the installation is completed before connecting it. Or installation fails, as ordering the disks can get rearranged.
 
 ### How do I verify if my system supports KVM?
 
-  Verifying your system supports KVM? Run the followings:
+  Verifying your system supports KVM? Run followings:
 
   ```bash
   sudo apt install cpu-checker
   sudo kvm-ok
   ```
 
-  You may receive errors from `kvm-ok` indicating your KVM acceleration can't be used, please check whether:
+  You may receive errors from `kvm-ok` indicating KVM acceleration can't be used, please check whether:
 
   - the virtualization extensions (`Intel VT-x` or `AMD SVM`) are enabled in your UEFI.
 
   - you are running an operating system that supports them, like Linux or Windows 11 (macOS and Windows 10 do not unfortunately).
 
-  - you enabled "nested virtualization" if you are running your container insides virtual machine.
+  - you enabled "nested virtualization" if you are running the container inside a virtual machine.
 
-  - you are not using a cloud provider, as most of them not allowing nested virtualization for their VPS's.
+  - you are not using a cloud provider, as most of them do not allow nested virtualization for their VPS's.
 
   If you didn't receive any error from `kvm-ok` at all, but the container still complains that `/dev/kvm` is missing, it might helped by adding `privileged: true` in your compose file (or `--privileged` in your `run` command), ruling out any permission issue.
 
@@ -406,7 +358,7 @@ create -d macvlan \
 
 ## Disclaimer ⚖️
 
-*The product names, logos, brands, and other trademarks referres within this project are the property of their respective trademark holders. This project is not affiliated, sponsored, or endorsed by Microsoft Corporation.*
+*The product names, logos, brands, and other trademarks referres within us are the property of their respective trademark holders. This project not affiliated, sponsored, or endorsed by Microsoft Corporation.*
 
 [build_url]: https://github.com/dockur/windows-arm/
 [hub_url]: https://hub.docker.com/r/dockurr/windows-arm/
