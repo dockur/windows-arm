@@ -25,7 +25,7 @@ Windows for ARM in a Docker container, for devices like the Raspberry Pi 5 and m
 
 ## Video 📺
 
-[![Youtube](https://img.youtube.com/vi/xhGYobuG508/0.jpg)](https://www.youtube.com/watch?v=xhGYobuG508)
+[![Youtube](https://img.youtube.com/vi/xhGYobuG508/0.jpg)](https://youtu.be/xhGYobuG508)
 
 ## Usage  🐳
 
@@ -37,9 +37,10 @@ services:
     container_name: windows
     image: dockurr/windows-arm
     environment:
-      VERSION: "win11"
+      VERSION: "win11e"
     devices:
       - /dev/kvm
+      - /dev/net/tun
     cap_add:
       - NET_ADMIN
     ports:
@@ -52,7 +53,7 @@ services:
 Via Docker CLI:
 
 ```bash
-docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-timeout 120 dockurr/windows-arm
+docker run -it --rm -p 8006:8006 --device=/dev/kvm --device=/dev/net/tun --cap-add NET_ADMIN --stop-timeout 120 dockurr/windows-arm
 ```
 
 Via Kubernetes:
@@ -65,7 +66,7 @@ kubectl apply -f kubernetes.yml
 
 ### How do I use it?
 
-  Very simple! These are the steps:
+  Simple! Steps below:
   
   - Start the container and connect to [port 8006](http://localhost:8006) using your web browser.
 
@@ -77,11 +78,11 @@ kubectl apply -f kubernetes.yml
 
 ### How do I select the Windows version?
 
-  By default, Windows 11 will be installed. But you can add the `VERSION` environment variable to your compose file, in order to specify an alternative Windows version to be downloaded:
+  By default, Windows 11 Enterprise will be installed. But you can add the `VERSION` environment variable to your compose file, in order to specify an alternative Windows version to be downloaded:
 
   ```yaml
   environment:
-    VERSION: "win11"
+    VERSION: "win11e"
   ```
 
   Select from the values below:
@@ -134,11 +135,11 @@ kubectl apply -f kubernetes.yml
 
 ### How do I change the size of the disk?
 
-  To expand the default size of 64 GB, add the `DISK_SIZE` setting to your compose file and set it to your preferred capacity:
+  To expand the default size of 512 GB, add the `DISK_SIZE` setting to your compose file and set it to your preferred capacity:
 
   ```yaml
   environment:
-    DISK_SIZE: "256G"
+    DISK_SIZE: "1T"
   ```
   
 > [!TIP]
@@ -189,7 +190,7 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
 
 ### How do I perform a manual installation?
 
-  It's best to stick to the automatic installation, as it adjusts various settings to prevent common issues when running Windows inside a virtual environment.
+  It's best sticking to automatic installation, as adjusting various settings to prevent common issues when running Windows inside a virtual environment.
 
   However, if you insist on performing the installation manually, add the following environment variable to your compose file:
 
@@ -200,14 +201,14 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
 
 ### How do I change the amount of CPU or RAM?
 
-  By default, the container will be allowed to use a maximum of 2 CPU cores and 4 GB of RAM.
+  By default, the container will be allowed to use a maximum of 8 CPU cores and 8 GB of RAM.
 
   If you want to adjust this, you can specify the desired amount using the following environment variables:
 
   ```yaml
   environment:
-    RAM_SIZE: "8G"
-    CPU_CORES: "4"
+    RAM_SIZE: "16G"
+    CPU_CORES: "32"
   ```
 
 ### How do I configure the username and password?
@@ -293,9 +294,11 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
   environment:
     DISK2_SIZE: "32G"
     DISK3_SIZE: "64G"
+...
   volumes:
     - /home/example:/storage2
     - /mnt/data/example:/storage3
+...
   ```
 
 ### How do I pass-through a disk?
@@ -306,9 +309,10 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
   devices:
     - /dev/sdb:/disk1
     - /dev/sdc:/disk2
+...
   ```
 
-  Use `/disk1` if you want it to become your main drive, and use `/disk2` and higher to add them as secondary drives.
+  Use `/disk1` if you want it to become your main drive, and use `/disk2` and higher to add them as further drives.
 
 ### How do I pass-through a USB device?
 
@@ -335,7 +339,7 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
 
   If you receive an error from `kvm-ok` indicating that KVM acceleration can't be used, please check whether:
 
-  - the virtualization extensions (`Intel VT-x` or `AMD SVM`) are enabled in your BIOS.
+  - the virtualization extensions (`Intel VT-x` or `AMD SVM`) are enabled in your UEFI.
 
   - you are running an operating system that supports them, like Linux or Windows 11 (macOS and Windows 10 do not unfortunately).
 
@@ -343,7 +347,7 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
 
   - you are not using a cloud provider, as most of them do not allow nested virtualization for their VPS's.
 
-  If you didn't receive any error from `kvm-ok` at all, but the container still complains that `/dev/kvm` is missing, it might help to add `privileged: true` to your compose file (or `--privileged` to your `run` command), to rule out any permission issue.
+  If you didn't receive any error from `kvm-ok` at all, but the container still complains that `/dev/kvm` is missing, it might helped by adding `privileged: true` to your compose file (or `--privileged` to your `run` command), to rule out any permission issue.
 
 ### Is this project legal?
 
