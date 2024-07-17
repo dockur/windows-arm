@@ -120,7 +120,7 @@ kubectl apply -f kubernetes.yml
   ```
 
 > [!NOTE]  
->  Changing these values has no effect after the installation performed already. Use settings inside Windows in case.
+>  Changing these values has no effect after the installation has been performed already. Use settings inside Windows in case.
 
 ### How do I change the storage location?
 
@@ -263,7 +263,7 @@ Your example folder `/home/user/example` availables ` \\host.lan\Data`.
       external: true
   ```
  
-  An added benefit of approaches that you won't performing any port mapping anymore, since all ports will be exposed by default.
+  An adds benefit to approaches is won't have performing any port mapping anymore, since all ports are exposed by default.
 
 > [!IMPORTANT]  
 > This IP address won't be accessible from the Docker host due to designs of macvlan, doesn't permit communication between the two. If this is a concern, you create a [second macvlan](https://blog.oddbit.com/post/2018-03-12-using-docker-macvlan-networks/#host-access) as your workaround.
