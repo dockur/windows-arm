@@ -70,7 +70,7 @@ kubectl apply -f kubernetes.yml
   
   - Start the container and connect to [port 8006](http://localhost:8006) using your web browser.
 
-  - Sit back and relax while the magic happens, our whole installation performs fully automatic.
+  - Sit back and relax while the magic happens, the whole installation will be performed fully automatic.
 
   - Once you see the desktop, your Windows installation is ready for use.
   
@@ -78,7 +78,7 @@ kubectl apply -f kubernetes.yml
 
 ### How do I select the Windows version?
 
-  By default, Windows 11 Enterprise will be installed. But you adding the `VERSION` environment variable to your compose file, in order to specify an alternative Windows version to be downloaded:
+  By default, Windows 11 Enterprise will be installed. But you can add the `VERSION` environment variable to your compose file, in order to specify an alternative Windows version to be downloaded:
 
   ```yaml
   environment:
@@ -100,18 +100,18 @@ kubectl apply -f kubernetes.yml
 
 ### How do I select the Windows language?
 
-  By default, the English version of Windows downloads. But you adding `LANGUAGE` environment variable in your compose file, ordering specifying as alternative language:
+  By default, the English version of Windows downloadeds. But you adding the `LANGUAGE` environment variable in your compose file, ordering to specify an alternative language:
 
   ```yaml
   environment:
     LANGUAGE: "French"
   ```
-
+  
   You choose between: 🇦🇪 Arabic, 🇧🇬 Bulgarian, 🇨🇳 Chinese, 🇭🇷 Croatian, 🇨🇿 Czech, 🇩🇰 Danish, 🇳🇱 Dutch, 🇬🇧 English, 🇪🇪 Estionian, 🇫🇮 Finnish, 🇫🇷 French, 🇩🇪 German, 🇬🇷 Greek, 🇮🇱 Hebrew, 🇭🇺 Hungarian, 🇮🇹 Italian, 🇯🇵 Japanese, 🇰🇷 Korean, 🇱🇻 Latvian, 🇱🇹 Lithuanian, 🇳🇴 Norwegian, 🇵🇱 Polish, 🇵🇹 Portuguese, 🇷🇴 Romanian, 🇷🇺 Russian, 🇷🇸 Serbian, 🇸🇰 Slovak, 🇸🇮 Slovenian, 🇪🇸 Spanish, 🇸🇪 Swedish, 🇹🇭 Thai, 🇹🇷 Turkish and 🇺🇦 Ukrainian.
 
 ### How do I select the keyboard layout?
 
-  Want to use a keyboard layout or locale that's not your default for selected language? Add the `KEYBOARD` and `REGION` variables with culture codes, like this:
+  Want using keyboard layouts or locales that's not your default for selected language? Add the `KEYBOARD` and `REGION` variables with culture codes, like this:
 
   ```yaml
   environment:
@@ -124,18 +124,18 @@ kubectl apply -f kubernetes.yml
 
 ### How do I change the storage location?
 
-  Changing storage locations? Include your following bind mount in compose file:
+  Change your storage locations? Include following bind mount in your compose file:
 
   ```yaml
   volumes:
     - /var/win:/storage
   ```
 
-  Replace examples path `/var/win` with your desired storage folder.
+  Replace the example path `/var/win` with your desired storage folder.
 
 ### How do I change the size of the disk?
 
-  To expand the default size of 512 GB, add `DISK_SIZE` setting in your compose file and sets your preferred capacity:
+  Expand your default size of 512 GB, add the `DISK_SIZE` setting in your compose file and sets your preferred capacity:
 
   ```yaml
   environment:
@@ -143,56 +143,56 @@ kubectl apply -f kubernetes.yml
   ```
   
 > [!TIP]
-> This also used resizing existing disk to larger capacity without any data loss.
+> This also used resizing the existing disk to a larger capacity without any data loss.
 
 ### How do I share files with the host?
 
-  Open 'File Explorer', click 'Network' section, seeing a computer called `host.lan`. Double-click and shows a folder called `Data`, which binds to any folder on your host via your compose file:
+  Open 'File Explorer', click the 'Network' section, seeing a computer called `host.lan`. Double-click and shows a folder called `Data`, which binds to any folder on your host via the compose file:
 
   ```yaml
   volumes:
     -  /home/user/example:/shared
   ```
 
-Your example folder `/home/user/example` availables ` \\host.lan\Data`.
-
+  Your example folder `/home/user/example` availables ` \\host.lan\Data`.
+ 
 > [!TIP]
-> You map your path to a drive letter in Windows, for easier access.
+> You map this path to a drive letter in Windows, for easier access.
 
 ### How do I install a custom image?
 
-  Ordering downloading an unsupported ISO image that's not selectable from the list above? Specify your URL of ISO in `VERSION` environment variable, example:
+  Ordering downloading an unsupported ISO image that's not selectable from the list above? Specify one of your URL to ISO in the `VERSION` environment variable, for example:
   
   ```yaml
   environment:
     VERSION: "https://example.com/win.iso"
   ```
 
-  Alternatively, you skip downloading and using local file instead, by binding your compose file this way:
+  Alternatively, you skip downloading and using local file instead, by binding it in your compose file on this way:
   
   ```yaml
   volumes:
     - /home/user/example.iso:/custom.iso
   ```
 
-  Replace the example path `/home/user/example.iso` with filename of your desired ISO file, the value of `VERSION`, means you, will ignored in case.
+  Replace the example path `/home/user/example.iso` with the filename of your desired ISO file, the value of `VERSION`, means you,  will ignored in your case.
 
 ### How do I run a script after installation?
 
-  To run your own script after installation, you create your file called `install.bat` and place in a folder together with any additional files it needs (software to be installed for example). Then bind your folder in compose file like this:
+  To run your own script after installation, create your file called `install.bat` and place in a folder together with any additional files it needs (software to be installed for example). Then bind that folder in your compose file like this:
 
   ```yaml
   volumes:
     -  /home/user/example:/oem
   ```
 
-  The example folder `/home/user/example` will copied to `C:\OEM` during installation and the containing `install.bat` executes during last steps.
+  Your example folder `/home/user/example` copied to `C:\OEM` during installation. The containing `install.bat` will executed during last steps.
 
 ### How do I perform a manual installation?
 
   It's best sticking to automatic installation, as adjusting various settings to prevent common issues when running Windows inside a virtual environment.
 
-  However, if you insist on performing the installation manually, add followings environment variable in your compose file:
+  However, if you insist on performing the installation manually, add the following environment variable to your compose file:
 
   ```yaml
   environment:
@@ -201,9 +201,9 @@ Your example folder `/home/user/example` availables ` \\host.lan\Data`.
 
 ### How do I change the amount of CPU or RAM?
 
-  By default, you allow using maximum of 8 CPU cores and 8 GB of RAM.
+  By default, container allows using maximum of 8 CPU cores and 8 GB of RAM.
 
-  Want to adjust this? Specify your desired amount using following environment variables:
+  Want to adjust this? Specify the desired amount using following environment variables:
 
   ```yaml
   environment:
@@ -211,11 +211,11 @@ Your example folder `/home/user/example` availables ` \\host.lan\Data`.
     CPU_CORES: "32"
   ```
 
-### How do I configure the username and password?
+### How do I configure my username and password?
 
-  By default, you called `Docker` created during the installation, without password.
+  By default, you called `Docker`, created during the installation, without password.
 
-  Want using different credentials? Consider changing them in your compose file:
+  Want using different credentials? Change them in your compose file:
 
   ```yaml
   environment:
@@ -223,11 +223,26 @@ Your example folder `/home/user/example` availables ` \\host.lan\Data`.
     PASSWORD: "gates"
   ```
 
-### How do I connect using RDP?
+create -d macvlan \
+      --subnet=192.168.0### How do I connect using RDP?
 
   Our web-viewer's mainly meant to using during installation, as picture quality are low, and has no audio or clipboard for example.
 
-  For better experience, connecting using any Microsoft Remote Desktop apps client to your IP of the container, using the username `Docker` and leaving password empty.
+  For better experience, connecting using any Microsoftample.
+
+  For better experience, connecting using any Microsoft
+  ```bash
+  docker network create -d macvlan \
+      --subnet=192.168.0### How do I connect using RDP?
+
+  Our web-viewer's mainly meant to using during installation, as picture quality are low, and has no audio or clipboard for example.
+
+  For better experience, connecting using any Microsoftate -d macvlan \
+      --subnet=192.168.0### How do I connect using RDP?
+
+  Our web-viewer's mainly meant to using during installation, as picture quality are low, and has no audio or clipboard for example.
+
+  For better experience, connecting using any Microsoftft Remote Desktop apps client to your IP of the container, using the username `Docker` and leaving password empty.
 
   There's a RDP client for [Android](https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx) available from the Play Store and one for [iOS](https://apps.apple.com/app/microsoft-remote-desktop/id714464092) in the Apple App Store. For Linux feel free using [FreeRDP](https://www.freerdp.com/) and on Windows just type `mstsc` in the search box.
 
@@ -239,7 +254,7 @@ Your example folder `/home/user/example` availables ` \\host.lan\Data`.
 
   ```bash
   docker network create -d macvlan \
-      --subnet=192.168.0.0/24 \
+      --subnet=192.168.0.0.0/24 \
       --gateway=192.168.0.1 \
       --ip-range=192.168.0.100/28 \
       -o parent=eth0 vlan
@@ -248,6 +263,39 @@ Your example folder `/home/user/example` availables ` \\host.lan\Data`.
   Be sure modifying these values, matching your local subnet. 
 
   Once created your network, change your compose file to look as follows:
+
+  ```yaml
+  services:
+    windows:
+      container_name: windows
+      ..<snip>..
+      networks:
+        vlan:
+### How do I connect using RDP?
+
+  Our web-viewer's mainly meant to be used during installation, as our picture quality are low, and has no audio or clipboard for example.
+
+  For better experience, please connect using any Microsoft Remote Desktop app client to the IP of your container, using username `Docker` and leaving password empty.
+
+  There is a RDP client for [Android](https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx) available from the Play Store and one for [iOS](https://apps.apple.com/app/microsoft-remote-desktop/id714464092) in the Apple App Store. For Linux feel free using [FreeRDP](https://www.freerdp.com/) and on Windows just type `mstsc` in the search box.
+
+### How do I assign an individual IP address to the container?
+
+  By default, you use bridged networking, shares your IP address with your host. 
+
+  Want assigning an individual IP address to the container? Create macvlan network as follows:
+
+  ```bash
+  docker network create -d macvlan \
+      --subnet=192.168.0.0/24 \
+      --gateway=192.168.0.1 \
+      --ip-range=192.168.0.100/28 \
+      -o parent=eth0 vlan
+  ```
+  
+  Be sure modifying these values, matching your local subnet. 
+
+  Once you created your network, change your compose file looking as follows:
 
   ```yaml
   services:
@@ -266,13 +314,13 @@ Your example folder `/home/user/example` availables ` \\host.lan\Data`.
   An adds benefit to approaches is won't have performing any port mapping anymore, since all ports are exposed by default.
 
 > [!IMPORTANT]  
-> This IP address won't be accessible from the Docker host due to designs of macvlan, doesn't permit communication between the two. If this is a concern, you create a [second macvlan](https://blog.oddbit.com/post/2018-03-12-using-docker-macvlan-networks/#host-access) as your workaround.
+> This IP address won't be accessible from the Docker host due to design of macvlan, which doesn't permit communication between the two. If this is a concern, you need to create a [second macvlan](https://blog.oddbit.com/post/2018-03-12-using-docker-macvlan-networks/#host-access) as current workaround.
 
-### How can Windows acquire an IP address from my router?
+### How can Windows acquire an IP addre### How my Windows acquiring an IP address from my router?
 
-  After configuring your container for [macvlan](#how-do-i-assign-an-individual-ip-address-to-the-container), possibles for Windows becoming part of your home network, requesting your IP from router, just like a real PC.
+  After configuring your container for [macvlan](#how-do-i-assign-an-individual-ip-address-to-the-container), possibles for Windows becoming part of your home network by requesting an IP from your router, just like a real PC.
 
-  To enable this, add followings in your compose file:
+  To enable this mode, add the following lines to your compose file:
 
   ```yaml
   environment:
@@ -288,7 +336,7 @@ Your example folder `/home/user/example` availables ` \\host.lan\Data`.
 
 ### How do I add multiple disks?
 
-  Really creating additional disks? Modify your compose file like this:
+  Really creating your additional disks? Modify compose file like this:
   
   ```yaml
   environment:
