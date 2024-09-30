@@ -424,6 +424,32 @@ switchEdition() {
   return 0
 }
 
+getMido() {
+
+  local id="$1"
+  local lang="$2"
+  local ret="$3"
+  local sum=""
+  local size=""
+
+  [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
+
+  case "${id,,}" in
+    "win11arm64-enterprise-ltsc-eval" )
+      size=4252764160
+      sum="ccec358a760c3c581249f091ed42d04f37b2b99c347b7a58257c3cc272d7982c"
+      ;;
+  esac
+
+  case "${ret,,}" in
+    "sum" ) echo "$sum" ;;
+    "size" ) echo "$size" ;;
+    *) echo "";;
+  esac
+
+  return 0
+}
+
 getLink1() {
 
   # Fallbacks for users who cannot connect to the Microsoft servers
@@ -486,9 +512,9 @@ getLink1() {
       ;;
     "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
       [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
-      size=4821989376
-      sum="e8f1431c4e6289b3997c20eadbb2576670300bb6e1cf8948b5d7af179010a962"
-      url="26100.1.240331-1435.ge_release_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
+      size=5121449984
+      sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
+      url="X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
       ;;
     "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
       case "${culture,,}" in
@@ -574,9 +600,9 @@ getLink2() {
       ;;
     "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
       [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
-      size=4821989376
-      sum="e8f1431c4e6289b3997c20eadbb2576670300bb6e1cf8948b5d7af179010a962"
-      url="11/26100.1.240331-1435.ge_release_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
+      size=5121449984
+      sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
+      url="11/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
       ;;
     "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
       size=4846794752
@@ -643,6 +669,14 @@ getSize() {
 }
 
 isMido() {
+
+  local id="$1"
+  local lang="$2"
+  local sum
+
+  sum=$(getMido "$id" "en" "sum")
+  [ -n "$sum" ] && return 0
+
   return 1
 }
 
