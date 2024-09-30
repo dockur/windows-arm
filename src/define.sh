@@ -315,7 +315,7 @@ printEdition() {
       edition="Enterprise"
       ;;
     *"-iot" | *"-iot-eval" )
-      edition="LTSC"
+      edition="IoT"
       ;;
     *"-ltsc" | *"-ltsc-eval" )
       edition="LTSC"
@@ -396,7 +396,7 @@ getVersion() {
   case "${id,,}" in
     "win10"* | "win11"* )
        case "${name,,}" in
-          *" iot"* ) id="$id-ltsc" ;;
+          *" iot"* ) id="$id-iot" ;;
           *" ltsc"* ) id="$id-ltsc" ;;
           *" enterprise evaluation"* ) id="$id-enterprise-eval" ;;
           *" enterprise"* ) id="$id-enterprise" ;;
@@ -419,6 +419,36 @@ switchEdition() {
     "win10${PLATFORM,,}-enterprise-eval" )
       DETECTED="win10${PLATFORM,,}-enterprise"
       ;;
+  esac
+
+  return 0
+}
+
+getMido() {
+
+  local id="$1"
+  local lang="$2"
+  local ret="$3"
+  local sum=""
+  local size=""
+
+  [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
+
+  case "${id,,}" in
+    "win11x64-enterprise-ltsc-eval" )
+      size=5
+      sum="xxx"
+      ;;
+    "win11x64-enterprise-iot-eval" )
+      size=5
+      sum="xxx"
+       ;;
+  esac
+
+  case "${ret,,}" in
+    "sum" ) echo "$sum" ;;
+    "size" ) echo "$size" ;;
+    *) echo "";;
   esac
 
   return 0
