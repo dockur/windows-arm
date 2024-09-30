@@ -673,6 +673,14 @@ getSize() {
 }
 
 isMido() {
+
+  local id="$1"
+  local lang="$2"
+  local sum
+
+  sum=$(getMido "$id" "en" "sum")
+  [ -n "$sum" ] && return 0
+
   return 1
 }
 
