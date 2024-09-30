@@ -315,7 +315,7 @@ printEdition() {
       edition="Enterprise"
       ;;
     *"-iot" | *"-iot-eval" )
-      edition="IoT"
+      edition="LTSC"
       ;;
     *"-ltsc" | *"-ltsc-eval" )
       edition="LTSC"
