@@ -97,7 +97,7 @@ kubectl apply -f kubernetes.yml
   | `win10e`  | Windows 10 Enterprise | ARM64        | 3.4 GB   |
 
 > [!TIP]
-> To install x64 versions of Windows,  use [dockur/windows](https://github.com/dockur/windows/).
+> To install x64 versions of Windows, use [dockur/windows](https://github.com/dockur/windows/).
 
 ### How do I select the Windows language?
 
