@@ -91,6 +91,7 @@ kubectl apply -f kubernetes.yml
   | `win11`   | Windows 11 Pro        | ARM64        | 4.9 GB   |
   | `ltsc11`   | Windows 11 LTSC      | ARM64        | 4.8 GB   |
   | `win11e`  | Windows 11 Enterprise | ARM64        | 4.8 GB   |
+  |||||  
   | `win10`   | Windows 10 Pro        | ARM64        | 3.5 GB   |
   | `ltsc10`  | Windows 10 LTSC       | ARM64        | 4.1 GB   |  
   | `win10e`  | Windows 10 Enterprise | ARM64        | 3.4 GB   |
