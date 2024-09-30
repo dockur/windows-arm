@@ -435,7 +435,7 @@ getMido() {
   [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
-    "win11x64-enterprise-ltsc-eval" )
+    "win11arm64-enterprise-ltsc-eval" )
       size=5
       sum="xxx"
       ;;
