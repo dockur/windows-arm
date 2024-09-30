@@ -436,8 +436,8 @@ getMido() {
 
   case "${id,,}" in
     "win11arm64-enterprise-ltsc-eval" )
-      size=5
-      sum="xxx"
+      size=4252764160
+      sum="ccec358a760c3c581249f091ed42d04f37b2b99c347b7a58257c3cc272d7982c"
       ;;
   esac
 
