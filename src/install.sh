@@ -711,9 +711,10 @@ addDriver() {
 
 addDrivers() {
 
-  local file="$1"
-  local index="$2"
-  local version="$3"
+  local src="$1"
+  local file="$2"
+  local index="$3"
+  local version="$4"
 
   local msg="Adding drivers to image..."
   info "$msg" && html "$msg"
@@ -737,6 +738,7 @@ addDrivers() {
   # Disable temporarily : addDriver "$version" "$drivers" "$target" "smbus"
   addDriver "$version" "$drivers" "$target" "qxldod"
   addDriver "$version" "$drivers" "$target" "viorng"
+  addDriver "$version" "$drivers" "$target" "viomem"  
   addDriver "$version" "$drivers" "$target" "viostor"
   addDriver "$version" "$drivers" "$target" "NetKVM"
   addDriver "$version" "$drivers" "$target" "Balloon"
@@ -746,6 +748,16 @@ addDrivers() {
   addDriver "$version" "$drivers" "$target" "viogpudo"
   addDriver "$version" "$drivers" "$target" "vioserial"
   addDriver "$version" "$drivers" "$target" "qemupciserial"
+
+  case "${version,,}" in
+    "win11x64"* | "win2025"* )
+      # Workaround Virtio GPU driver bug
+      local dst="$src/\$OEM\$/\$\$/Drivers"
+      mkdir -p "$dst"
+      ! cp -a "$dest/." "$dst" && return 1
+      rm -rf "$dest/viogpudo"
+      ;;
+  esac
 
   if ! wimlib-imagex update "$file" "$index" --command "add $dest /$target" >/dev/null; then
     return 1
@@ -768,10 +780,10 @@ addFolder() {
   local msg="Adding OEM folder to image..."
   info "$msg" && html "$msg"
 
-  local dest="$src/\$OEM\$/\$1/"
+  local dest="$src/\$OEM\$/\$1/OEM"
   mkdir -p "$dest"
 
-  ! cp -r "$folder" "$dest" && return 1
+  ! cp -a "$folder/." "$dest" && return 1
 
   local file
   file=$(find "$dest" -maxdepth 1 -type f -iname install.bat | head -n 1)
@@ -820,7 +832,7 @@ updateImage() {
     index="2"
   fi
 
-  if ! addDrivers "$wim" "$index" "$DETECTED"; then
+  if ! addDrivers "$src" "$wim" "$index" "$DETECTED"; then
     error "Failed to add drivers to image!" && return 1
   fi
 
