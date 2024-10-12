@@ -18,7 +18,6 @@ Windows for ARM in a Docker container, for devices like the Raspberry Pi 5 and m
 
 ## Features ✨
 
- - Multi-language
  - ISO downloader
  - KVM acceleration
  - Web-based viewer
