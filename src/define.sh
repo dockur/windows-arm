@@ -735,7 +735,7 @@ addFolder() {
   local dest="$src/\$OEM\$/\$1/OEM"
   mkdir -p "$dest"
 
-  ! cp -r "$folder/." "$dest" && return 1
+  ! cp -Lr "$folder/." "$dest" && return 1
 
   local file
   file=$(find "$dest" -maxdepth 1 -type f -iname install.bat | head -n 1)
