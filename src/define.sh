@@ -719,6 +719,31 @@ validVersion() {
   return 1
 }
 
+addFolder() {
+
+  local src="$1"
+  local folder="/oem"
+
+  [ ! -d "$folder" ] && folder="/OEM"
+  [ ! -d "$folder" ] && folder="$STORAGE/oem"
+  [ ! -d "$folder" ] && folder="$STORAGE/OEM"
+  [ ! -d "$folder" ] && return 0
+
+  local msg="Adding OEM folder to image..."
+  info "$msg" && html "$msg"
+
+  local dest="$src/\$OEM\$/\$1/OEM"
+  mkdir -p "$dest"
+
+  ! cp -Lr "$folder/." "$dest" && return 1
+
+  local file
+  file=$(find "$dest" -maxdepth 1 -type f -iname install.bat | head -n 1)
+  [ -f "$file" ] && unix2dos -q "$file"
+
+  return 0
+}
+
 migrateFiles() {
   return 0
 }
