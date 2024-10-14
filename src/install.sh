@@ -815,11 +815,11 @@ updateImage() {
   fi
 
   if ! addDrivers "$src" "$tmp" "$wim" "$index" "$DETECTED"; then
-    error "Failed to add drivers to image!" && return 1
+    error "Failed to add drivers to image!"
   fi
 
   if ! addFolder "$src"; then
-    error "Failed to add OEM folder to image!" && return 1
+    error "Failed to add OEM folder to image!"
   fi
 
   if wimlib-imagex extract "$wim" "$index" "/$file" "--dest-dir=$tmp" >/dev/null 2>&1; then
