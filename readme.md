@@ -365,5 +365,5 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
 [Build]: https://github.com/dockur/windows-arm/actions/workflows/build.yml/badge.svg
 [Size]: https://img.shields.io/docker/image-size/dockurr/windows-arm/latest?color=066da5&label=size
 [Pulls]: https://img.shields.io/docker/pulls/dockurr/windows-arm.svg?style=flat&label=pulls&logo=docker
-[Version]: https://img.shields.io/docker/v/dockurr/windows-arm/latest?arch=amd64&sort=semver&color=066da5
+[Version]: https://img.shields.io/docker/v/dockurr/windows-arm/latest?arch=arm64&sort=semver&color=066da5
 [Package]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fipitio.github.io%2Fbackage%2Fdockur%2Fwindows-arm%2Fwindows-arm.json&query=%24.downloads&logo=github&style=flat&color=066da5&label=pulls
