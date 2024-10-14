@@ -541,7 +541,7 @@ detectImage() {
   fi
 
   info=$(wimlib-imagex info -xml "$wim" | tr -d '\000')
-  ! checkPlatform "$info" && exit 67
+  checkPlatform "$info" || exit 67
 
   DETECTED=$(detectVersion "$info")
 
@@ -588,7 +588,7 @@ prepareImage() {
 
   desc=$(printVersion "$DETECTED" "$DETECTED")
 
-  ! setMachine "$DETECTED" "$iso" "$dir" "$desc" && return 1
+  setMachine "$DETECTED" "$iso" "$dir" "$desc" || return 1
   skipVersion "$DETECTED" && return 0
 
   if [[ "${BOOT_MODE,,}" != "windows_legacy" ]]; then
@@ -704,9 +704,9 @@ addDriver() {
   esac
 
   local dest="$path/$target/$driver"
-  mkdir -p "$dest"
+  mkdir -p "$dest" || return 1
+  cp -Lr "$path/$driver/$folder/." "$dest" || return 1
 
-  cp -Lr "$path/$driver/$folder/." "$dest"
   return 0
 }
 
@@ -731,33 +731,33 @@ addDrivers() {
 
   local target="\$WinPEDriver\$"
   local dest="$drivers/$target"
-  mkdir -p "$dest"
+  mkdir -p "$dest" || return 1
 
   wimlib-imagex update "$file" "$index" --command "delete --force --recursive /$target" >/dev/null || true
 
-  addDriver "$version" "$drivers" "$target" "qxl"
-  addDriver "$version" "$drivers" "$target" "viofs"
-  addDriver "$version" "$drivers" "$target" "sriov"
-  # Disable temporarily : addDriver "$version" "$drivers" "$target" "smbus"
-  addDriver "$version" "$drivers" "$target" "qxldod"
-  addDriver "$version" "$drivers" "$target" "viorng"
-  addDriver "$version" "$drivers" "$target" "viostor"
-  addDriver "$version" "$drivers" "$target" "viomem"
-  addDriver "$version" "$drivers" "$target" "NetKVM"
-  addDriver "$version" "$drivers" "$target" "Balloon"
-  addDriver "$version" "$drivers" "$target" "vioscsi"
-  # Disable temporarily : addDriver "$version" "$drivers" "$target" "pvpanic"
-  addDriver "$version" "$drivers" "$target" "vioinput"
-  addDriver "$version" "$drivers" "$target" "viogpudo"
-  addDriver "$version" "$drivers" "$target" "vioserial"
-  addDriver "$version" "$drivers" "$target" "qemupciserial"
+  addDriver "$version" "$drivers" "$target" "qxl" || return 1
+  addDriver "$version" "$drivers" "$target" "viofs" || return 1
+  addDriver "$version" "$drivers" "$target" "sriov" || return 1
+  # Disable temporarily : addDriver "$version" "$drivers" "$target" "smbus" || return 1
+  addDriver "$version" "$drivers" "$target" "qxldod" || return 1
+  addDriver "$version" "$drivers" "$target" "viorng" || return 1
+  addDriver "$version" "$drivers" "$target" "viostor" || return 1
+  addDriver "$version" "$drivers" "$target" "viomem" || return 1
+  addDriver "$version" "$drivers" "$target" "NetKVM" || return 1
+  addDriver "$version" "$drivers" "$target" "Balloon" || return 1
+  addDriver "$version" "$drivers" "$target" "vioscsi" || return 1
+  # Disable temporarily : addDriver "$version" "$drivers" "$target" "pvpanic" || return 1
+  addDriver "$version" "$drivers" "$target" "vioinput" || return 1
+  addDriver "$version" "$drivers" "$target" "viogpudo" || return 1
+  addDriver "$version" "$drivers" "$target" "vioserial" || return 1
+  addDriver "$version" "$drivers" "$target" "qemupciserial" || return 1
 
   case "${version,,}" in
     "win11x64"* | "win2025"* )
       # Workaround Virtio GPU driver bug
       local dst="$src/\$OEM\$/\$\$/Drivers"
-      mkdir -p "$dst"
-      ! cp -Lr "$dest/." "$dst" && return 1
+      mkdir -p "$dst" || return 1
+      cp -Lr "$dest/." "$dst" || return 1
       rm -rf "$dest/viogpudo"
       ;;
   esac
@@ -815,11 +815,11 @@ updateImage() {
   fi
 
   if ! addDrivers "$src" "$tmp" "$wim" "$index" "$DETECTED"; then
-    error "Failed to add drivers to image!" && return 1
+    error "Failed to add drivers to image!"
   fi
 
   if ! addFolder "$src"; then
-    error "Failed to add OEM folder to image!" && return 1
+    error "Failed to add OEM folder to image!"
   fi
 
   if wimlib-imagex extract "$wim" "$index" "/$file" "--dest-dir=$tmp" >/dev/null 2>&1; then
@@ -884,7 +884,8 @@ removeImage() {
 
   [ ! -f "$iso" ] && return 0
   [ -n "$CUSTOM" ] && return 0
-  ! rm -f "$iso" 2> /dev/null && warn "failed to remove $iso !"
+
+  rm -f "$iso" 2> /dev/null || warn "failed to remove $iso !"
 
   return 0
 }
@@ -927,20 +928,20 @@ buildImage() {
 
   if [[ "${BOOT_MODE,,}" != "windows_legacy" ]]; then
 
-    ! genisoimage -o "$out" -b "$ETFS" -no-emul-boot -c "$cat" -iso-level 4 -J -l -D -N -joliet-long -relaxed-filenames -V "${LABEL::30}" \
-                  -udf -boot-info-table -eltorito-alt-boot -eltorito-boot "$EFISYS" -no-emul-boot -allow-limited-size -quiet "$dir" 2> "$log" && failed="y"
+    genisoimage -o "$out" -b "$ETFS" -no-emul-boot -c "$cat" -iso-level 4 -J -l -D -N -joliet-long -relaxed-filenames -V "${LABEL::30}" \
+                  -udf -boot-info-table -eltorito-alt-boot -eltorito-boot "$EFISYS" -no-emul-boot -allow-limited-size -quiet "$dir" 2> "$log" || failed="y"
 
   else
 
     case "${DETECTED,,}" in
       "win2k"* | "winxp"* | "win2003"* )
-        ! genisoimage -o "$out" -b "$ETFS" -no-emul-boot -boot-load-seg 1984 -boot-load-size 4 -c "$cat" -iso-level 2 -J -l -D -N -joliet-long \
-                      -relaxed-filenames -V "${LABEL::30}" -quiet "$dir" 2> "$log" && failed="y" ;;
+        genisoimage -o "$out" -b "$ETFS" -no-emul-boot -boot-load-seg 1984 -boot-load-size 4 -c "$cat" -iso-level 2 -J -l -D -N -joliet-long \
+                      -relaxed-filenames -V "${LABEL::30}" -quiet "$dir" 2> "$log" || failed="y" ;;
       "win9"* )
-        ! genisoimage -o "$out" -b "$ETFS" -J -r -V "${LABEL::30}" -quiet "$dir" 2> "$log" && failed="y" ;;
+        genisoimage -o "$out" -b "$ETFS" -J -r -V "${LABEL::30}" -quiet "$dir" 2> "$log" || failed="y" ;;
       * )
-        ! genisoimage -o "$out" -b "$ETFS" -no-emul-boot -c "$cat" -iso-level 2 -J -l -D -N -joliet-long -relaxed-filenames -V "${LABEL::30}" \
-                      -udf -allow-limited-size -quiet "$dir" 2> "$log" && failed="y" ;;
+        genisoimage -o "$out" -b "$ETFS" -no-emul-boot -c "$cat" -iso-level 2 -J -l -D -N -joliet-long -relaxed-filenames -V "${LABEL::30}" \
+                      -udf -allow-limited-size -quiet "$dir" 2> "$log" || failed="y" ;;
     esac
 
   fi
@@ -956,7 +957,7 @@ buildImage() {
   [ -s "$log" ] && error="$(<"$log")"
   [[ "$error" != "$hide" ]] && echo "$error"
 
-  ! mv -f "$out" "$BOOT" && return 1
+  mv -f "$out" "$BOOT" || return 1
   return 0
 }
 
