@@ -26,23 +26,23 @@ parseVersion() {
   [ -z "$VERSION" ] && VERSION="win11"
 
   case "${VERSION,,}" in
-    "11" | "11p" | "win11" | "win11p" | "windows11" | "windows 11" )
+    "11" | "11p" | "win11" | "pro11" | "win11p" | "windows11" | "windows 11" )
       VERSION="win11arm64"
       ;;
     "11e" | "win11e" | "windows11e" | "windows 11e" )
       VERSION="win11arm64-enterprise-eval"
       ;;
-    "ltsc11" | "11ltsc" | "win11-ltsc" | "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+    "ltsc11" | "11ltsc" | "win11-ltsc" | "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" | "11l" )
       VERSION="win11arm64-enterprise-ltsc-eval"
       [ -z "$DETECTED" ] && DETECTED="win11arm64-ltsc"
       ;;
-    "10" | "10p" | "win10" | "win10p" | "windows10" | "windows 10" )
+    "10" | "10p" | "win10" | "pro10" | "win10p" | "windows10" | "windows 10" )
       VERSION="win10arm64"
       ;;
     "10e" | "win10e" | "windows10e" | "windows 10e" )
       VERSION="win10arm64-enterprise-eval"
       ;;
-    "ltsc10" | "10ltsc" | "win10-ltsc" | "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
+    "ltsc10" | "10ltsc" | "win10-ltsc" | "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" | "10l" )
       VERSION="win10arm64-enterprise-ltsc-eval"
       [ -z "$DETECTED" ] && DETECTED="win10arm64-ltsc"
       ;;
