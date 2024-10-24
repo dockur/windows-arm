@@ -32,7 +32,7 @@ parseVersion() {
     "11e" | "win11e" | "windows11e" | "windows 11e" )
       VERSION="win11arm64-enterprise-eval"
       ;;
-    "ltsc11" | "11ltsc" | "win11-ltsc" | "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" | "11l" )
+    "ltsc11" | "11l" | "11ltsc" | "win11l" | "win11-ltsc" | "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
       VERSION="win11arm64-enterprise-ltsc-eval"
       [ -z "$DETECTED" ] && DETECTED="win11arm64-ltsc"
       ;;
@@ -42,7 +42,7 @@ parseVersion() {
     "10e" | "win10e" | "windows10e" | "windows 10e" )
       VERSION="win10arm64-enterprise-eval"
       ;;
-    "ltsc10" | "10ltsc" | "win10-ltsc" | "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" | "10l" )
+    "ltsc10" | "10l" | "10ltsc" | "win10l" | "win10-ltsc" | "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       VERSION="win10arm64-enterprise-ltsc-eval"
       [ -z "$DETECTED" ] && DETECTED="win10arm64-ltsc"
       ;;
