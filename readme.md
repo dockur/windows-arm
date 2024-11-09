@@ -36,7 +36,7 @@ services:
     container_name: windows
     image: dockurr/windows-arm
     environment:
-      VERSION: "win11"
+      VERSION: "11"
     devices:
       - /dev/kvm
     cap_add:
@@ -80,20 +80,20 @@ kubectl apply -f kubernetes.yml
 
   ```yaml
   environment:
-    VERSION: "win11"
+    VERSION: "11"
   ```
 
   Select from the values below:
   
   | **Value** | **Version**           | **Platform** | **Size** |
   |---|---|---|---|
-  | `win11`   | Windows 11 Pro        | ARM64        | 4.9 GB   |
-  | `ltsc11`   | Windows 11 LTSC      | ARM64        | 4.8 GB   |
-  | `win11e`  | Windows 11 Enterprise | ARM64        | 4.8 GB   |
+  | `11`   | Windows 11 Pro        | ARM64        | 4.9 GB   |
+  | `11l`  | Windows 11 LTSC       | ARM64        | 4.8 GB   |
+  | `11e`  | Windows 11 Enterprise | ARM64        | 4.8 GB   |
   |||||  
-  | `win10`   | Windows 10 Pro        | ARM64        | 3.5 GB   |
-  | `ltsc10`  | Windows 10 LTSC       | ARM64        | 4.1 GB   |  
-  | `win10e`  | Windows 10 Enterprise | ARM64        | 3.4 GB   |
+  | `10`   | Windows 10 Pro        | ARM64        | 3.5 GB   |
+  | `10l`  | Windows 10 LTSC       | ARM64        | 4.1 GB   |  
+  | `10e`  | Windows 10 Enterprise | ARM64        | 3.4 GB   |
 
 > [!TIP]
 > To install x64 versions of Windows, use [dockur/windows](https://github.com/dockur/windows/).
