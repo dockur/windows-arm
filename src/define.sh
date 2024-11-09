@@ -552,7 +552,7 @@ getLink1() {
         "tr" | "tr-"* ) url="tr-tr_windows_11_business_editions_version_24h2_arm64_dvd_4da6f82d.iso" ;;
         "uk" | "uk-"* ) url="uk-ua_windows_11_business_editions_version_24h2_arm64_dvd_65304891.iso" ;;
         "zh-hk" | "zh-tw" ) url="zh-tw_windows_11_business_editions_version_24h2_arm64_dvd_99a82a4f.iso" ;;
-        "zh" | "zh-"* ) url="zh-cn_windows_11_business_editions_version_24h2_arm64_dvd_9696a5e8.iso" ;;        
+        "zh" | "zh-"* ) url="zh-cn_windows_11_business_editions_version_24h2_arm64_dvd_9696a5e8.iso" ;;
       esac
       ;;
     "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
