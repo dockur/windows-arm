@@ -25,6 +25,8 @@ parseVersion() {
 
   [ -z "$VERSION" ] && VERSION="win11"
 
+  local msg="is not available for ARM64 CPU's."
+
   case "${VERSION,,}" in
     "11" | "11p" | "win11" | "pro11" | "win11p" | "windows11" | "windows 11" )
       VERSION="win11arm64"
@@ -32,7 +34,11 @@ parseVersion() {
     "11e" | "win11e" | "windows11e" | "windows 11e" )
       VERSION="win11arm64-enterprise-eval"
       ;;
-    "ltsc11" | "11l" | "11ltsc" | "win11l" | "win11-ltsc" | "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+    "11i" | "11iot" | "iot11" | "win11i" | "win11-iot" | "win11arm64-iot" | "win11arm64-enterprise-iot-eval" )
+      VERSION="win11arm64-enterprise-iot-eval"
+      [ -z "$DETECTED" ] && DETECTED="win11arm64-iot"
+      ;;
+    "11l" | "11ltsc" | "ltsc11" | "win11l" | "win11-ltsc" | "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
       VERSION="win11arm64-enterprise-ltsc-eval"
       [ -z "$DETECTED" ] && DETECTED="win11arm64-ltsc"
       ;;
@@ -42,9 +48,61 @@ parseVersion() {
     "10e" | "win10e" | "windows10e" | "windows 10e" )
       VERSION="win10arm64-enterprise-eval"
       ;;
-    "ltsc10" | "10l" | "10ltsc" | "win10l" | "win10-ltsc" | "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
+    "10i" | "10iot" | "iot10" | "win10i" | "win10-iot" | "win10arm64-iot" | "win10arm64-enterprise-iot-eval" )
+      VERSION="win10arm64-enterprise-iot-eval"
+      [ -z "$DETECTED" ] && DETECTED="win10arm64-iot"
+      ;;
+    "10l" | "10ltsc" | "ltsc10" | "win10l" | "win10-ltsc" | "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       VERSION="win10arm64-enterprise-ltsc-eval"
       [ -z "$DETECTED" ] && DETECTED="win10arm64-ltsc"
+      ;;
+    "8" | "8p" | "81" | "81p" | "pro8" | "8.1" | "win8" | "win8p" | "win81" | "win81p" | "windows 8" | \
+    "8e" | "81e" | "8.1e" | "win8e" | "win81e" | "windows 8e" )
+      error "Windows 8 $msg" && return 1
+      ;;
+    "7" | "7e" | "win7" | "win7e" | "windows7" | "windows 7" | \
+    "7u" | "win7u" | "windows7u" | "windows 7u" | \
+    "7x86" | "win7x86" | "windows7x86"  | "win7x86-enterprise" )
+      error "Windows 7 $msg" && return 1
+      ;;
+    "vista" | "ve" | "6" | "winvista" | "windowsvista" | "windows vista" | \
+    "vistu" | "vu" | "6u" | "winvistu" | "windowsvistu" | "windows vistu" | \
+    "vistax86" | "vex86" | "6x86" | "winvistax86" | "windowsvistax86"  | "winvistax86-enterprise" )
+      error "Windows Vista $msg" && return 1
+      ;;
+    "xp" | "xp32" | "xpx86" | "5" | "5x86" | "winxp" | "winxp86" | "windowsxp" | "windows xp" | \
+    "xp64" | "xpx64" | "5x64" | "winxp64" | "winxpx64" | "windowsxp64" | "windowsxpx64" )
+      error "Windows XP $msg" && return 1
+      ;;
+    "25" | "2025" | "win25" | "win2025" | "windows2025" | "windows 2025" )
+      error "Windows Server 2025 $msg" && return 1
+      ;;
+    "22" | "2022" | "win22" | "win2022" | "windows2022" | "windows 2022" )
+      error "Windows Server 2022 $msg" && return 1
+      ;;
+    "19" | "2019" | "win19" | "win2019" | "windows2019" | "windows 2019" )
+      error "Windows Server 2019 $msg" && return 1
+      ;;
+    "16" | "2016" | "win16" | "win2016" | "windows2016" | "windows 2016" )
+      error "Windows Server 2016 $msg" && return 1
+      ;;
+    "2012" | "2012r2" | "win2012" | "win2012r2" | "windows2012" | "windows 2012" )
+      error "Windows Server 2012 $msg" && return 1
+      ;;
+    "2008" | "2008r2" | "win2008" | "win2008r2" | "windows2008" | "windows 2008" )
+      error "Windows Server 2008 $msg" && return 1
+      ;;
+    "2003" | "2003r2" | "win2003" | "win2003r2" | "windows2003" | "windows 2003" )
+      error "Windows Server 2003 $msg" && return 1
+      ;;
+    "core11" | "core 11" )
+      error "Tiny 11 Core $msg" && return 1
+      ;;
+    "tiny11" | "tiny 11" )
+      error "Tiny 11 $msg" && return 1
+      ;;
+   "tiny10" | "tiny 10" )
+      error "Tiny 10 $msg" && return 1
       ;;
   esac
 
