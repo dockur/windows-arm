@@ -121,6 +121,19 @@ kubectl apply -f kubernetes.yml
 > [!TIP]
 > This can also be used to resize the existing disk to a larger capacity without any data loss.
 
+### How do I increase the display resolution?
+
+  The display output is a simple framebuffer, so that the screen can be visible during installation as it doesn't require any drivers.
+  
+  After Windows is fully installed, you can add the following to your compose file:
+
+  ```yaml
+  environment:
+    VGA: "virtio-gpu"
+  ```
+
+  to add a virtual graphics cards to your machine that allows for higher resolutions.
+
 ### How do I share files with the host?
 
   Open 'File Explorer' and click on the 'Network' section, you will see a computer called `host.lan`. Double-click it and it will show a folder called `Data`, which can be bound to any folder on your host via the compose file:
