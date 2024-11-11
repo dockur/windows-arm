@@ -35,8 +35,8 @@ parseVersion() {
       VERSION="win11arm64-enterprise-eval"
       ;;
     "11i" | "11iot" | "iot11" | "win11i" | "win11-iot" | "win11arm64-iot" | "win11arm64-enterprise-iot-eval" )
-      VERSION="win11arm64-enterprise-iot-eval"
-      [ -z "$DETECTED" ] && DETECTED="win11arm64-iot"
+      VERSION="win11arm64-enterprise-ltsc-eval"
+      [ -z "$DETECTED" ] && DETECTED="win11arm64-ltsc"
       ;;
     "11l" | "11ltsc" | "ltsc11" | "win11l" | "win11-ltsc" | "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
       VERSION="win11arm64-enterprise-ltsc-eval"
@@ -49,8 +49,8 @@ parseVersion() {
       VERSION="win10arm64-enterprise-eval"
       ;;
     "10i" | "10iot" | "iot10" | "win10i" | "win10-iot" | "win10arm64-iot" | "win10arm64-enterprise-iot-eval" )
-      VERSION="win10arm64-enterprise-iot-eval"
-      [ -z "$DETECTED" ] && DETECTED="win10arm64-iot"
+      VERSION="win10arm64-enterprise-ltsc-eval"
+      [ -z "$DETECTED" ] && DETECTED="win10arm64-ltsc"
       ;;
     "10l" | "10ltsc" | "ltsc10" | "win10l" | "win10-ltsc" | "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       VERSION="win10arm64-enterprise-ltsc-eval"
