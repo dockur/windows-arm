@@ -1,7 +1,7 @@
 FROM scratch
-COPY --from=qemux/qemu-arm:2.19 / /
+COPY --from=qemux/qemu-arm:2.20 / /
 
-ARG VERSION_ARG="0.0"
+ARG VERSION_ARG="4.00"
 ARG DEBCONF_NOWARNINGS="yes"
 ARG DEBIAN_FRONTEND="noninteractive"
 ARG DEBCONF_NONINTERACTIVE_SEEN="true"
