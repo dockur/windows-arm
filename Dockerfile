@@ -1,7 +1,7 @@
 FROM scratch
 COPY --from=qemux/qemu-arm:2.20 / /
 
-ARG VERSION_ARG="4.00"
+ARG VERSION_ARG="0.00"
 ARG DEBCONF_NOWARNINGS="yes"
 ARG DEBIAN_FRONTEND="noninteractive"
 ARG DEBCONF_NONINTERACTIVE_SEEN="true"
@@ -31,8 +31,8 @@ COPY --chmod=755 ./assets /run/assets
 ADD --chmod=755 https://raw.githubusercontent.com/christgau/wsdd/v0.8/src/wsdd.py /usr/sbin/wsdd
 ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v0.1.262-2/virtio-win-0.1.262.tar.xz /drivers.txz
 
-EXPOSE 8006 3389
 VOLUME /storage
+EXPOSE 8006 3389
 
 ENV VERSION="11"
 ENV RAM_SIZE="4G"
