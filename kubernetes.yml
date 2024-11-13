@@ -19,7 +19,7 @@ spec:
   terminationGracePeriodSeconds: 120 # the Kubernetes default is 30 seconds and it may be not enough
   containers:
     - name: windows
-      image: dockurr/windows-arm
+      image: dockurr/windows
       ports:
         - containerPort: 8006
           protocol: TCP

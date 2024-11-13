@@ -31,8 +31,8 @@ Via Docker Compose:
 ```yaml
 services:
   windows:
+    image: dockurr/windows
     container_name: windows
-    image: dockurr/windows-arm
     environment:
       VERSION: "11"
     devices:
@@ -49,7 +49,7 @@ services:
 Via Docker CLI:
 
 ```bash
-docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-timeout 120 dockurr/windows-arm
+docker run -it --rm -p 8006:8006 --device=/dev/kvm --cap-add NET_ADMIN --stop-timeout 120 dockurr/windows
 ```
 
 Via Kubernetes:
@@ -129,7 +129,7 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows-arm/refs/heads
 
 ### How do I increase the display resolution?
 
-  The display output is a simple framebuffer, so that the screen can be visible during installation as it doesn't require any drivers.
+  The display output is a simple framebuffer, just so that the screen can be visible during installation as it doesn't require any drivers.
   
   After Windows is fully installed, you can add the following to your compose file:
 
@@ -381,12 +381,12 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
 *The product names, logos, brands, and other trademarks referred to within this project are the property of their respective trademark holders. This project is not affiliated, sponsored, or endorsed by Microsoft Corporation.*
 
 [build_url]: https://github.com/dockur/windows-arm/
-[hub_url]: https://hub.docker.com/r/dockurr/windows-arm/
-[tag_url]: https://hub.docker.com/r/dockurr/windows-arm/tags
-[pkg_url]: https://github.com/dockur/windows-arm/pkgs/container/windows-arm
+[hub_url]: https://hub.docker.com/r/dockurr/windows/
+[tag_url]: https://hub.docker.com/r/dockurr/windows/tags
+[pkg_url]: https://github.com/dockur/windows/pkgs/container/windows
 
 [Build]: https://github.com/dockur/windows-arm/actions/workflows/build.yml/badge.svg
 [Size]: https://img.shields.io/docker/image-size/dockurr/windows-arm/latest?color=066da5&label=size
-[Pulls]: https://img.shields.io/docker/pulls/dockurr/windows-arm.svg?style=flat&label=pulls&logo=docker
-[Version]: https://img.shields.io/docker/v/dockurr/windows-arm/latest?arch=arm64&sort=semver&color=066da5
-[Package]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fipitio.github.io%2Fbackage%2Fdockur%2Fwindows-arm%2Fwindows-arm.json&query=%24.downloads&logo=github&style=flat&color=066da5&label=pulls
+[Pulls]: https://img.shields.io/docker/pulls/dockurr/windows.svg?style=flat&label=pulls&logo=docker
+[Version]: https://img.shields.io/docker/v/dockurr/windows/latest?arch=arm64&sort=semver&color=066da5
+[Package]: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fipitio.github.io%2Fbackage%2Fdockur%2Fwindows%2Fwindows.json&query=%24.downloads&logo=github&style=flat&color=066da5&label=pulls
