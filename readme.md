@@ -60,6 +60,14 @@ Via Kubernetes:
 kubectl apply -f kubernetes.yml
 ```
 
+## Compatibility ⚙️
+
+| **Product**  | **Platform**   | |
+|---|---|---|
+| Docker Engine | Linux| ✅ |
+| Docker Desktop | Linux | ❌ |
+| Docker Desktop | macOS | ❌ |
+
 ## FAQ 💬
 
 ### How do I use it?
