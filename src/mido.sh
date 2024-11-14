@@ -63,20 +63,22 @@ download_windows() {
   local lang="$2"
   local desc="$3"
   local sku_id=""
+  local sku_url=""
   local language=""
   local session_id=""
   local user_agent=""
   local windows_version=""
   local iso_download_link=""
   local product_edition_id=""
+  local language_skuid_json=""  
   local iso_download_link_html=""
   local iso_download_page_html=""
-  local language_skuid_table_html=""
 
   case "${id,,}" in
     "win11x64" ) windows_version="11" ;;
     "win10x64" ) windows_version="10" ;;
     "win81x64" ) windows_version="8" ;;
+    "win11arm64" ) windows_version="11arm64" ;;
     * ) error "Invalid VERSION specified, value \"$id\" is not recognized!" && return 1 ;;
   esac
 
@@ -117,23 +119,17 @@ download_windows() {
     return $?
   }
 
-  # Extract everything after the last slash
-  local url_segment_parameter="${url##*/}"
-
   [[ "$DEBUG" == [Yy1]* ]] && echo -n "Getting language SKU ID: "
-  # Get language -> skuID association table
-  # SKU ID: This specifies the language of the ISO. We always use "English (United States)", however, the SKU for this changes with each Windows release
-  # We must make this request so our next one will be allowed
-  # --data "" is required otherwise no "Content-Length" header will be sent causing HTTP response "411 Length Required"
-  language_skuid_table_html=$(curl --silent --max-time 30 --request POST --user-agent "$user_agent" --data "" --header "Accept:" --max-filesize 10K --fail --proto =https --tlsv1.2 --http1.1 -- "https://www.microsoft.com/en-US/api/controls/contentinclude/html?pageId=a8f8f489-4c7f-463a-9ca6-5cff94d8d041&host=www.microsoft.com&segments=software-download,$url_segment_parameter&query=&action=getskuinformationbyproductedition&sessionId=$session_id&productEditionId=$product_edition_id&sdVersion=2") || {
+  sku_url="https://www.microsoft.com/software-download-connector/api/getskuinformationbyproductedition?profile=1234&ProductEditionId=$product_edition_id&SKU=undefined&friendlyFileName=undefined&Locale=en-US&sessionID=$session_id"
+  
+  language_skuid_json=$(curl --silent --max-time 30 --request POST --user-agent "$user_agent" --data "" --header "Accept:" --max-filesize 10K --fail --proto =https --tlsv1.2 --http1.1 -- "$sku_url") || {
     handle_curl_error $?
     return $?
   }
 
-  # tr: Filter for only alphanumerics or "-" to prevent HTTP parameter injection
-  sku_id=$(echo "$language_skuid_table_html" | grep -m 1 ">${language}<" | sed 's/&quot;//g' | cut -d ',' -f 1  | cut -d ':' -f 2 | tr -cd '[:alnum:]-' | head -c 16)
+  { sku_id=$(echo "$language_skuid_json" | jq -r '.Skus[] | select(.Language=="${language}").Id'); rc=$?; } || :
 
-  if [ -z "$sku_id" ]; then
+  if [ -z "$sku_id" ] || [[ "$sku_id" == "null" ]] || (( rc != 0 )); then
     language=$(getLanguage "$lang" "desc")
     error "No download in the $language language available for $desc!"
     return 1
@@ -141,6 +137,9 @@ download_windows() {
 
   [[ "$DEBUG" == [Yy1]* ]] && echo "$sku_id"
   [[ "$DEBUG" == [Yy1]* ]] && echo "Getting ISO download link..."
+
+  # Extract everything after the last slash
+  local url_segment_parameter="${url##*/}"
 
   # Get ISO download link
   # If any request is going to be blocked by Microsoft it's always this last one (the previous requests always seem to succeed)
