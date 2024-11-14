@@ -70,7 +70,7 @@ download_windows() {
   local windows_version=""
   local iso_download_link=""
   local product_edition_id=""
-  local language_skuid_json=""  
+  local language_skuid_json=""
   local iso_download_link_html=""
   local iso_download_page_html=""
 
@@ -121,7 +121,7 @@ download_windows() {
 
   [[ "$DEBUG" == [Yy1]* ]] && echo -n "Getting language SKU ID: "
   sku_url="https://www.microsoft.com/software-download-connector/api/getskuinformationbyproductedition?profile=1234&ProductEditionId=$product_edition_id&SKU=undefined&friendlyFileName=undefined&Locale=en-US&sessionID=$session_id"
-  
+
   language_skuid_json=$(curl --silent --max-time 30 --request POST --user-agent "$user_agent" --data "" --header "Accept:" --max-filesize 10K --fail --proto =https --tlsv1.2 --http1.1 -- "$sku_url") || {
     handle_curl_error $?
     return $?
@@ -316,6 +316,7 @@ getWindows() {
   esac
 
   case "${version,,}" in
+    "win11${PLATFORM,,}" ) ;;  
     "win11${PLATFORM,,}-enterprise-iot"* ) ;;
     "win11${PLATFORM,,}-enterprise-ltsc"* ) ;;
     * )
