@@ -494,8 +494,8 @@ getMido() {
 
   case "${id,,}" in
     "win11arm64" )
-      size=111
-      sum="xxx"
+      size=5460387840
+      sum="57d1dfb2c6690a99fe99226540333c6c97d3fd2b557a50dfe3d68c3f675ef2b0"
       ;;
     "win11arm64-enterprise-ltsc-eval" )
       size=4252764160
