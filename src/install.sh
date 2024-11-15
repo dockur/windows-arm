@@ -120,6 +120,7 @@ finishInstall() {
 
   rm -f "$STORAGE/windows.old"
   rm -f "$STORAGE/windows.vga"
+  rm -f "$STORAGE/windows.args"
   rm -f "$STORAGE/windows.base"
   rm -f "$STORAGE/windows.boot"
   rm -f "$STORAGE/windows.mode"
@@ -154,6 +155,11 @@ finishInstall() {
         echo "$BOOT_MODE" > "$STORAGE/windows.mode"
       fi
     fi
+  fi
+
+  if [ -n "${ARGS:-}" ]; then
+    ARGUMENTS="$ARGS ${ARGUMENTS:-}"
+    echo "$ARGS" > "$STORAGE/windows.args"
   fi
 
   if [ -n "${DISK_TYPE:-}" ] && [[ "${DISK_TYPE:-}" != "scsi" ]]; then
@@ -614,11 +620,11 @@ updateXML() {
   local language="$2"
   local culture region user admin pass keyboard
 
-  [ -z "$YRES" ] && YRES="720"
-  [ -z "$XRES" ] && XRES="1280"
+  [ -z "$HEIGHT" ] && HEIGHT="720"
+  [ -z "$WIDTH" ] && WIDTH="1280"
 
-  sed -i "s/<VerticalResolution>1080<\/VerticalResolution>/<VerticalResolution>$YRES<\/VerticalResolution>/g" "$asset"
-  sed -i "s/<HorizontalResolution>1920<\/HorizontalResolution>/<HorizontalResolution>$XRES<\/HorizontalResolution>/g" "$asset"
+  sed -i "s/<VerticalResolution>1080<\/VerticalResolution>/<VerticalResolution>$HEIGHT<\/VerticalResolution>/g" "$asset"
+  sed -i "s/<HorizontalResolution>1920<\/HorizontalResolution>/<HorizontalResolution>$WIDTH<\/HorizontalResolution>/g" "$asset"
 
   culture=$(getLanguage "$language" "culture")
 
@@ -964,6 +970,11 @@ buildImage() {
 bootWindows() {
 
   rm -rf "$TMP"
+
+  if [ -f "$STORAGE/windows.args" ]; then
+    ARGS=$(<"$STORAGE/windows.args")
+    ARGUMENTS="$ARGS ${ARGUMENTS:-}"
+  fi
 
   if [ -s "$STORAGE/windows.type" ] && [ -f "$STORAGE/windows.type" ]; then
     [ -z "${DISK_TYPE:-}" ] && DISK_TYPE=$(<"$STORAGE/windows.type")
