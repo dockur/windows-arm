@@ -14,7 +14,7 @@ set -Eeuo pipefail
 : "${USERNAME:=""}"
 : "${PASSWORD:=""}"
 
-MIRRORS=2
+MIRRORS=1
 PLATFORM="ARM64"
 
 parseVersion() {
@@ -115,162 +115,202 @@ getLanguage() {
   local ret="$2"
   local lang=""
   local desc=""
+  local short=""
   local culture=""
 
   case "${id,,}" in
     "ar" | "ar-"* )
+      short="ar"
       lang="Arabic"
       desc="$lang"
       culture="ar-SA" ;;
     "bg" | "bg-"* )
+      short="bg"
       lang="Bulgarian"
       desc="$lang"
       culture="bg-BG" ;;
     "cs" | "cs-"* | "cz" | "cz-"* )
+      short="cs"
       lang="Czech"
       desc="$lang"
       culture="cs-CZ" ;;
     "da" | "da-"* | "dk" | "dk-"* )
+      short="da"
       lang="Danish"
       desc="$lang"
       culture="da-DK" ;;
     "de" | "de-"* )
+      short="de"
       lang="German"
       desc="$lang"
       culture="de-DE" ;;
     "el" | "el-"* | "gr" | "gr-"* )
+      short="el"
       lang="Greek"
       desc="$lang"
       culture="el-GR" ;;
     "gb" | "en-gb" )
+      short="en-gb"
       lang="English International"
       desc="English"
       culture="en-GB" ;;
     "en" | "en-"* )
+      short="en"
       lang="English"
       desc="English"
       culture="en-US" ;;
     "mx" | "es-mx" )
+      short="mx"
       lang="Spanish (Mexico)"
       desc="Spanish"
       culture="es-MX" ;;
     "es" | "es-"* )
+      short="es"
       lang="Spanish"
       desc="$lang"
       culture="es-ES" ;;
     "et" | "et-"* )
+      short="et"
       lang="Estonian"
       desc="$lang"
       culture="et-EE" ;;
     "fi" | "fi-"* )
+      short="fi"
       lang="Finnish"
       desc="$lang"
       culture="fi-FI" ;;
     "ca" | "fr-ca" )
+      short="ca"
       lang="French Canadian"
       desc="French"
       culture="fr-CA" ;;
     "fr" | "fr-"* )
+      short="fr"
       lang="French"
       desc="$lang"
       culture="fr-FR" ;;
     "he" | "he-"* | "il" | "il-"* )
+      short="he"
       lang="Hebrew"
       desc="$lang"
       culture="he-IL" ;;
     "hr" | "hr-"* | "cr" | "cr-"* )
+      short="hr"
       lang="Croatian"
       desc="$lang"
       culture="hr-HR" ;;
     "hu" | "hu-"* )
+      short="hu"
       lang="Hungarian"
       desc="$lang"
       culture="hu-HU" ;;
     "it" | "it-"* )
+      short="it"
       lang="Italian"
       desc="$lang"
       culture="it-IT" ;;
     "ja" | "ja-"* | "jp" | "jp-"* )
+      short="ja"
       lang="Japanese"
       desc="$lang"
       culture="ja-JP" ;;
     "ko" | "ko-"* | "kr" | "kr-"* )
+      short="ko"
       lang="Korean"
       desc="$lang"
       culture="ko-KR" ;;
     "lt" | "lt-"* )
+      short="lt"
       lang="Lithuanian"
       desc="$lang"
-      culture="lv-LV" ;;
+      culture="lt-LT" ;;
     "lv" | "lv-"* )
+      short="lv"
       lang="Latvian"
       desc="$lang"
-      culture="lt-LT" ;;
+      culture="lv-LV" ;;
     "nb" | "nb-"* |"nn" | "nn-"* | "no" | "no-"* )
+      short="no"
       lang="Norwegian"
       desc="$lang"
       culture="nb-NO" ;;
     "nl" | "nl-"* )
+      short="nl"
       lang="Dutch"
       desc="$lang"
       culture="nl-NL" ;;
     "pl" | "pl-"* )
+      short="pl"
       lang="Polish"
       desc="$lang"
       culture="pl-PL" ;;
     "br" | "pt-br" )
+      short="pt"
       lang="Brazilian Portuguese"
       desc="Portuguese"
       culture="pt-BR" ;;
     "pt" | "pt-"* )
+      short="pp"
       lang="Portuguese"
       desc="$lang"
       culture="pt-BR" ;;
     "ro" | "ro-"* )
+      short="ro"
       lang="Romanian"
       desc="$lang"
       culture="ro-RO" ;;
     "ru" | "ru-"* )
+      short="ru"
       lang="Russian"
       desc="$lang"
       culture="ru-RU" ;;
     "sk" | "sk-"* )
+      short="sk"
       lang="Slovak"
       desc="$lang"
       culture="sk-SK" ;;
     "sl" | "sl-"* | "si" | "si-"* )
+      short="sl"
       lang="Slovenian"
       desc="$lang"
       culture="sl-SI" ;;
     "sr" | "sr-"* )
+      short="sr"
       lang="Serbian Latin"
       desc="Serbian"
       culture="sr-Latn-RS" ;;
     "sv" | "sv-"* | "se" | "se-"* )
+      short="sv"
       lang="Swedish"
       desc="$lang"
       culture="sv-SE" ;;
     "th" | "th-"* )
+      short="th"
       lang="Thai"
       desc="$lang"
       culture="th-TH" ;;
     "tr" | "tr-"* )
+      short="tr"
       lang="Turkish"
       desc="$lang"
       culture="tr-TR" ;;
     "ua" | "ua-"* | "uk" | "uk-"* )
+      short="uk"
       lang="Ukrainian"
       desc="$lang"
       culture="uk-UA" ;;
     "hk" | "zh-hk" | "cn-hk" )
+      short="hk"
       lang="Chinese (Traditional)"
       desc="Chinese HK"
       culture="zh-TW" ;;
     "tw" | "zh-tw" | "cn-tw" )
+      short="tw"
       lang="Chinese (Traditional)"
       desc="Chinese TW"
       culture="zh-TW" ;;
     "zh" | "zh-"* | "cn" | "cn-"* )
+      short="cn"
       lang="Chinese (Simplified)"
       desc="Chinese"
       culture="zh-CN" ;;
@@ -279,6 +319,7 @@ getLanguage() {
   case "${ret,,}" in
     "desc" ) echo "$desc" ;;
     "name" ) echo "$lang" ;;
+    "code" ) echo "$short" ;;
     "culture" ) echo "$culture" ;;
     *) echo "$desc";;
   esac
@@ -522,179 +563,6 @@ getLink1() {
   local url=""
   local sum=""
   local size=""
-  local host="https://drive.massgrave.dev"
-
-  culture=$(getLanguage "$lang" "culture")
-
-  case "${id,,}" in
-    "win11arm64" )
-      case "${culture,,}" in
-        "ar" | "ar-"* ) url="ar-sa_windows_11_consumer_editions_version_24h2_arm64_dvd_331e352e.iso" ;;
-        "bg" | "bg-"* ) url="bg-bg_windows_11_consumer_editions_version_24h2_arm64_dvd_ad0f4159.iso" ;;
-        "cs" | "cs-"* ) url="cs-cz_windows_11_consumer_editions_version_24h2_arm64_dvd_09e9a65d.iso" ;;
-        "da" | "da-"* ) url="da-dk_windows_11_consumer_editions_version_24h2_arm64_dvd_cfc9f7d2.iso" ;;
-        "de" | "de-"* ) url="de-de_windows_11_consumer_editions_version_24h2_arm64_dvd_77817e34.iso" ;;
-        "el" | "el-"* ) url="el-gr_windows_11_consumer_editions_version_24h2_arm64_dvd_7ff49fe0.iso" ;;
-        "gb" | "en-gb" ) url="en-gb_windows_11_consumer_editions_version_24h2_arm64_dvd_2fb276c5.iso" ;;
-        "en" | "en-"* )
-          size=5460387840
-          sum="57d1dfb2c6690a99fe99226540333c6c97d3fd2b557a50dfe3d68c3f675ef2b0"
-          url="en-us_windows_11_consumer_editions_version_24h2_arm64_dvd_4cc70bf6.iso" ;;
-        "mx" | "es-mx" ) url="es-mx_windows_11_consumer_editions_version_24h2_arm64_dvd_29df5eac.iso" ;;
-        "es" | "es-"* ) url="es-es_windows_11_consumer_editions_version_24h2_arm64_dvd_b0586d9e.iso" ;;
-        "et" | "et-"* ) url="et-ee_windows_11_consumer_editions_version_24h2_arm64_dvd_0895b4c2.iso" ;;
-        "fi" | "fi-"* ) url="fi-fi_windows_11_consumer_editions_version_24h2_arm64_dvd_030941fb.iso" ;;
-        "ca" | "fr-ca" ) url="fr-ca_windows_11_consumer_editions_version_24h2_arm64_dvd_08e2b30e.iso" ;;
-        "fr" | "fr-"* ) url="fr-fr_windows_11_consumer_editions_version_24h2_arm64_dvd_f7d51069.iso" ;;
-        "he" | "he-"* ) url="he-il_windows_11_consumer_editions_version_24h2_arm64_dvd_24838d6b.iso" ;;
-        "hr" | "hr-"* ) url="hr-hr_windows_11_consumer_editions_version_24h2_arm64_dvd_260e2f8a.iso" ;;
-        "hu" | "hu-"* ) url="hu-hu_windows_11_consumer_editions_version_24h2_arm64_dvd_981626d6.iso" ;;
-        "it" | "it-"* ) url="it-it_windows_11_consumer_editions_version_24h2_arm64_dvd_30f0547d.iso" ;;
-        "ja" | "ja-"* ) url="ja-jp_windows_11_consumer_editions_version_24h2_arm64_dvd_f5fc9b3e.iso" ;;
-        "ko" | "ko-"* ) url="ko-kr_windows_11_consumer_editions_version_24h2_arm64_dvd_5dddc52e.iso" ;;
-        "lt" | "lt-"* ) url="lt-lt_windows_11_consumer_editions_version_24h2_arm64_dvd_e83cfe4c.iso" ;;
-        "lv" | "lv-"* ) url="lv-lv_windows_11_consumer_editions_version_24h2_arm64_dvd_0028b5e8.iso" ;;
-        "nb" | "nb-"* ) url="nb-no_windows_11_consumer_editions_version_24h2_arm64_dvd_1df6aff1.iso" ;;
-        "nl" | "nl-"* ) url="nl-nl_windows_11_consumer_editions_version_24h2_arm64_dvd_2a794237.iso" ;;
-        "pl" | "pl-"* ) url="pl-pl_windows_11_consumer_editions_version_24h2_arm64_dvd_80af0fd7.iso" ;;
-        "br" | "pt-br" ) url="pt-br_windows_11_consumer_editions_version_24h2_arm64_dvd_0648fb13.iso" ;;
-        "pt" | "pt-"* ) url="pt-pt_windows_11_consumer_editions_version_24h2_arm64_dvd_223f3f3a.iso" ;;
-        "ro" | "ro-"* ) url="ro-ro_windows_11_consumer_editions_version_24h2_arm64_dvd_78f3a92a.iso" ;;
-        "ru" | "ru-"* ) url="ru-ru_windows_11_consumer_editions_version_24h2_arm64_dvd_8e4d44aa.iso" ;;
-        "sk" | "sk-"* ) url="sk-sk_windows_11_consumer_editions_version_24h2_arm64_dvd_c8c147d6.iso" ;;
-        "sl" | "sl-"* ) url="sl-si_windows_11_consumer_editions_version_24h2_arm64_dvd_f4e5671d.iso" ;;
-        "sr" | "sr-"* ) url="sr-latn-rs_windows_11_consumer_editions_version_24h2_arm64_dvd_489179df.iso" ;;
-        "sv" | "sv-"* ) url="sv-se_windows_11_consumer_editions_version_24h2_arm64_dvd_fa42c0cc.iso" ;;
-        "th" | "th-"* ) url="th-th_windows_11_consumer_editions_version_24h2_arm64_dvd_abb88faa.iso" ;;
-        "tr" | "tr-"* ) url="tr-tr_windows_11_consumer_editions_version_24h2_arm64_dvd_ea2494b5.iso" ;;
-        "uk" | "uk-"* ) url="uk-ua_windows_11_consumer_editions_version_24h2_arm64_dvd_70fa6caf.iso" ;;
-        "zh-hk" | "zh-tw" ) url="zh-tw_windows_11_consumer_editions_version_24h2_arm64_dvd_fa6b02d0.iso" ;;
-        "zh" | "zh-"* ) url="zh-cn_windows_11_consumer_editions_version_24h2_arm64_dvd_4b5c8070.iso" ;;
-      esac
-      ;;
-    "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
-      case "${culture,,}" in
-        "ar" | "ar-"* ) url="ar-sa_windows_11_business_editions_version_24h2_arm64_dvd_0b673385.iso" ;;
-        "bg" | "bg-"* ) url="bg-bg_windows_11_business_editions_version_24h2_arm64_dvd_788c03e0.iso" ;;
-        "cs" | "cs-"* ) url="cs-cz_windows_11_business_editions_version_24h2_arm64_dvd_1f7bc350.iso" ;;
-        "da" | "da-"* ) url="da-dk_windows_11_business_editions_version_24h2_arm64_dvd_9d466587.iso" ;;
-        "de" | "de-"* ) url="de-de_windows_11_business_editions_version_24h2_arm64_dvd_c2e28d02.iso" ;;
-        "el" | "el-"* ) url="el-gr_windows_11_business_editions_version_24h2_arm64_dvd_549d89e0.iso" ;;
-        "gb" | "en-gb" ) url="en-gb_windows_11_business_editions_version_24h2_arm64_dvd_4b053a98.iso" ;;
-        "en" | "en-"* )
-          size=5388951552
-          sum="15ff94a99e89846c54316275f60ea697c9517e5dea7b3a963157a4c632524f72"
-          url="en-us_windows_11_business_editions_version_24h2_arm64_dvd_ad92e9d8.iso" ;;
-        "mx" | "es-mx" ) url="es-mx_windows_11_business_editions_version_24h2_arm64_dvd_2f7a4f0e.iso" ;;
-        "es" | "es-"* ) url="es-es_windows_11_business_editions_version_24h2_arm64_dvd_81ab0494.iso" ;;
-        "et" | "et-"* ) url="et-ee_windows_11_business_editions_version_24h2_arm64_dvd_49e9e4b9.iso" ;;
-        "fi" | "fi-"* ) url="fi-fi_windows_11_business_editions_version_24h2_arm64_dvd_18c415d6.iso" ;;
-        "ca" | "fr-ca" ) url="fr-ca_windows_11_business_editions_version_24h2_arm64_dvd_9de095b9.iso" ;;
-        "fr" | "fr-"* ) url="fr-fr_windows_11_business_editions_version_24h2_arm64_dvd_dadf21c7.iso" ;;
-        "he" | "he-"* ) url="he-il_windows_11_business_editions_version_24h2_arm64_dvd_a836dc29.iso" ;;
-        "hr" | "hr-"* ) url="hr-hr_windows_11_business_editions_version_24h2_arm64_dvd_8b68a3fd.iso" ;;
-        "hu" | "hu-"* ) url="hu-hu_windows_11_business_editions_version_24h2_arm64_dvd_0e1fd665.iso" ;;
-        "it" | "it-"* ) url="it-it_windows_11_business_editions_version_24h2_arm64_dvd_c4e7511f.iso" ;;
-        "ja" | "ja-"* ) url="ja-jp_windows_11_business_editions_version_24h2_arm64_dvd_28e70c96.iso" ;;
-        "ko" | "ko-"* ) url="ko-kr_windows_11_business_editions_version_24h2_arm64_dvd_739157b9.iso" ;;
-        "lt" | "lt-"* ) url="lt-lt_windows_11_business_editions_version_24h2_arm64_dvd_896253e8.iso" ;;
-        "lv" | "lv-"* ) url="lv-lv_windows_11_business_editions_version_24h2_arm64_dvd_e5fd8399.iso" ;;
-        "nb" | "nb-"* ) url="nb-no_windows_11_business_editions_version_24h2_arm64_dvd_698e7791.iso" ;;
-        "nl" | "nl-"* ) url="nl-nl_windows_11_business_editions_version_24h2_arm64_dvd_7e6e0919.iso" ;;
-        "pl" | "pl-"* ) url="pl-pl_windows_11_business_editions_version_24h2_arm64_dvd_b297967a.iso" ;;
-        "br" | "pt-br" ) url="pt-br_windows_11_business_editions_version_24h2_arm64_dvd_7011721a.iso" ;;
-        "pt" | "pt-"* ) url="pt-pt_windows_11_business_editions_version_24h2_arm64_dvd_221e64a5.iso" ;;
-        "ro" | "ro-"* ) url="ro-ro_windows_11_business_editions_version_24h2_arm64_dvd_82cbceb3.iso" ;;
-        "ru" | "ru-"* ) url="ru-ru_windows_11_business_editions_version_24h2_arm64_dvd_6ab7f1a4.iso" ;;
-        "sk" | "sk-"* ) url="sk-sk_windows_11_business_editions_version_24h2_arm64_dvd_04ce533b.iso" ;;
-        "sl" | "sl-"* ) url="sl-si_windows_11_business_editions_version_24h2_arm64_dvd_dd345ed1.iso" ;;
-        "sr" | "sr-"* ) url="sr-latn-rs_windows_11_business_editions_version_24h2_arm64_dvd_f2b86976.iso" ;;
-        "sv" | "sv-"* ) url="sv-se_windows_11_business_editions_version_24h2_arm64_dvd_88f0e36f.iso" ;;
-        "th" | "th-"* ) url="th-th_windows_11_business_editions_version_24h2_arm64_dvd_9c714026.iso" ;;
-        "tr" | "tr-"* ) url="tr-tr_windows_11_business_editions_version_24h2_arm64_dvd_4da6f82d.iso" ;;
-        "uk" | "uk-"* ) url="uk-ua_windows_11_business_editions_version_24h2_arm64_dvd_65304891.iso" ;;
-        "zh-hk" | "zh-tw" ) url="zh-tw_windows_11_business_editions_version_24h2_arm64_dvd_99a82a4f.iso" ;;
-        "zh" | "zh-"* ) url="zh-cn_windows_11_business_editions_version_24h2_arm64_dvd_9696a5e8.iso" ;;
-      esac
-      ;;
-    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
-      [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
-      size=5121449984
-      sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
-      url="en-us_windows_11_iot_enterprise_ltsc_2024_arm64_dvd_ec517836.iso"
-      ;;
-    "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
-      case "${culture,,}" in
-        "ar" | "ar-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Arabic_Pro_Ent_EDU_N_MLF_X23-67213.ISO" ;;
-        "bg" | "bg-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Bulgarian_Pro_Ent_EDU_N_MLF_X23-67215.ISO" ;;
-        "cs" | "cs-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Czech_Pro_Ent_EDU_N_MLF_X23-67219.ISO" ;;
-        "da" | "da-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Danish_Pro_Ent_EDU_N_MLF_X23-67220.ISO" ;;
-        "de" | "de-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_German_Pro_Ent_EDU_N_MLF_X23-67228.ISO" ;;
-        "el" | "el-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Greek_Pro_Ent_EDU_N_MLF_X23-67229.ISO" ;;
-        "gb" | "en-gb" ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Eng_Intl_Pro_Ent_EDU_N_MLF_X23-67222.ISO" ;;
-        "en" | "en-"* )
-          size=5190453248
-          sum="bd96b342193f81c0a2e6595d8d8b8dc01dbf789d19211699f6299fec7b712197"
-          url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_English_Pro_Ent_EDU_N_MLF_X23-67223.ISO" ;;
-        "mx" | "es-mx" ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Spanish_Latam_Pro_Ent_EDU_N_MLF_X23-67245.ISO" ;;
-        "es" | "es-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Spanish_Pro_Ent_EDU_N_MLF_X23-67246.ISO" ;;
-        "et" | "et-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Estonian_Pro_Ent_EDU_N_MLF_X23-67224.ISO" ;;
-        "fi" | "fi-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Finnish_Pro_Ent_EDU_N_MLF_X23-67225.ISO" ;;
-        "ca" | "fr-ca" ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_FrenchCanadian_Pro_Ent_EDU_N_MLF_X23-67227.ISO" ;;
-        "fr" | "fr-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_French_Pro_Ent_EDU_N_MLF_X23-67226.ISO" ;;
-        "he" | "he-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Hebrew_Pro_Ent_EDU_N_MLF_X23-67230.ISO" ;;
-        "hr" | "hr-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Croatian_Pro_Ent_EDU_N_MLF_X23-67218.ISO" ;;
-        "hu" | "hu-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Hungarian_Pro_Ent_EDU_N_MLF_X23-67231.ISO" ;;
-        "it" | "it-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Italian_Pro_Ent_EDU_N_MLF_X23-67232.ISO" ;;
-        "ja" | "ja-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Japanese_Pro_Ent_EDU_N_MLF_X23-67233.ISO" ;;
-        "ko" | "ko-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Korean_Pro_Ent_EDU_N_MLF_X23-67234.ISO" ;;
-        "lt" | "lt-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Lithuanian_Pro_Ent_EDU_N_MLF_X23-67236.ISO" ;;
-        "lv" | "lv-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Latvian_Pro_Ent_EDU_N_MLF_X23-67235.ISO" ;;
-        "nb" | "nb-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Norwegian_Pro_Ent_EDU_N_MLF_X23-67237.ISO" ;;
-        "nl" | "nl-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Dutch_Pro_Ent_EDU_N_MLF_X23-67221.ISO" ;;
-        "pl" | "pl-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Polish_Pro_Ent_EDU_N_MLF_X23-67238.ISO" ;;
-        "br" | "pt-br" ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Brazilian_Pro_Ent_EDU_N_MLF_X23-67214.ISO" ;;
-        "pt" | "pt-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Portuguese_Pro_Ent_EDU_N_MLF_X23-67239.ISO" ;;
-        "ro" | "ro-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Romanian_Pro_Ent_EDU_N_MLF_X23-67240.ISO" ;;
-        "ru" | "ru-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Russian_Pro_Ent_EDU_N_MLF_X23-67241.ISO" ;;
-        "sk" | "sk-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Slovak_Pro_Ent_EDU_N_MLF_X23-67243.ISO" ;;
-        "sl" | "sl-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Slovenian_Pro_Ent_EDU_N_MLF_X23-67244.ISO" ;;
-        "sr" | "sr-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Serbian_Latin_Pro_Ent_EDU_N_MLF_X23-67242.ISO" ;;
-        "sv" | "sv-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Swedish_Pro_Ent_EDU_N_MLF_X23-67247.ISO" ;;
-        "th" | "th-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Thai_Pro_Ent_EDU_N_MLF_X23-67248.ISO" ;;
-        "tr" | "tr-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Turkish_Pro_Ent_EDU_N_MLF_X23-67249.ISO" ;;
-        "uk" | "uk-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_Ukrainian_Pro_Ent_EDU_N_MLF_X23-67250.ISO" ;;
-        "zh-hk" | "zh-tw" ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_ChnTrad_Pro_Ent_EDU_N_MLF_X23-67217.ISO" ;;
-        "zh" | "zh-"* ) url="SW_DVD9_Win_Pro_10_22H2.15_Arm64_ChnSimp_Pro_Ent_EDU_N_MLF_X23-67216.ISO" ;;
-      esac
-      ;;
-    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
-      [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
-      size=4430471168
-      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
-      url="en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
-      ;;
-  esac
-
-  case "${ret,,}" in
-    "sum" ) echo "$sum" ;;
-    "size" ) echo "$size" ;;
-    *) [ -n "$url" ] && echo "$host/$url";;
-  esac
-
-  return 0
-}
-
-getLink2() {
-
-  # Fallbacks for users who cannot connect to the Microsoft servers
-
-  local id="$1"
-  local lang="$2"
-  local ret="$3"
-  local url=""
-  local sum=""
-  local size=""
   local host="https://dl.bobpony.com/windows"
 
   [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
@@ -807,12 +675,42 @@ isESD() {
   return 1
 }
 
+isMG() {
+
+  local id="$1"
+  local lang="$2"
+
+  case "${id,,}" in
+    "win11${PLATFORM,,}" )
+      return 0
+      ;;
+    "win11${PLATFORM,,}-enterprise" | "win11${PLATFORM,,}-enterprise-eval" )
+      return 0
+      ;;
+    "win11${PLATFORM,,}-ltsc" | "win11${PLATFORM,,}-enterprise-ltsc-eval" )
+      return 0
+      ;;
+    "win10${PLATFORM,,}" )
+      return 0
+      ;;
+    "win10${PLATFORM,,}-enterprise" | "win10${PLATFORM,,}-enterprise-eval" )
+      return 0
+      ;;
+    "win10${PLATFORM,,}-ltsc" | "win10${PLATFORM,,}-enterprise-ltsc-eval" )
+      return 0
+      ;;
+  esac
+
+  return 1
+}
+
 validVersion() {
 
   local id="$1"
   local lang="$2"
   local url
 
+  isMG "$id" "$lang" && return 0
   isESD "$id" "$lang" && return 0
   isMido "$id" "$lang" && return 0
 
