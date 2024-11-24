@@ -674,7 +674,7 @@ isESD() {
 
   return 1
 }
-      
+
 isMG() {
 
   local id="$1"
