@@ -175,7 +175,9 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
 
 ### How do I run a script after installation?
 
-  To run your own script after installation, you can create a file called `install.bat` and place it in a folder together with any additional files it needs (software to be installed for example). Then bind that folder in your compose file like this:
+  To run your own script after installation, you can create a file called `install.bat` and place it in a folder together with any additional files it needs (software to be installed for example).
+  
+  Then bind that folder in your compose file like this:
 
   ```yaml
   volumes:
