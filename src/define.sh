@@ -95,12 +95,9 @@ parseVersion() {
     "2003" | "2003r2" | "win2003" | "win2003r2" | "windows2003" | "windows 2003" )
       error "Windows Server 2003 $msg" && return 1
       ;;
-    "core11" | "core 11" )
+    "core11" | "core 11" | "tiny11" | "tiny 11" )
       VERSION="core11"
       [ -z "$DETECTED" ] && DETECTED="win11arm64"
-      ;;
-    "tiny11" | "tiny 11" )
-      error "Tiny 11 $msg" && return 1
       ;;
    "tiny10" | "tiny 10" )
       error "Tiny 10 $msg" && return 1
