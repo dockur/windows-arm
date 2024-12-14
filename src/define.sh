@@ -14,7 +14,7 @@ set -Eeuo pipefail
 : "${USERNAME:=""}"
 : "${PASSWORD:=""}"
 
-MIRRORS=1
+MIRRORS=2
 PLATFORM="ARM64"
 
 parseVersion() {
@@ -96,7 +96,8 @@ parseVersion() {
       error "Windows Server 2003 $msg" && return 1
       ;;
     "core11" | "core 11" )
-      error "Tiny 11 Core $msg" && return 1
+      VERSION="core11"
+      [ -z "$DETECTED" ] && DETECTED="win11arm64"
       ;;
     "tiny11" | "tiny 11" )
       error "Tiny 11 $msg" && return 1
@@ -386,6 +387,7 @@ printVersion() {
   local desc="$2"
 
   case "${id,,}" in
+    "core11"* ) desc="Core 11" ;;
     "win10"* ) desc="Windows 10" ;;
     "win11"* ) desc="Windows 11" ;;
   esac
@@ -439,8 +441,11 @@ fromFile() {
   local desc="$1"
   local file="${1,,}"
   local arch="${PLATFORM,,}"
-
-  case "${file// /_}" in
+  
+  file="${file//-/_}"
+  file="${file// /_}"
+  
+  case "$file" in
     *"_x64_"* | *"_x64."*)
       arch="x64"
       ;;
@@ -452,7 +457,10 @@ fromFile() {
       ;;
   esac
 
-  case "${file// /_}" in
+  case "$file" in
+    "tiny11core"* | "tiny11_core"* | "tiny_11_core"* )
+      id="core11"
+      ;;
     "win10"*| "win_10"* | *"windows10"* | *"windows_10"* )
       id="win10${arch}"
       ;;
@@ -588,6 +596,35 @@ getLink1() {
       size=4430471168
       sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="10/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
+      ;;
+  esac
+
+  case "${ret,,}" in
+    "sum" ) echo "$sum" ;;
+    "size" ) echo "$size" ;;
+    *) [ -n "$url" ] && echo "$host/$url";;
+  esac
+
+  return 0
+}
+
+getLink2() {
+
+  local id="$1"
+  local lang="$2"
+  local ret="$3"
+  local url=""
+  local sum=""
+  local size=""
+  local host="https://archive.org/download"
+
+  [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
+
+  case "${id,,}" in
+    "core11" )
+      size=1
+      sum="xxx"
+      url="tiny11-core-arm64/tiny11%20core%20arm64.iso"
       ;;
   esac
 
