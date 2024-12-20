@@ -95,7 +95,11 @@ parseVersion() {
     "2003" | "2003r2" | "win2003" | "win2003r2" | "windows2003" | "windows 2003" )
       error "Windows Server 2003 $msg" && return 1
       ;;
-    "core11" | "core 11" | "tiny11" | "tiny 11" )
+    "tiny11" | "tiny 11" )
+      VERSION="tiny11"
+      [ -z "$DETECTED" ] && DETECTED="win11arm64"
+      ;;
+    "core11" | "core 11" )
       VERSION="core11"
       [ -z "$DETECTED" ] && DETECTED="win11arm64"
       ;;
@@ -384,6 +388,7 @@ printVersion() {
   local desc="$2"
 
   case "${id,,}" in
+    "tiny11"* ) desc="Tiny 11" ;;
     "core11"* ) desc="Core 11" ;;
     "win10"* ) desc="Windows 10" ;;
     "win11"* ) desc="Windows 11" ;;
@@ -457,6 +462,9 @@ fromFile() {
   case "$file" in
     "tiny11core"* | "tiny11_core"* | "tiny_11_core"* )
       id="core11"
+      ;;
+    "tiny11"* | "tiny_11"* )
+      id="tiny11"
       ;;
     "win10"*| "win_10"* | *"windows10"* | *"windows_10"* )
       id="win10${arch}"
@@ -618,9 +626,14 @@ getLink2() {
   [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
+    "tiny11" )
+      size=1
+      sum="xx"
+      url="tiny11a64/tiny11a64%20r1.iso"
+      ;;
     "core11" )
       size=1
-      sum="xxx"
+      sum="812dae6b5bf5215db63b61ae10d8f0ffd3aa8529a18d96e9ced53341e2c676ec"
       url="tiny11-core-arm64/tiny11%20core%20arm64.iso"
       ;;
   esac
