@@ -627,8 +627,8 @@ getLink2() {
 
   case "${id,,}" in
     "tiny11" )
-      size=1
-      sum="xx"
+      size=4480499712
+      sum="ec6056aa554c17290224af23e1b99961fe99606bb5ea9102d61838939c63325b"
       url="tiny11a64/tiny11a64%20r1.iso"
       ;;
     "core11" )
