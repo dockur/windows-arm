@@ -14,7 +14,7 @@ set -Eeuo pipefail
 : "${USERNAME:=""}"
 : "${PASSWORD:=""}"
 
-MIRRORS=1
+MIRRORS=2
 PLATFORM="ARM64"
 
 parseVersion() {
@@ -95,11 +95,13 @@ parseVersion() {
     "2003" | "2003r2" | "win2003" | "win2003r2" | "windows2003" | "windows 2003" )
       error "Windows Server 2003 $msg" && return 1
       ;;
-    "core11" | "core 11" )
-      error "Tiny 11 Core $msg" && return 1
-      ;;
     "tiny11" | "tiny 11" )
-      error "Tiny 11 $msg" && return 1
+      VERSION="tiny11"
+      [ -z "$DETECTED" ] && DETECTED="win11arm64"
+      ;;
+    "core11" | "core 11" )
+      VERSION="core11"
+      [ -z "$DETECTED" ] && DETECTED="win11arm64"
       ;;
    "tiny10" | "tiny 10" )
       error "Tiny 10 $msg" && return 1
@@ -386,6 +388,8 @@ printVersion() {
   local desc="$2"
 
   case "${id,,}" in
+    "tiny11"* ) desc="Tiny 11" ;;
+    "core11"* ) desc="Core 11" ;;
     "win10"* ) desc="Windows 10" ;;
     "win11"* ) desc="Windows 11" ;;
   esac
@@ -439,8 +443,11 @@ fromFile() {
   local desc="$1"
   local file="${1,,}"
   local arch="${PLATFORM,,}"
-
-  case "${file// /_}" in
+  
+  file="${file//-/_}"
+  file="${file// /_}"
+  
+  case "$file" in
     *"_x64_"* | *"_x64."*)
       arch="x64"
       ;;
@@ -452,7 +459,13 @@ fromFile() {
       ;;
   esac
 
-  case "${file// /_}" in
+  case "$file" in
+    "tiny11core"* | "tiny11_core"* | "tiny_11_core"* )
+      id="core11"
+      ;;
+    "tiny11"* | "tiny_11"* )
+      id="tiny11"
+      ;;
     "win10"*| "win_10"* | *"windows10"* | *"windows_10"* )
       id="win10${arch}"
       ;;
@@ -588,6 +601,40 @@ getLink1() {
       size=4430471168
       sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="10/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
+      ;;
+  esac
+
+  case "${ret,,}" in
+    "sum" ) echo "$sum" ;;
+    "size" ) echo "$size" ;;
+    *) [ -n "$url" ] && echo "$host/$url";;
+  esac
+
+  return 0
+}
+
+getLink2() {
+
+  local id="$1"
+  local lang="$2"
+  local ret="$3"
+  local url=""
+  local sum=""
+  local size=""
+  local host="https://archive.org/download"
+
+  [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
+
+  case "${id,,}" in
+    "tiny11" )
+      size=4480499712
+      sum="ec6056aa554c17290224af23e1b99961fe99606bb5ea9102d61838939c63325b"
+      url="tiny11a64/tiny11a64%20r1.iso"
+      ;;
+    "core11" )
+      size=3300327424
+      sum="812dae6b5bf5215db63b61ae10d8f0ffd3aa8529a18d96e9ced53341e2c676ec"
+      url="tiny11-core-arm64/tiny11%20core%20arm64.iso"
       ;;
   esac
 
