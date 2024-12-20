@@ -632,7 +632,7 @@ getLink2() {
       url="tiny11a64/tiny11a64%20r1.iso"
       ;;
     "core11" )
-      size=1
+      size=3300327424
       sum="812dae6b5bf5215db63b61ae10d8f0ffd3aa8529a18d96e9ced53341e2c676ec"
       url="tiny11-core-arm64/tiny11%20core%20arm64.iso"
       ;;
