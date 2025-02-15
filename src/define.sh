@@ -5,6 +5,7 @@ set -Eeuo pipefail
 : "${HEIGHT:=""}"
 : "${VERIFY:=""}"
 : "${REGION:=""}"
+: "${EDITION:=""}"
 : "${MANUAL:=""}"
 : "${REMOVE:=""}"
 : "${VERSION:=""}"
@@ -722,42 +723,12 @@ isESD() {
   return 1
 }
 
-isMG() {
-
-  local id="$1"
-  local lang="$2"
-
-  case "${id,,}" in
-    "win11${PLATFORM,,}" )
-      return 0
-      ;;
-    "win11${PLATFORM,,}-enterprise" | "win11${PLATFORM,,}-enterprise-eval" )
-      return 0
-      ;;
-    "win11${PLATFORM,,}-ltsc" | "win11${PLATFORM,,}-enterprise-ltsc-eval" )
-      return 0
-      ;;
-    "win10${PLATFORM,,}" )
-      return 0
-      ;;
-    "win10${PLATFORM,,}-enterprise" | "win10${PLATFORM,,}-enterprise-eval" )
-      return 0
-      ;;
-    "win10${PLATFORM,,}-ltsc" | "win10${PLATFORM,,}-enterprise-ltsc-eval" )
-      return 0
-      ;;
-  esac
-
-  return 1
-}
-
 validVersion() {
 
   local id="$1"
   local lang="$2"
   local url
 
-  isMG "$id" "$lang" && return 0
   isESD "$id" "$lang" && return 0
   isMido "$id" "$lang" && return 0
 
@@ -792,10 +763,6 @@ addFolder() {
   file=$(find "$dest" -maxdepth 1 -type f -iname install.bat | head -n 1)
   [ -f "$file" ] && unix2dos -q "$file"
 
-  return 0
-}
-
-migrateFiles() {
   return 0
 }
 
