@@ -76,8 +76,6 @@ startInstall() {
 
     BOOT="$STORAGE/$file"
 
-    ! migrateFiles "$BOOT" "$VERSION" && error "Migration failed!" && exit 57
-
   fi
 
   skipInstall "$BOOT" && return 1
@@ -666,6 +664,13 @@ updateXML() {
     sed -z "s/<Password>...............<Value \/>/<Password>\n              <Value>$pass<\/Value>/g" -i "$asset"
     sed -z "s/<AdministratorPassword>...........<Value \/>/<AdministratorPassword>\n          <Value>$admin<\/Value>/g" -i "$asset"
     sed -z "s/<AdministratorPassword>...............<Value \/>/<AdministratorPassword>\n              <Value>$admin<\/Value>/g" -i "$asset"
+  fi
+
+  if [ -n "$EDITION" ]; then
+    sed -i "s/<Value>Windows Server 2025 SERVERSTANDARD<\/Value>/<Value>Windows Server 2025 SERVER${EDITION^^}<\/Value>/g" "$asset"
+    sed -i "s/<Value>Windows Server 2022 SERVERSTANDARD<\/Value>/<Value>Windows Server 2022 SERVER${EDITION^^}<\/Value>/g" "$asset"
+    sed -i "s/<Value>Windows Server 2019 SERVERSTANDARD<\/Value>/<Value>Windows Server 2019 SERVER${EDITION^^}<\/Value>/g" "$asset"
+    sed -i "s/<Value>Windows Server 2016 SERVERSTANDARD<\/Value>/<Value>Windows Server 2016 SERVER${EDITION^^}<\/Value>/g" "$asset"
   fi
 
   return 0
