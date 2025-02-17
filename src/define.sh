@@ -491,7 +491,9 @@ fromName() {
 
   case "${name,,}" in
     *"windows 10"* ) id="win10${arch}" ;;
+    *"optimum 10"* ) id="win10${arch}" ;;
     *"windows 11"* ) id="win11${arch}" ;;
+    *"optimum 11"* ) id="win11${arch}" ;;
   esac
 
   echo "$id"
