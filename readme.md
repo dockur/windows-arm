@@ -96,7 +96,7 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows-arm/refs/heads
   | **Value** | **Version**           | **Platform** | **Size** |
   |---|---|---|---|
   | `11`   | Windows 11 Pro        | ARM64        | 5.0 GB   |
-  | `11l`  | Windows 11 LTSC       | ARM64        | 3.9 GB   |
+  | `11l`  | Windows 11 LTSC       | ARM64        | 4.7 GB   |
   | `11e`  | Windows 11 Enterprise | ARM64        | 4.8 GB   |
   |||||  
   | `10`   | Windows 10 Pro        | ARM64        | 3.5 GB   |
