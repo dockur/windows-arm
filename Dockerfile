@@ -1,5 +1,5 @@
 FROM scratch
-COPY --from=qemux/qemu-arm:2.27 / /
+COPY --from=qemux/qemu-arm:2.28 / /
 
 ARG VERSION_ARG="0.00"
 ARG DEBCONF_NOWARNINGS="yes"
