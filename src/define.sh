@@ -585,9 +585,9 @@ getLink1() {
 
   case "${id,,}" in
     "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
-      size=6326812672
-      sum="464c75909b9c37864e144886445a2faa67ac86f0845a68cca3f017b97f810e8d"
-      url="11/en-us_windows_11_23h2_arm64.iso"
+      size=5219411968
+      sum="dbd54452c3c20b4625f511dae3c3e057270448fb661232d4fa66279f59a63157"
+      url="11/en-us_windows_11_24h2_arm64.iso"
       ;;
     "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
       [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
