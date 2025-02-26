@@ -444,10 +444,10 @@ fromFile() {
   local desc="$1"
   local file="${1,,}"
   local arch="${PLATFORM,,}"
-  
+
   file="${file//-/_}"
   file="${file// /_}"
-  
+
   case "$file" in
     *"_x64_"* | *"_x64."*)
       arch="x64"
@@ -596,8 +596,8 @@ getLink1() {
       url="11/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
       ;;
     "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
-      size=4846794752
-      sum="6d2688f95fa1d359d68ed0c38c3f38de7b3713c893410e15be9d1e706a4a58c7"
+      size=4689637376
+      sum="7b43e64f4e3b961a83f9b70efa4b9d863bc5c348fe86d75917ac974116d17227"
       url="10/en-us_windows_10_22h2_arm64.iso"
       ;;
     "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
