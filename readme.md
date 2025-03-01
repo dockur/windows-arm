@@ -144,7 +144,9 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows-arm/refs/heads
 
 ### How do I share files with the host?
 
-  Open 'File Explorer' and click on the 'Network' section, you will see a computer called `host.lan`. Double-click it and it will show a folder called `Data`, which can be bound to any folder on your host via the compose file:
+  Open 'File Explorer' and click on the 'Network' section, you will see a computer called `host.lan`.
+  
+  Double-click it and it will show a folder called `Data`, which can be bound to any folder on your host via the compose file:
 
   ```yaml
   volumes:
@@ -158,7 +160,7 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
 
 ### How do I install a custom image?
 
-  In order to download an unsupported ISO image that is not selectable from the list above, specify the URL of that ISO in the `VERSION` environment variable, for example:
+  In order to download an unsupported ISO image, specify its URL in the `VERSION` environment variable:
   
   ```yaml
   environment:
@@ -172,7 +174,7 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
     - /home/user/example.iso:/custom.iso
   ```
 
-  Replace the example path `/home/user/example.iso` with the filename of your desired ISO file, the value of `VERSION` will be ignored in this case.
+  Replace the example path `/home/user/example.iso` with the filename of your desired ISO file. The value of `VERSION` will be ignored in this case.
 
 ### How do I run a script after installation?
 
@@ -185,7 +187,7 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
     -  /home/user/example:/oem
   ```
 
-  The example folder `/home/user/example` will be copied to `C:\OEM` during installation and the containing `install.bat` will be executed during the last step.
+  The example folder `/home/user/example` will be copied to `C:\OEM` and the containing `install.bat` will be executed during the last step of the automatic installation.
 
 ### How do I perform a manual installation?
 
@@ -212,9 +214,9 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
 
 ### How do I configure the username and password?
 
-  By default, a user called `Docker` is created during the installation, with an empty password.
+  By default, a user called `Docker` (with an empty password) is created during installation.
 
-  If you want to use different credentials, you can change them in your compose file:
+  If you want to use different credentials, you can configure them (only BEFORE installation) in your compose file:
 
   ```yaml
   environment:
@@ -224,7 +226,9 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
 
 ### How do I select the Windows language?
 
-  By default, the English version of Windows will be downloaded. But you can add the `LANGUAGE` environment variable to your compose file, in order to specify an alternative language:
+  By default, the English version of Windows will be downloaded.
+
+  But before installation you can add the `LANGUAGE` environment variable to your compose file, in order to specify an alternative language:
 
   ```yaml
   environment:
@@ -235,16 +239,13 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
 
 ### How do I select the keyboard layout?
 
-  If you want to use a keyboard layout or locale that is not the default for your selected language, you can add the `KEYBOARD` and `REGION` variables with a culture code, like this:
+  If you want to use a keyboard layout or locale that is not the default for your selected language, before installation you can add  `KEYBOARD` and `REGION` variables like this:
 
   ```yaml
   environment:
     REGION: "en-US"
     KEYBOARD: "en-US"
   ```
-
-> [!NOTE]  
->  Changing these values will have no effect after the installation has been performed already. Use the control panel inside Windows in that case.
 
 ### How do I connect using RDP?
 
@@ -295,7 +296,7 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
 
   After configuring the container for [macvlan](#how-do-i-assign-an-individual-ip-address-to-the-container), it is possible for Windows to become part of your home network by requesting an IP from your router, just like a real PC.
 
-  To enable this mode, add the following lines to your compose file:
+  To enable this mode, in which the container and Windows will have separate IP addresses, add the following lines to your compose file:
 
   ```yaml
   environment:
@@ -305,9 +306,6 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
   device_cgroup_rules:
     - 'c *:* rwm'
   ```
-
-> [!NOTE]  
-> In this mode, the container and Windows will each have their own separate IPs.
 
 ### How do I add multiple disks?
 
@@ -345,8 +343,7 @@ The example folder `/home/user/example` will be available as ` \\host.lan\Data`.
     - /dev/bus/usb
   ```
   
-> [!IMPORTANT]
-> If the device is a USB disk drive, please wait until after the installation is completed before connecting it. Otherwise the installation may fail, as the order of the disks can get rearranged.
+  If the device is a USB disk drive, please wait until after the installation is completed before connecting it. Otherwise the installation may fail, as the order of the disks can get rearranged.
 
 ### How do I verify if my system supports KVM?
 
