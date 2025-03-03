@@ -99,13 +99,25 @@ for dir in "${dirs[@]}"; do
   addShare "$dir" "$dir_name" "Shared $dir_name" || error "Failed to create shared folder for $dir!"
 done
 
+# Fix Samba permissions
+[ -d /run/samba/msg.lock ] && chmod -R 0755 /run/samba/msg.lock
+[ -d /var/log/samba/cores ] && chmod -R 0700 /var/log/samba/cores
+
 if ! smbd; then
   error "Samba daemon failed to start!"
   smbd -i --debug-stdout || true
 fi
 
-# Enable Web Service Discovery
-wsdd -i "$interface" -p -n "$hostname" &
-echo "$!" > /var/run/wsdd.pid
+if [[ "${BOOT_MODE:-}" == "windows_legacy" ]]; then
+  # Enable NetBIOS on Windows 7 and lower
+  if ! nmbd; then
+    error "NetBIOS daemon failed to start!"
+    nmbd -i --debug-stdout || true
+  fi
+else
+  # Enable Web Service Discovery on Vista and up
+  wsdd -i "$interface" -p -n "$hostname" &
+  echo "$!" > /var/run/wsdd.pid
+fi
 
 return 0
