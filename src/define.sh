@@ -544,6 +544,7 @@ getMido() {
   local id="$1"
   local lang="$2"
   local ret="$3"
+  local url=""  
   local sum=""
   local size=""
 
@@ -563,7 +564,7 @@ getMido() {
   case "${ret,,}" in
     "sum" ) echo "$sum" ;;
     "size" ) echo "$size" ;;
-    *) echo "";;
+    *) echo "$url";;
   esac
 
   return 0
