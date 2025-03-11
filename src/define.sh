@@ -591,7 +591,6 @@ getLink1() {
       url="11/en-us_windows_11_24h2_arm64.iso"
       ;;
     "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
-      [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
       size=5121449984
       sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
       url="11/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
