@@ -135,14 +135,12 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
 
   The display output is a simple framebuffer, just so that the screen can be visible during installation as it doesn't require any drivers.
   
-  After Windows is fully installed, you can add the following to your compose file:
+  To add a virtual graphics cards to your machine that allows for higher resolutions, you can add the following to your compose file after Windows is fully installed:
 
   ```yaml
   environment:
     VGA: "virtio-gpu"
   ```
-
-  to add a virtual graphics cards to your machine that allows for higher resolutions.
 
 ### How do I share files with the host?
 
@@ -159,48 +157,6 @@ The example folder `./example` will be available as ` \\host.lan\Data`.
 
 > [!TIP]
 > You can map this path to a drive letter in Windows, for easier access.
-
-### How do I install a custom image?
-
-  In order to download an unsupported ISO image, specify its URL in the `VERSION` environment variable:
-  
-  ```yaml
-  environment:
-    VERSION: "https://example.com/win.iso"
-  ```
-
-  Alternatively, you can also skip the download and use a local file instead, by binding it in your compose file in this way:
-  
-  ```yaml
-  volumes:
-    - ./example.iso:/custom.iso
-  ```
-
-  Replace the example path `./example.iso` with the filename of your desired ISO file. The value of `VERSION` will be ignored in this case.
-
-### How do I run a script after installation?
-
-  To run your own script after installation, you can create a file called `install.bat` and place it in a folder together with any additional files it needs (software to be installed for example).
-  
-  Then bind that folder in your compose file like this:
-
-  ```yaml
-  volumes:
-    -  ./example:/oem
-  ```
-
-  The example folder `./example` will be copied to `C:\OEM` and the containing `install.bat` will be executed during the last step of the automatic installation.
-
-### How do I perform a manual installation?
-
-  It's best to stick to the automatic installation, as it adjusts various settings to prevent common issues when running Windows inside a virtual environment.
-
-  However, if you insist on performing the installation manually, add the following environment variable to your compose file:
-
-  ```yaml
-  environment:
-    MANUAL: "Y"
-  ```
 
 ### How do I change the amount of CPU or RAM?
 
@@ -247,6 +203,48 @@ The example folder `./example` will be available as ` \\host.lan\Data`.
   environment:
     REGION: "en-US"
     KEYBOARD: "en-US"
+  ```
+
+### How do I install a custom image?
+
+  In order to download an unsupported ISO image, specify its URL in the `VERSION` environment variable:
+  
+  ```yaml
+  environment:
+    VERSION: "https://example.com/win.iso"
+  ```
+
+  Alternatively, you can also skip the download and use a local file instead, by binding it in your compose file in this way:
+  
+  ```yaml
+  volumes:
+    - ./example.iso:/custom.iso
+  ```
+
+  Replace the example path `./example.iso` with the filename of your desired ISO file. The value of `VERSION` will be ignored in this case.
+
+### How do I run a script after installation?
+
+  To run your own script after installation, you can create a file called `install.bat` and place it in a folder together with any additional files it needs (software to be installed for example).
+  
+  Then bind that folder in your compose file like this:
+
+  ```yaml
+  volumes:
+    -  ./example:/oem
+  ```
+
+  The example folder `./example` will be copied to `C:\OEM` and the containing `install.bat` will be executed during the last step of the automatic installation.
+
+### How do I perform a manual installation?
+
+  It's recommended to stick to the automatic installation, as it adjusts various settings to prevent common issues when running Windows inside a virtual environment.
+
+  However, if you insist on performing the installation manually on your own risk, add the following environment variable to your compose file:
+
+  ```yaml
+  environment:
+    MANUAL: "Y"
   ```
 
 ### How do I connect using RDP?
