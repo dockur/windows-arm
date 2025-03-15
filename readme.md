@@ -95,15 +95,15 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
 
   Select from the values below:
   
-  | **Value** | **Version**           | **Platform** | **Size** |
-  |---|---|---|---|
-  | `11`   | Windows 11 Pro        | ARM64        | 4.8 GB   |
-  | `11l`  | Windows 11 LTSC       | ARM64        | 4.7 GB   |
-  | `11e`  | Windows 11 Enterprise | ARM64        | 4.8 GB   |
-  |||||  
-  | `10`   | Windows 10 Pro        | ARM64        | 3.5 GB   |
-  | `10l`  | Windows 10 LTSC       | ARM64        | 4.1 GB   |  
-  | `10e`  | Windows 10 Enterprise | ARM64        | 3.4 GB   |
+  | **Value** | **Version**           | **Size** |
+  |---|---|---|
+  | `11`   | Windows 11 Pro        | 4.8 GB   |
+  | `11l`  | Windows 11 LTSC       | 4.7 GB   |
+  | `11e`  | Windows 11 Enterprise | 4.8 GB   |
+  ||||  
+  | `10`   | Windows 10 Pro        | 3.5 GB   |
+  | `10l`  | Windows 10 LTSC       | 4.1 GB   |  
+  | `10e`  | Windows 10 Enterprise | 3.4 GB   |
 
 > [!TIP]
 > To install x64 versions of Windows, use [dockur/windows](https://github.com/dockur/windows/).
@@ -378,6 +378,10 @@ The example folder `./example` will be available as ` \\host.lan\Data`.
   - you are not using "Docker Desktop for Linux" as it does not support KVM, instead make use of Docker Engine directly.
  
   - it could help to add `privileged: true` to your compose file (or `sudo` to your `docker run` command), to rule out any permission issue.
+
+### How do I run a Linux desktop in a container?
+
+  You can use [qemus/qemu-arm](https://github.com/qemus/qemu-arm) in that case.
 
 ### Is this project legal?
 
