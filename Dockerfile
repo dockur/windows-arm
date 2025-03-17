@@ -31,7 +31,7 @@ COPY --chmod=755 ./assets /run/assets
 ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v0.1.266-1/virtio-win-0.1.266.tar.xz /drivers.txz
 
 VOLUME /storage
-EXPOSE 8006 3389
+EXPOSE 80 3389
 
 ENV VERSION="11"
 ENV RAM_SIZE="4G"
