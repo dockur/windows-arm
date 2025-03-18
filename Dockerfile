@@ -1,5 +1,5 @@
 FROM scratch
-COPY --from=qemux/qemu-arm:3.06 / /
+COPY --from=qemux/qemu-arm:3.07 / /
 
 ARG VERSION_ARG="0.00"
 ARG DEBCONF_NOWARNINGS="yes"
@@ -9,16 +9,11 @@ ARG DEBCONF_NONINTERACTIVE_SEEN="true"
 RUN set -eu && \
     apt-get update && \
     apt-get --no-install-recommends -y install \
-        bc \
-        jq \
-        7zip \
         wsdd \
         samba \
-        xz-utils \
         wimtools \
         dos2unix \
         cabextract \
-        genisoimage \
         libxml2-utils \
         libarchive-tools && \
     apt-get clean && \
