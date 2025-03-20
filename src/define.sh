@@ -17,7 +17,6 @@ set -Eeuo pipefail
 : "${PASSWORD:=""}"
 
 MIRRORS=2
-PLATFORM="ARM64"
 
 parseVersion() {
 
