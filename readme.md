@@ -73,6 +73,8 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
 | Docker Engine     | Linux | ✅ |
 | Docker Desktop    | Linux | ❌ |
 | Docker Desktop    | macOS | ❌ |
+| Podman            | Linux | ✅ |
+| Podman Desktop    | Linux | ✅ |
 | Github Codespaces | Cloud | ✅ |
 
 ## FAQ 💬
