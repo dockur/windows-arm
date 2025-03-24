@@ -16,6 +16,7 @@ skipInstall() {
 
   if [ -f "$previous" ]; then
     previous=$(<"$previous")
+    previous="${previous//[![:print:]]/}"
     if [ -n "$previous" ]; then
       previous="$STORAGE/$previous"
       if [[ "${previous,,}" != "${iso,,}" ]]; then
@@ -581,6 +582,10 @@ detectImage() {
   info "Detected: $desc"
   setXML "" && return 0
 
+  if [[ "$DETECTED" == "win81x86"* ]] || [[ "$DETECTED" == "win10x86"* ]]; then
+    error "The 32-bit version of $desc is not supported!" && return 1
+  fi
+
   msg="the answer file for $desc was not found ($DETECTED.xml)"
   local fallback="/run/assets/${DETECTED%%-*}.xml"
 
@@ -726,7 +731,11 @@ addDriver() {
 
   if [ -z "$folder" ]; then
     desc=$(printVersion "$id" "$id")
-    warn "no \"$driver\" driver available for \"$desc\" !" && return 0
+    if [[ "${id,,}" != *"x86"* ]]; then
+      warn "no \"$driver\" driver available for \"$desc\" !" && return 0
+    else
+      warn "no \"$driver\" driver available for the 32-bit version of \"$desc\" !" && return 0
+    fi
   fi
 
   [ ! -d "$path/$driver/$folder" ] && return 0
@@ -1006,19 +1015,27 @@ bootWindows() {
 
   if [ -f "$STORAGE/windows.args" ]; then
     ARGS=$(<"$STORAGE/windows.args")
+    ARGS="${ARGS//[![:print:]]/}"
     ARGUMENTS="$ARGS ${ARGUMENTS:-}"
   fi
 
   if [ -s "$STORAGE/windows.type" ] && [ -f "$STORAGE/windows.type" ]; then
-    [ -z "${DISK_TYPE:-}" ] && DISK_TYPE=$(<"$STORAGE/windows.type")
+    if [ -z "${DISK_TYPE:-}" ]; then
+      DISK_TYPE=$(<"$STORAGE/windows.type")
+      DISK_TYPE="${DISK_TYPE//[![:print:]]/}"
+    fi
   fi
 
   if [ -s "$STORAGE/windows.mode" ] && [ -f "$STORAGE/windows.mode" ]; then
     BOOT_MODE=$(<"$STORAGE/windows.mode")
+    BOOT_MODE="${BOOT_MODE//[![:print:]]/}"
   fi
 
   if [ -s "$STORAGE/windows.old" ] && [ -f "$STORAGE/windows.old" ]; then
-    [[ "${PLATFORM,,}" == "x64" ]] && MACHINE=$(<"$STORAGE/windows.old")
+    if [[ "${PLATFORM,,}" == "x64" ]]; then
+      MACHINE=$(<"$STORAGE/windows.old")
+      MACHINE="${MACHINE//[![:print:]]/}"
+    fi
   fi
 
   return 0
