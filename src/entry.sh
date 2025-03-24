@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 : "${APP:="Windows"}"
-: "${PLATFORM:="x64"}"
+: "${PLATFORM:="arm64"}"
 : "${BOOT_MODE:="windows"}"
 : "${SUPPORT:="https://github.com/dockur/windows-arm"}"
 
