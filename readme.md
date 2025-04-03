@@ -201,15 +201,6 @@ The example folder `./example` will be available as ` \\host.lan\Data`.
     KEYBOARD: "en-US"
   ```
 
-### How do I set the product key?
-
-  By default, an evaluation version of Windows will be installed, but if you have a product key you can add a `KEY` variable like this (before installation):
-
-  ```yaml
-  environment:
-    KEY: "xxxxx-xxxxx-xxxxx-xxxxx-xxxxx"
-  ```
-
 ### How do I install a custom image?
 
   In order to download an unsupported ISO image, specify its URL in the `VERSION` environment variable:
@@ -245,7 +236,7 @@ The example folder `./example` will be available as ` \\host.lan\Data`.
 
   It's recommended to stick to the automatic installation, as it adjusts various settings to prevent common issues when running Windows inside a virtual environment.
 
-  However, if you insist on performing the installation manually on your own risk, add the following environment variable to your compose file:
+  However, if you insist on performing the installation manually at your own risk, add the following environment variable to your compose file:
 
   ```yaml
   environment:
