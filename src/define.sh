@@ -75,6 +75,9 @@ parseVersion() {
     "xp64" | "xpx64" | "5x64" | "winxp64" | "winxpx64" | "windowsxp64" | "windowsxpx64" )
       error "Windows XP $msg" && return 1
       ;;
+    "2k" | "2000" | "win2k" | "win2000" | "windows2k" | "windows2000" )
+      error "Windows 2000 $msg" && return 1
+      ;;      
     "25" | "2025" | "win25" | "win2025" | "windows2025" | "windows 2025" )
       error "Windows Server 2025 $msg" && return 1
       ;;
@@ -87,7 +90,7 @@ parseVersion() {
     "16" | "2016" | "win16" | "win2016" | "windows2016" | "windows 2016" )
       error "Windows Server 2016 $msg" && return 1
       ;;
-    "hv" | "hyperv" | "hyper v" | "hyper-v" | "19hv" | "2019hv" | "win2019hv")
+    "hv" | "hyperv" | "hyper v" | "hyper-v" | "19hv" | "2019hv" | "win2019hv" )
       error "Hyper-V Server 2019 $msg" && return 1
       ;;
     "2012" | "2012r2" | "win2012" | "win2012r2" | "windows2012" | "windows 2012" )
