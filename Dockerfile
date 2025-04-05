@@ -15,7 +15,8 @@ RUN set -eu && \
         dos2unix \
         cabextract \
         libxml2-utils \
-        libarchive-tools && \
+        libarchive-tools \
+        netcat-openbsd && \
     apt-get clean && \
     echo "$VERSION_ARG" > /run/version && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
