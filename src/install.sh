@@ -723,16 +723,18 @@ updateXML() {
     sed -i "s/<Username>Docker<\/Username>/<Username>$user<\/Username>/g" "$asset"
   fi
 
-  if [ -n "$PASSWORD" ]; then
-    pass=$(printf '%s' "${PASSWORD}Password" | iconv -f utf-8 -t utf-16le | base64 -w 0)
-    admin=$(printf '%s' "${PASSWORD}AdministratorPassword" | iconv -f utf-8 -t utf-16le | base64 -w 0)
-    sed -i "s/<Value>password<\/Value>/<Value>$admin<\/Value>/g" "$asset"
-    sed -i "s/<PlainText>true<\/PlainText>/<PlainText>false<\/PlainText>/g" "$asset"
-    sed -z "s/<Password>...........<Value \/>/<Password>\n          <Value>$pass<\/Value>/g" -i "$asset"
-    sed -z "s/<Password>...............<Value \/>/<Password>\n              <Value>$pass<\/Value>/g" -i "$asset"
-    sed -z "s/<AdministratorPassword>...........<Value \/>/<AdministratorPassword>\n          <Value>$admin<\/Value>/g" -i "$asset"
-    sed -z "s/<AdministratorPassword>...............<Value \/>/<AdministratorPassword>\n              <Value>$admin<\/Value>/g" -i "$asset"
-  fi
+  [ -n "$PASSWORD" ] && pass="$PASSWORD"
+  [ -z "$pass" ] && pass="admin"
+
+  pw=$(printf '%s' "${pass}Password" | iconv -f utf-8 -t utf-16le | base64 -w 0)
+  admin=$(printf '%s' "${pass}AdministratorPassword" | iconv -f utf-8 -t utf-16le | base64 -w 0)
+
+  sed -i "s/<Value>password<\/Value>/<Value>$admin<\/Value>/g" "$asset"
+  sed -i "s/<PlainText>true<\/PlainText>/<PlainText>false<\/PlainText>/g" "$asset"
+  sed -z "s/<Password>...........<Value \/>/<Password>\n          <Value>$pw<\/Value>/g" -i "$asset"
+  sed -z "s/<Password>...............<Value \/>/<Password>\n              <Value>$pw<\/Value>/g" -i "$asset"
+  sed -z "s/<AdministratorPassword>...........<Value \/>/<AdministratorPassword>\n          <Value>$admin<\/Value>/g" -i "$asset"
+  sed -z "s/<AdministratorPassword>...............<Value \/>/<AdministratorPassword>\n              <Value>$admin<\/Value>/g" -i "$asset"
 
   if [ -n "$EDITION" ]; then
     [[ "${EDITION^^}" == "CORE" ]] && EDITION="STANDARDCORE"
@@ -835,7 +837,7 @@ addDrivers() {
   addDriver "$version" "$drivers" "$target" "qxl" || return 1
   addDriver "$version" "$drivers" "$target" "viofs" || return 1
   addDriver "$version" "$drivers" "$target" "sriov" || return 1
-  # Disable temporarily : addDriver "$version" "$drivers" "$target" "smbus" || return 1
+  addDriver "$version" "$drivers" "$target" "smbus" || return 1
   addDriver "$version" "$drivers" "$target" "qxldod" || return 1
   addDriver "$version" "$drivers" "$target" "viorng" || return 1
   addDriver "$version" "$drivers" "$target" "viostor" || return 1
@@ -843,7 +845,7 @@ addDrivers() {
   addDriver "$version" "$drivers" "$target" "NetKVM" || return 1
   addDriver "$version" "$drivers" "$target" "Balloon" || return 1
   addDriver "$version" "$drivers" "$target" "vioscsi" || return 1
-  # Disable temporarily : addDriver "$version" "$drivers" "$target" "pvpanic" || return 1
+  addDriver "$version" "$drivers" "$target" "pvpanic" || return 1
   addDriver "$version" "$drivers" "$target" "vioinput" || return 1
   addDriver "$version" "$drivers" "$target" "viogpudo" || return 1
   addDriver "$version" "$drivers" "$target" "vioserial" || return 1
