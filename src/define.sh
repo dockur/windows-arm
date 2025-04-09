@@ -768,7 +768,7 @@ addFolder() {
   cp -Lr "$folder/." "$dest" || return 1
 
   local file
-  file=$(find "$dest" -maxdepth 1 -type f -iname install.bat | head -n 1)
+  file=$(find "$dest" -maxdepth 1 -type f -iname install.bat -print -quit)
   [ -f "$file" ] && unix2dos -q "$file"
 
   return 0
