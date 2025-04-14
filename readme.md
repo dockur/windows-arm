@@ -214,7 +214,7 @@ The example folder `./example` will be available as ` \\host.lan\Data`.
   
   ```yaml
   volumes:
-    - ./example.iso:/custom.iso
+    - ./example.iso:/boot.iso
   ```
 
   Replace the example path `./example.iso` with the filename of your desired ISO file. The value of `VERSION` will be ignored in this case.
