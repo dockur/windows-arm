@@ -591,11 +591,16 @@ getLink1() {
   [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
-    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
+    "win11arm64" )
       size=5219411968
       sum="dbd54452c3c20b4625f511dae3c3e057270448fb661232d4fa66279f59a63157"
       url="11/en-us_windows_11_24h2_arm64.iso"
       ;;
+    "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
+       size=111
+       sum="aaa"
+       url=""
+       ;;
     "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
       size=5121449984
       sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
@@ -604,7 +609,7 @@ getLink1() {
     "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
       size=4689637376
       sum="7b43e64f4e3b961a83f9b70efa4b9d863bc5c348fe86d75917ac974116d17227"
-      url="10/en-us_windows_10_22h2_arm64.iso"
+      url="win-pro-10-22-h-2.15-arm-64-eng-intl-pro-ent-edu-n-mlf-x-23-67222/Win_Pro_10_22H2.15_Arm64_Eng_Intl_Pro_Ent_EDU_N_MLF_X23-67222.ISO"
       ;;
     "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       size=4430471168
