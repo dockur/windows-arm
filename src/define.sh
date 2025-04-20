@@ -77,7 +77,7 @@ parseVersion() {
       ;;
     "2k" | "2000" | "win2k" | "win2000" | "windows2k" | "windows2000" )
       error "Windows 2000 $msg" && return 1
-      ;;      
+      ;;
     "25" | "2025" | "win25" | "win2025" | "windows2025" | "windows 2025" )
       error "Windows Server 2025 $msg" && return 1
       ;;
@@ -550,7 +550,7 @@ getMido() {
   local id="$1"
   local lang="$2"
   local ret="$3"
-  local url=""  
+  local url=""
   local sum=""
   local size=""
 
@@ -644,6 +644,26 @@ getLink2() {
       size=3300327424
       sum="812dae6b5bf5215db63b61ae10d8f0ffd3aa8529a18d96e9ced53341e2c676ec"
       url="tiny11-core-arm64/tiny11%20core%20arm64.iso"
+      ;;
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
+      size=5460387840
+      sum="57d1dfb2c6690a99fe99226540333c6c97d3fd2b557a50dfe3d68c3f675ef2b0"
+      url="windows-11-24h2-arm64-iso/Win11_24H2_English_Arm64.iso"
+      ;;
+    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+      size=5121449984
+      sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
+      url="Windows11LTSC/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
+      ;;
+    "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
+      size=5192060928
+      sum="101079b911c8c3dd9c9a88499a16b930fbf00cbaf901761d8265bb3a8fcd9ea9"
+      url="win-pro-10-22-h-2.15-arm-64-eng-intl-pro-ent-edu-n-mlf-x-23-67222/Win_Pro_10_22H2.15_Arm64_Eng_Intl_Pro_Ent_EDU_N_MLF_X23-67222.ISO"
+      ;;
+    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
+      size=4430471168
+      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
+      url="windows-10-enterprise-ltsc-full-collection/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
       ;;
   esac
 
