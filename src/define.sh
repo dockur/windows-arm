@@ -645,6 +645,26 @@ getLink2() {
       sum="812dae6b5bf5215db63b61ae10d8f0ffd3aa8529a18d96e9ced53341e2c676ec"
       url="tiny11-core-arm64/tiny11%20core%20arm64.iso"
       ;;
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
+      size=5219411968
+      sum="dbd54452c3c20b4625f511dae3c3e057270448fb661232d4fa66279f59a63157"
+      url="windows-11-24h2-arm64-iso/Win11_24H2_English_Arm64.iso"
+      ;;
+    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+      size=5121449984
+      sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
+      url="Windows11LTSC/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
+      ;;
+    "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
+      size=4689637376
+      sum="7b43e64f4e3b961a83f9b70efa4b9d863bc5c348fe86d75917ac974116d17227"
+      url="win-pro-10-22-h-2.15-arm-64-eng-intl-pro-ent-edu-n-mlf-x-23-67222/Win_Pro_10_22H2.15_Arm64_Eng_Intl_Pro_Ent_EDU_N_MLF_X23-67222.ISO"
+      ;;
+    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
+      size=4430471168
+      sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
+      url="windows-10-enterprise-ltsc-full-collection/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
+      ;;
   esac
 
   case "${ret,,}" in
