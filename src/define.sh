@@ -604,7 +604,7 @@ getLink1() {
     "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
       size=4689637376
       sum="7b43e64f4e3b961a83f9b70efa4b9d863bc5c348fe86d75917ac974116d17227"
-      url="win-pro-10-22-h-2.15-arm-64-eng-intl-pro-ent-edu-n-mlf-x-23-67222/Win_Pro_10_22H2.15_Arm64_Eng_Intl_Pro_Ent_EDU_N_MLF_X23-67222.ISO"
+      url="10/en-us_windows_10_22h2_arm64.iso"
       ;;
     "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       size=4430471168
