@@ -651,8 +651,8 @@ getLink2() {
       url="windows-11-24h2-arm64-iso/Win11_24H2_English_Arm64.iso"
       ;;
     "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
-      size=111
-      sum="aaa"
+      size=6872444928
+      sum="2bf0fd1d5abd267cd0ae8066fea200b3538e60c3e572428c0ec86d4716b61cb7"
       url="win11-23h2-en-fr/ARM64/SW_DVD9_Win_Pro_11_23H2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-59519.ISO"
       ;;
     "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
