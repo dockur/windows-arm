@@ -24,7 +24,7 @@ RUN set -eu && \
 COPY --chmod=755 ./src /run/
 COPY --chmod=755 ./assets /run/assets
 
-ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v0.1.271-1/virtio-win-0.1.271.tar.xz /drivers.txz
+ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v0.1.271-1/virtio-win-0.1.271.tar.xz /var/drivers.txz
 
 VOLUME /storage
 EXPOSE 3389 8006
