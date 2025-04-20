@@ -61,14 +61,14 @@ parseVersion() {
     "8e" | "81e" | "8.1e" | "win8e" | "win81e" | "windows 8e" )
       error "Windows 8 $msg" && return 1
       ;;
-    "7" | "7e" | "win7" | "win7e" | "windows7" | "windows 7" | \
-    "7u" | "win7u" | "windows7u" | "windows 7u" | \
-    "7x86" | "win7x86" | "windows7x86"  | "win7x86-enterprise" )
+    "7" | "win7" | "windows7" | "windows 7" | "7u" | "win7u" | "windows7u" | "windows 7u" | "7e" | \
+    "win7e" | "windows7e" | "windows 7e" | "7x86" | "win7x86" | "win732" | "windows7x86" | "7ux86" | \
+    "7u32" | "win7x86-ultimate" | "7ex86" | "7e32" | "win7x86-enterprise" )
       error "Windows 7 $msg" && return 1
       ;;
-    "vista" | "ve" | "6" | "winvista" | "windowsvista" | "windows vista" | \
-    "vistu" | "vu" | "6u" | "winvistu" | "windowsvistu" | "windows vistu" | \
-    "vistax86" | "vex86" | "6x86" | "winvistax86" | "windowsvistax86"  | "winvistax86-enterprise" )
+    "vista" | "vs" | "6" | "winvista" | "windowsvista" | "windows vista" | "vistu" | "vu" | "6u" | "winvistu" | \
+    "viste" | "ve" | "6e" | "winviste" | "vistax86" | "vista32" | "6x86" | "winvistax86" | "windowsvistax86" | \
+    "vux86" | "vu32" | "winvistax86-ultimate" | "vex86" | "ve32" | "winvistax86-enterprise" )
       error "Windows Vista $msg" && return 1
       ;;
     "xp" | "xp32" | "xpx86" | "5" | "5x86" | "winxp" | "winxp86" | "windowsxp" | "windows xp" | \
