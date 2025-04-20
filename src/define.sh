@@ -550,7 +550,7 @@ getMido() {
   local id="$1"
   local lang="$2"
   local ret="$3"
-  local url=""  
+  local url=""
   local sum=""
   local size=""
 
