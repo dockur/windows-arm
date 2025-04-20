@@ -646,8 +646,8 @@ getLink2() {
       url="tiny11-core-arm64/tiny11%20core%20arm64.iso"
       ;;
     "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
-      size=5219411968
-      sum="dbd54452c3c20b4625f511dae3c3e057270448fb661232d4fa66279f59a63157"
+      size=5460387840
+      sum="57d1dfb2c6690a99fe99226540333c6c97d3fd2b557a50dfe3d68c3f675ef2b0"
       url="windows-11-24h2-arm64-iso/Win11_24H2_English_Arm64.iso"
       ;;
     "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
