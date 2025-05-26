@@ -29,7 +29,7 @@ boot() {
 
   if [ -s "$QEMU_PTY" ]; then
     if [ "$(stat -c%s "$QEMU_PTY")" -gt 7 ]; then
-      info "Windows started succesfully, visit http://127.0.0.1:8006/ to view the screen..."
+      info "Windows started successfully, visit http://127.0.0.1:8006/ to view the screen..."
       return 0
     fi
   fi
