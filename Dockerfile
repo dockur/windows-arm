@@ -9,7 +9,6 @@ ARG DEBCONF_NONINTERACTIVE_SEEN="true"
 RUN set -eu && \
     apt-get update && \
     apt-get --no-install-recommends -y install \
-        wsdd \
         samba \
         wimtools \
         dos2unix \
@@ -24,6 +23,7 @@ RUN set -eu && \
 COPY --chmod=755 ./src /run/
 COPY --chmod=755 ./assets /run/assets
 
+ADD --chmod=755 https://raw.githubusercontent.com/christgau/wsdd/refs/tags/v0.9/src/wsdd.py /usr/sbin/wsdd
 ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v0.1.271-1/virtio-win-0.1.271.tar.xz /var/drivers.txz
 
 VOLUME /storage
