@@ -31,7 +31,7 @@ Windows for ARM in a Docker container, for devices like the Raspberry Pi 5 and m
 ```yaml
 services:
   windows:
-    image: dockurr/windows
+    image: dockurr/windows-arm
     container_name: windows
     environment:
       VERSION: "11"
@@ -53,13 +53,13 @@ services:
 ##### Via Docker CLI:
 
 ```bash
-docker run -it --rm --name windows -p 8006:8006 --device=/dev/kvm --device=/dev/net/tun --cap-add NET_ADMIN -v "${PWD:-.}/windows:/storage" --stop-timeout 120 dockurr/windows
+docker run -it --rm --name windows -p 8006:8006 --device=/dev/kvm --device=/dev/net/tun --cap-add NET_ADMIN -v "${PWD:-.}/windows:/storage" --stop-timeout 120 dockurr/windows-arm
 ```
 
 ##### Via Kubernetes:
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/master/kubernetes.yml
+kubectl apply -f https://raw.githubusercontent.com/dockur/windows-arm/refs/heads/master/kubernetes.yml
 ```
 
 ##### Via Github Codespaces:
