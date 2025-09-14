@@ -28,10 +28,10 @@ RUN set -eu && \
 COPY --chmod=755 ./src /run/
 COPY --chmod=755 ./assets /run/assets
 
-ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/refs/heads/master/src/mido.sh /run/
-ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/refs/heads/master/src/power.sh /run/
-ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/refs/heads/master/src/samba.sh /run/
-ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/refs/heads/master/src/install.sh /run/
+ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/mido.sh /run/
+ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/power.sh /run/
+ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/samba.sh /run/
+ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/install.sh /run/
 
 ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v0.1.285-1/virtio-win-0.1.285.tar.xz /var/drivers.txz
 
@@ -44,3 +44,13 @@ ENV CPU_CORES="2"
 ENV DISK_SIZE="64G"
 
 ENTRYPOINT ["/usr/bin/tini", "-s", "/run/entry.sh"]
+
+
+switchEdition() {
+
+  local id="$1"
+
+  [[ "${id,,}" == *"-eval" ]] && DETECTED="${id::-5}"
+
+  return 0
+}
