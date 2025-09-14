@@ -35,11 +35,11 @@ parseVersion() {
     "11e" | "win11e" | "windows11e" | "windows 11e" )
       VERSION="win11arm64-enterprise-eval"
       ;;
-    "11i" | "11iot" | "iot11" | "win11i" | "win11-iot" | "win11arm64-iot" | "win11arm64-enterprise-iot-eval" )
+    "11i" | "11iot" | "iot11" | "win11i" | "win11-iot" | "win11arm64-iot" )
       VERSION="win11arm64-enterprise-ltsc-eval"
       [ -z "$DETECTED" ] && DETECTED="win11arm64-ltsc"
       ;;
-    "11l" | "11ltsc" | "ltsc11" | "win11l" | "win11-ltsc" | "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+    "11l" | "11ltsc" | "ltsc11" | "win11l" | "win11-ltsc" | "win11arm64-ltsc" )
       VERSION="win11arm64-enterprise-ltsc-eval"
       [ -z "$DETECTED" ] && DETECTED="win11arm64-ltsc"
       ;;
@@ -49,11 +49,11 @@ parseVersion() {
     "10e" | "win10e" | "windows10e" | "windows 10e" )
       VERSION="win10arm64-enterprise-eval"
       ;;
-    "10i" | "10iot" | "iot10" | "win10i" | "win10-iot" | "win10arm64-iot" | "win10arm64-enterprise-iot-eval" )
+    "10i" | "10iot" | "iot10" | "win10i" | "win10-iot" | "win10arm64-iot" )
       VERSION="win10arm64-enterprise-ltsc-eval"
       [ -z "$DETECTED" ] && DETECTED="win10arm64-ltsc"
       ;;
-    "10l" | "10ltsc" | "ltsc10" | "win10l" | "win10-ltsc" | "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
+    "10l" | "10ltsc" | "ltsc10" | "win10l" | "win10-ltsc" | "win10arm64-ltsc" )
       VERSION="win10arm64-enterprise-ltsc-eval"
       [ -z "$DETECTED" ] && DETECTED="win10arm64-ltsc"
       ;;
@@ -727,6 +727,8 @@ isMido() {
   local lang="$2"
   local sum
 
+  [[ "${MIDO:-}" == [Nn]* ]] && return 1
+
   sum=$(getMido "$id" "en" "sum")
   [ -n "$sum" ] && return 0
 
@@ -737,6 +739,8 @@ isESD() {
 
   local id="$1"
   local lang="$2"
+
+  [[ "${ESD:-}" == [Nn]* ]] && return 1
 
   case "${id,,}" in
     "win11${PLATFORM,,}" | "win10${PLATFORM,,}" )
