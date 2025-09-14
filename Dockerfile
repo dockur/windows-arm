@@ -3,6 +3,7 @@
 FROM scratch
 COPY --from=qemux/qemu-arm:7.12 / /
 
+ARG TARGETARCH
 ARG VERSION_ARG="0.00"
 ARG DEBCONF_NOWARNINGS="yes"
 ARG DEBIAN_FRONTEND="noninteractive"
@@ -18,7 +19,7 @@ RUN set -eu && \
         libxml2-utils \
         libarchive-tools \
         netcat-openbsd && \
-    wget "https://github.com/gershnik/wsdd-native/releases/download/v1.21/wsddn_1.21_arm64.deb" -O /tmp/wsddn.deb -q && \
+    wget "https://github.com/gershnik/wsdd-native/releases/download/v1.21/wsddn_1.21_${TARGETARCH}.deb" -O /tmp/wsddn.deb -q && \
     dpkg -i /tmp/wsddn.deb && \
     apt-get clean && \
     echo "$VERSION_ARG" > /run/version && \
