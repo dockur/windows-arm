@@ -561,6 +561,10 @@ getMido() {
       size=5460387840
       sum="57d1dfb2c6690a99fe99226540333c6c97d3fd2b557a50dfe3d68c3f675ef2b0"
       ;;
+    "win11arm64-enterprise-eval" )
+      size=4295096320
+      sum="dad633276073f14f3e0373ef7e787569e216d54942ce522b39451c8f2d38ad43"
+      ;;
     "win11arm64-enterprise-ltsc-eval" )
       size=5042194432
       sum="3dcdba9c9c0aa0430d4332b60c9afcb3cd613d648a49cbba2d4ef7b5978f32e8"
