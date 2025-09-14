@@ -18,6 +18,8 @@ RUN set -eu && \
         libxml2-utils \
         libarchive-tools \
         netcat-openbsd && \
+    wget "https://github.com/gershnik/wsdd-native/releases/download/v1.21/wsddn_1.21_arm64.deb" -O /tmp/wsddn.deb -q && \
+    dpkg -i /tmp/wsddn.deb && \
     apt-get clean && \
     echo "$VERSION_ARG" > /run/version && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -25,7 +27,6 @@ RUN set -eu && \
 COPY --chmod=755 ./src /run/
 COPY --chmod=755 ./assets /run/assets
 
-ADD --chmod=755 https://raw.githubusercontent.com/christgau/wsdd/refs/tags/v0.9/src/wsdd.py /usr/sbin/wsdd
 ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v0.1.285-1/virtio-win-0.1.285.tar.xz /var/drivers.txz
 
 VOLUME /storage
