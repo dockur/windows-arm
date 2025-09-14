@@ -533,14 +533,7 @@ switchEdition() {
 
   local id="$1"
 
-  case "${id,,}" in
-    "win11${PLATFORM,,}-enterprise-eval" )
-      DETECTED="win11${PLATFORM,,}-enterprise"
-      ;;
-    "win10${PLATFORM,,}-enterprise-eval" )
-      DETECTED="win10${PLATFORM,,}-enterprise"
-      ;;
-  esac
+  [[ "${id,,}" == *"-eval" ]] && DETECTED="${id::-5}"
 
   return 0
 }
@@ -561,11 +554,11 @@ getMido() {
       size=5460387840
       sum="57d1dfb2c6690a99fe99226540333c6c97d3fd2b557a50dfe3d68c3f675ef2b0"
       ;;
-    "win11arm64-enterprise-eval" )
+    "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
       size=4295096320
       sum="dad633276073f14f3e0373ef7e787569e216d54942ce522b39451c8f2d38ad43"
       ;;
-    "win11arm64-enterprise-ltsc-eval" )
+    "win11arm64-enterprise-ltsc" | "win11arm64-enterprise-ltsc-eval" )
       size=5042194432
       sum="3dcdba9c9c0aa0430d4332b60c9afcb3cd613d648a49cbba2d4ef7b5978f32e8"
       ;;
@@ -600,7 +593,7 @@ getLink1() {
       sum="dbd54452c3c20b4625f511dae3c3e057270448fb661232d4fa66279f59a63157"
       url="11/en-us_windows_11_24h2_arm64.iso"
       ;;
-    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc" | "win11arm64-enterprise-ltsc-eval" )
       size=5121449984
       sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
       url="11/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
@@ -610,7 +603,7 @@ getLink1() {
       sum="7b43e64f4e3b961a83f9b70efa4b9d863bc5c348fe86d75917ac974116d17227"
       url="10/en-us_windows_10_22h2_arm64.iso"
       ;;
-    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
+    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       size=4430471168
       sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="10/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
@@ -659,7 +652,7 @@ getLink2() {
       sum="2bf0fd1d5abd267cd0ae8066fea200b3538e60c3e572428c0ec86d4716b61cb7"
       url="win11-23h2-en-fr/ARM64/SW_DVD9_Win_Pro_11_23H2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-59519.ISO"
       ;;
-    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc" | "win11arm64-enterprise-ltsc-eval" )
       size=5121449984
       sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
       url="Windows11LTSC/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
@@ -669,7 +662,7 @@ getLink2() {
       sum="101079b911c8c3dd9c9a88499a16b930fbf00cbaf901761d8265bb3a8fcd9ea9"
       url="win-pro-10-22-h-2.15-arm-64-eng-intl-pro-ent-edu-n-mlf-x-23-67222/Win_Pro_10_22H2.15_Arm64_Eng_Intl_Pro_Ent_EDU_N_MLF_X23-67222.ISO"
       ;;
-    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc-eval" )
+    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       size=4430471168
       sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="windows-10-enterprise-ltsc-full-collection/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
