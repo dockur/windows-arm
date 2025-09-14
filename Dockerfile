@@ -44,13 +44,3 @@ ENV CPU_CORES="2"
 ENV DISK_SIZE="64G"
 
 ENTRYPOINT ["/usr/bin/tini", "-s", "/run/entry.sh"]
-
-
-switchEdition() {
-
-  local id="$1"
-
-  [[ "${id,,}" == *"-eval" ]] && DETECTED="${id::-5}"
-
-  return 0
-}
