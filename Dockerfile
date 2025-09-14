@@ -27,6 +27,11 @@ RUN set -eu && \
 COPY --chmod=755 ./src /run/
 COPY --chmod=755 ./assets /run/assets
 
+ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/refs/heads/master/src/mido.sh /run/
+ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/refs/heads/master/src/power.sh /run/
+ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/refs/heads/master/src/samba.sh /run/
+ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/refs/heads/master/src/install.sh /run/
+
 ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v0.1.285-1/virtio-win-0.1.285.tar.xz /var/drivers.txz
 
 VOLUME /storage
