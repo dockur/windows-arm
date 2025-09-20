@@ -550,7 +550,7 @@ getMido() {
   local sum=""
   local size=""
 
-  [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
+  [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
     "win11arm64" )
@@ -588,7 +588,7 @@ getLink1() {
   local size=""
   local host="https://dl.bobpony.com/windows"
 
-  [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
+  [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
     "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
@@ -632,7 +632,7 @@ getLink2() {
   local size=""
   local host="https://archive.org/download"
 
-  [[ "${lang,,}" != "en" ]] && [[ "${lang,,}" != "en-us" ]] && return 0
+  [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
     "tiny11" )
