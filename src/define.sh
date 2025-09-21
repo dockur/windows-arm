@@ -558,7 +558,7 @@ getMido() {
     # ARMv8.0 and lower cannot run Windows 11 builds higher than 22631
     return 0
   fi
-    
+
   [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
