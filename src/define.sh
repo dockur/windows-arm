@@ -23,7 +23,7 @@ parseVersion() {
   if [[ "${VERSION}" == \"*\" || "${VERSION}" == \'*\' ]]; then
     VERSION="${VERSION:1:-1}"
   fi
-  
+
   VERSION=$(expr "$VERSION" : "^\ *\(.*[^ ]\)\ *$")
   [ -z "$VERSION" ] && VERSION="win11"
 
@@ -550,6 +550,11 @@ getMido() {
   local sum=""
   local size=""
 
+  if [[ "${ARCH,,}" == "arm64" ]] && ! grep -qw 'Features.*atomics' /proc/cpuinfo; then
+    # ARMv8.0 and lower cannot run Windows 11 builds higher than 22631
+    return 0
+  fi
+    
   [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
