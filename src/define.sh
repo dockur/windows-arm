@@ -29,6 +29,10 @@ parseVersion() {
 
   local msg="is not available for ARM64 CPU's."
 
+  if [[ "${ARCH,,}" == "arm64" ]] && ! grep -qw 'Features.*atomics' /proc/cpuinfo; then
+    warn "Your CPU architecture is older than ARMv8.1 and cannot run Windows 11 builds higher than 22631."
+  fi
+
   case "${VERSION,,}" in
     "11" | "11p" | "win11" | "pro11" | "win11p" | "windows11" | "windows 11" )
       VERSION="win11arm64"
