@@ -18,16 +18,30 @@ set -Eeuo pipefail
 
 MIRRORS=2
 
+isCompatible() {
+
+  # ARMv8.0 cannot run Windows 11 builds higher than 22631
+  if [[ "${ARCH,,}" == "arm64" ]] && ! grep -qw 'Features.*atomics' /proc/cpuinfo; then
+    return 1
+  fi
+
+  return 0
+}
+
 parseVersion() {
 
   if [[ "${VERSION}" == \"*\" || "${VERSION}" == \'*\' ]]; then
     VERSION="${VERSION:1:-1}"
   fi
-  
+
   VERSION=$(expr "$VERSION" : "^\ *\(.*[^ ]\)\ *$")
   [ -z "$VERSION" ] && VERSION="win11"
 
   local msg="is not available for ARM64 CPU's."
+
+  if ! isCompatible; then
+    warn "Your CPU architecture is older than ARMv8.1 and cannot run Windows 11 builds higher than 22631."
+  fi
 
   case "${VERSION,,}" in
     "11" | "11p" | "win11" | "pro11" | "win11p" | "windows11" | "windows 11" )
@@ -550,6 +564,7 @@ getMido() {
   local sum=""
   local size=""
 
+  [[ "${id,,}" == "win11"* ]] && ! isCompatible && return 0
   [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
@@ -588,6 +603,7 @@ getLink1() {
   local size=""
   local host="https://dl.bobpony.com/windows"
 
+  [[ "${id,,}" == "win11"* ]] && ! isCompatible && return 0
   [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
@@ -632,6 +648,7 @@ getLink2() {
   local size=""
   local host="https://archive.org/download"
 
+  [[ "${id,,}" == "win11"* ]] && ! isCompatible && return 0
   [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
