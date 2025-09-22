@@ -655,8 +655,8 @@ getLink2() {
 
   case "${id,,}" in
     "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
-      size=5219411968
-      sum="dbd54452c3c20b4625f511dae3c3e057270448fb661232d4fa66279f59a63157"
+      size=6565922816
+      sum="a05a7aeb2d55d6f3c1981228f94b1c49d23dc4c12baa8a1abbad6940c918d26b"
       url="11/en-us_windows_11_23h2_arm64.iso"
       ;;
   esac
