@@ -40,7 +40,7 @@ parseVersion() {
   local msg="is not available for ARM64 CPU's."
 
   if ! isCompatible; then
-    warn "Your CPU architecture is ARMv8.0, which cannot run Windows 11 builds 24H2 and up."
+    warn "Your CPU architecture is below ARMv8.1, and does not support Windows 11 build 24H2 and up."
   fi
 
   case "${VERSION,,}" in
