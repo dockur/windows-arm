@@ -16,11 +16,11 @@ set -Eeuo pipefail
 : "${USERNAME:=""}"
 : "${PASSWORD:=""}"
 
-MIRRORS=2
+MIRRORS=4
 
 isCompatible() {
 
-  # ARMv8.0 cannot run Windows 11 builds higher than 22631
+  # ARMv8.0 cannot run Windows 11 builds 24H2 and up.
   if [[ "${ARCH,,}" == "arm64" ]] && ! grep -qw 'Features.*atomics' /proc/cpuinfo; then
     return 1
   fi
@@ -40,7 +40,7 @@ parseVersion() {
   local msg="is not available for ARM64 CPU's."
 
   if ! isCompatible; then
-    warn "Your CPU architecture is older than ARMv8.1 and cannot run Windows 11 builds higher than 22631."
+    warn "Your CPU architecture is ARMv8.0, which cannot run Windows 11 builds 24H2 and up."
   fi
 
   case "${VERSION,,}" in
@@ -640,6 +640,38 @@ getLink1() {
 
 getLink2() {
 
+  # Fallbacks for users who cannot connect to the Microsoft servers
+
+  local id="$1"
+  local lang="$2"
+  local ret="$3"
+  local url=""
+  local sum=""
+  local size=""
+  local host="https://dl.bobpony.com/windows"
+
+  isCompatible && return 0
+  [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
+
+  case "${id,,}" in
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
+      size=6565922816
+      sum="a05a7aeb2d55d6f3c1981228f94b1c49d23dc4c12baa8a1abbad6940c918d26b"
+      url="11/en-us_windows_11_23h2_arm64.iso"
+      ;;
+  esac
+
+  case "${ret,,}" in
+    "sum" ) echo "$sum" ;;
+    "size" ) echo "$size" ;;
+    *) [ -n "$url" ] && echo "$host/$url";;
+  esac
+
+  return 0
+}
+
+getLink3() {
+
   local id="$1"
   local lang="$2"
   local ret="$3"
@@ -686,6 +718,41 @@ getLink2() {
       size=4430471168
       sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="windows-10-enterprise-ltsc-full-collection/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
+      ;;
+  esac
+
+  case "${ret,,}" in
+    "sum" ) echo "$sum" ;;
+    "size" ) echo "$size" ;;
+    *) [ -n "$url" ] && echo "$host/$url";;
+  esac
+
+  return 0
+}
+
+getLink4() {
+
+  local id="$1"
+  local lang="$2"
+  local ret="$3"
+  local url=""
+  local sum=""
+  local size=""
+  local host="https://archive.org/download"
+
+  isCompatible && return 0
+  [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
+
+  case "${id,,}" in
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
+      size=6872444928
+      sum="2bf0fd1d5abd267cd0ae8066fea200b3538e60c3e572428c0ec86d4716b61cb7"
+      url="win11-23h2-en-fr/ARM64/SW_DVD9_Win_Pro_11_23H2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-59519.ISO"
+      ;;
+    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+      size=6874210304
+      sum="b468c15425514a2bca8627cecb2effdb0c0a47156c76b4466f3954a03c0de06d"
+      url="win11-23h2-en-fr/ARM64/en-us_windows_11_iot_enterprise_version_23h2_arm64_dvd_6cc52d75.iso"
       ;;
   esac
 
