@@ -16,7 +16,7 @@ set -Eeuo pipefail
 : "${USERNAME:=""}"
 : "${PASSWORD:=""}"
 
-MIRRORS=2
+MIRRORS=4
 
 isCompatible() {
 
@@ -640,6 +640,38 @@ getLink1() {
 
 getLink2() {
 
+  # Fallbacks for users who cannot connect to the Microsoft servers
+
+  local id="$1"
+  local lang="$2"
+  local ret="$3"
+  local url=""
+  local sum=""
+  local size=""
+  local host="https://dl.bobpony.com/windows"
+
+  isCompatible && return 0
+  [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
+
+  case "${id,,}" in
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
+      size=5219411968
+      sum="dbd54452c3c20b4625f511dae3c3e057270448fb661232d4fa66279f59a63157"
+      url="11/en-us_windows_11_23h2_arm64.iso"
+      ;;
+  esac
+
+  case "${ret,,}" in
+    "sum" ) echo "$sum" ;;
+    "size" ) echo "$size" ;;
+    *) [ -n "$url" ] && echo "$host/$url";;
+  esac
+
+  return 0
+}
+
+getLink3() {
+
   local id="$1"
   local lang="$2"
   local ret="$3"
@@ -686,6 +718,41 @@ getLink2() {
       size=4430471168
       sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="windows-10-enterprise-ltsc-full-collection/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
+      ;;
+  esac
+
+  case "${ret,,}" in
+    "sum" ) echo "$sum" ;;
+    "size" ) echo "$size" ;;
+    *) [ -n "$url" ] && echo "$host/$url";;
+  esac
+
+  return 0
+}
+
+getLink4() {
+
+  local id="$1"
+  local lang="$2"
+  local ret="$3"
+  local url=""
+  local sum=""
+  local size=""
+  local host="https://archive.org/download"
+
+  isCompatible && return 0
+  [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
+
+  case "${id,,}" in
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
+      size=6872444928
+      sum="2bf0fd1d5abd267cd0ae8066fea200b3538e60c3e572428c0ec86d4716b61cb7"
+      url="win11-23h2-en-fr/ARM64/SW_DVD9_Win_Pro_11_23H2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-59519.ISO"
+      ;;
+    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc" | "win11arm64-enterprise-ltsc-eval" )
+      size=5121449984
+      sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
+      url="win11-23h2-en-fr/ARM64/en-us_windows_11_iot_enterprise_version_23h2_arm64_dvd_6cc52d75.iso"
       ;;
   esac
 
