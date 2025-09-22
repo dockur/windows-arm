@@ -20,7 +20,7 @@ MIRRORS=4
 
 isCompatible() {
 
-  # ARMv8.0 cannot run Windows 11 builds higher than 22631
+  # ARMv8.0 cannot run Windows 11 builds 24H2 and up.
   if [[ "${ARCH,,}" == "arm64" ]] && ! grep -qw 'Features.*atomics' /proc/cpuinfo; then
     return 1
   fi
@@ -40,7 +40,7 @@ parseVersion() {
   local msg="is not available for ARM64 CPU's."
 
   if ! isCompatible; then
-    warn "Your CPU architecture is older than ARMv8.1 and cannot run Windows 11 builds higher than 22631."
+    warn "Your CPU architecture is ARMv8.0, which cannot run Windows 11 builds 24H2 and up."
   fi
 
   case "${VERSION,,}" in
