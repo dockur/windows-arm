@@ -750,8 +750,8 @@ getLink4() {
       url="win11-23h2-en-fr/ARM64/SW_DVD9_Win_Pro_11_23H2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-59519.ISO"
       ;;
     "win11arm64-ltsc" | "win11arm64-enterprise-ltsc" | "win11arm64-enterprise-ltsc-eval" )
-      size=5121449984
-      sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
+      size=6874210304
+      sum="b468c15425514a2bca8627cecb2effdb0c0a47156c76b4466f3954a03c0de06d"
       url="win11-23h2-en-fr/ARM64/en-us_windows_11_iot_enterprise_version_23h2_arm64_dvd_6cc52d75.iso"
       ;;
   esac
