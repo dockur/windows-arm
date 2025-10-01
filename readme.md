@@ -93,7 +93,7 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
   
   | **Value** | **Version**           | **Size** |
   |---|---|---|
-  | `11`   | Windows 11 Pro        | 4.8 GB   |
+  | `11`   | Windows 11 Pro        | 6.8 GB   |
   | `11l`  | Windows 11 LTSC       | 4.7 GB   |
   | `11e`  | Windows 11 Enterprise | 4.3 GB   |
   ||||  
