@@ -1,11 +1,8 @@
 {
-  "name": "Windows 11 Enterprise",
+  "name": "Windows 10 Enterprise",
   "service": "windows",
   "containerEnv": {
-    "VERSION": "11e",
-    "RAM_SIZE": "max",
-    "DISK_SIZE": "max",
-    "CPU_CORES": "max"    
+    "VERSION": "10e"
   },  
   "forwardPorts": [8006],  
   "portsAttributes": {

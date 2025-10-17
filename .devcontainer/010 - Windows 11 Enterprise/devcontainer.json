@@ -1,11 +1,8 @@
 {
-  "name": "Tiny 11",
+  "name": "Windows 11 Enterprise",
   "service": "windows",
   "containerEnv": {
-    "VERSION": "tiny11",
-    "RAM_SIZE": "max",
-    "DISK_SIZE": "max",
-    "CPU_CORES": "max"    
+    "VERSION": "11e"
   },  
   "forwardPorts": [8006],  
   "portsAttributes": {

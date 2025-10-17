@@ -1,11 +1,8 @@
 {
-  "name": "Windows 11 LTSC",
+  "name": "Windows 10 LTSC",
   "service": "windows",
   "containerEnv": {
-    "VERSION": "11l",
-    "RAM_SIZE": "max",
-    "DISK_SIZE": "max",
-    "CPU_CORES": "max"    
+    "VERSION": "10l"
   },  
   "forwardPorts": [8006],  
   "portsAttributes": {
