@@ -3,7 +3,6 @@ services:
     container_name: windows
     image: dockurr/windows-arm    
     environment:
-      VERSION: "11"
       ALLOCATE: "Y"
       RAM_SIZE: "half"
       DISK_SIZE: "max"
