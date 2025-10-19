@@ -1,9 +1,8 @@
 services:
   windows:
     container_name: windows
-    image: dockurr/windows-arm    
+    image: ghcr.io/dockur/windows-arm
     environment:
-      ALLOCATE: "Y"
       RAM_SIZE: "half"
       DISK_SIZE: "max"
       CPU_CORES: "max"
