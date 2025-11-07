@@ -39,10 +39,6 @@ parseVersion() {
 
   local msg="is not available for ARM64 CPU's."
 
-  if ! isCompatible; then
-    warn "Your CPU architecture is below ARMv8.1, and does not support Windows 11 build 24H2 and up."
-  fi
-
   case "${VERSION,,}" in
     "11" | "11p" | "win11" | "pro11" | "win11p" | "windows11" | "windows 11" )
       VERSION="win11arm64"
@@ -129,6 +125,12 @@ parseVersion() {
       error "Tiny 10 $msg" && return 1
       ;;
   esac
+
+  if [[ "${VERSION,,}" == "win11"* || "${DETECTED,,}" == "win11"* ]]; then
+    if ! isCompatible; then
+      warn "Your CPU architecture is below ARMv8.1, and does not support Windows 11 build 24H2 and up."
+    fi
+  fi
 
   return 0
 }
