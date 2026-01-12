@@ -3,7 +3,9 @@ services:
     image: dockurr/windows
     container_name: windows
     environment:
-      VERSION: "11"
+      VERSION: "2025"
+      MANUAL: "Y"
+      VGA: "virtio-gpu"
     devices:
       - /dev/kvm
       - /dev/net/tun
