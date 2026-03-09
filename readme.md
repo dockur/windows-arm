@@ -22,7 +22,7 @@ Windows for ARM in a Docker container, for devices like the Raspberry Pi 5 and m
 
 ## Video 📺
 
-[![Youtube](https://img.youtube.com/vi/xhGYobuG508/0.jpg)](https://www.youtube.com/watch?v=xhGYobuG508)
+[![Youtube](https://img.youtube.com/vi/xhGYobuG508/maxresdefault.jpg)](https://www.youtube.com/watch?v=xhGYobuG508)
 
 ## Usage  🐳
 
