@@ -615,7 +615,7 @@ getLink1() {
     "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
       size=5219411968
       sum="dbd54452c3c20b4625f511dae3c3e057270448fb661232d4fa66279f59a63157"
-      url="11/en-us_windows_11_24h2_arm64.iso"
+      url="11/en-us_windows_11_25h2_arm64.iso"
       ;;
     "win11arm64-ltsc" | "win11arm64-enterprise-ltsc" | "win11arm64-enterprise-ltsc-eval" )
       size=5121449984
