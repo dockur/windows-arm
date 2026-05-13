@@ -702,7 +702,7 @@ getLink3() {
     "win11arm64" )
       size=5460387840
       sum="57d1dfb2c6690a99fe99226540333c6c97d3fd2b557a50dfe3d68c3f675ef2b0"
-      url="windows-11-24h2-arm64-iso/Win11_24H2_English_Arm64.iso"
+      url="Windows11_24H2_Arm64_ISO/Win11_24H2_English_Arm64.iso"
       ;;
     "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
       size=6872444928
