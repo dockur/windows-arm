@@ -583,10 +583,9 @@ getMido() {
     "win11arm64-enterprise-ltsc-eval" )
       size=5042194432
       sum="3dcdba9c9c0aa0430d4332b60c9afcb3cd613d648a49cbba2d4ef7b5978f32e8"
-      url="https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26100.1.240331-1435.ge_release_CLIENT_IOT_LTSC_EVAL_A64FRE_en-us.iso"
+      url="https://software-static.download.prss.microsoft.com/dbazure/998969d5-f34g-4e03-ac9d-1f9786c66749/26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_IOT_LTSC_EVAL_A64FRE_en-us.iso"
       ;;
   esac
-
   case "${ret,,}" in
     "sum" ) echo "$sum" ;;
     "size" ) echo "$size" ;;
