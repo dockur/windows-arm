@@ -34,7 +34,7 @@ parseVersion() {
     VERSION="${VERSION:1:-1}"
   fi
 
-  VERSION=$(expr "$VERSION" : "^\ *\(.*[^ ]\)\ *$")
+  [ -n "$VERSION" ] && VERSION=$(expr "$VERSION" : "^\ *\(.*[^ ]\)\ *$")
   [ -z "$VERSION" ] && VERSION="win11"
 
   local msg="is not available for ARM64 CPU's."
