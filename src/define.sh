@@ -613,8 +613,8 @@ getLink1() {
 
   case "${id,,}" in
     "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
-      size=5219411968
-      sum="dbd54452c3c20b4625f511dae3c3e057270448fb661232d4fa66279f59a63157"
+      size=6566623232
+      sum="a5faa9daddc7a473581b0029821c42cab6f64165ec26289f45f0648c8fa7b4c3"
       url="11/en-us_windows_11_25h2_arm64.iso"
       ;;
     "win11arm64-ltsc" | "win11arm64-enterprise-ltsc" | "win11arm64-enterprise-ltsc-eval" )
