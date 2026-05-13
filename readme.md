@@ -125,7 +125,7 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
   ```
   
 > [!TIP]
-> This can also be used to resize the existing disk to a larger capacity without any data loss. However you will need to [manually extend the disk partition](https://learn.microsoft.com/en-us/windows-server/storage/disk-management/extend-a-basic-volume?tabs=disk-management) since the added disk space will appear as unallocated.
+> This can also be used to resize the existing disk to a larger capacity without any data loss. However you will need to [manually extend the disk partition](https://learn.microsoft.com/en-us/windows-server/storage/disk-management/extend-a-basic-volume?tabs=disk-management) afterwards, since the added disk space will appear as unallocated.
 
 ### How do I increase the display resolution?
 
@@ -336,7 +336,9 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
     - /dev/bus/usb
   ```
   
-  If the device is a USB disk drive, please wait until after the installation is completed before connecting it. Otherwise the installation may fail, as the order of the disks can get rearranged.
+  > [!WARNING]  
+  > Adding a USB mass storage device before Windows Setup has finished may cause it to fail. Or worse: the drive can get formatted  as the system disk, and all your data will be lost! So always keep them disconnected when launching the container for the first time.
+
 
 ### How do I verify if my system supports KVM?
 
