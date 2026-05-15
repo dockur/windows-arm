@@ -5,6 +5,9 @@ COPY --from=qemux/qemu-arm:7.30 / /
 
 ARG TARGETARCH
 ARG VERSION_ARG="0.00"
+ARG VERSION_WSDD="1.24"
+ARG VERSION_VIRTIO="0.1.285"
+
 ARG DEBCONF_NOWARNINGS="yes"
 ARG DEBIAN_FRONTEND="noninteractive"
 ARG DEBCONF_NONINTERACTIVE_SEEN="true"
@@ -18,7 +21,7 @@ RUN set -eu && \
         cabextract \
         libxml2-utils \
         libarchive-tools && \
-    wget "https://github.com/gershnik/wsdd-native/releases/download/v1.23/wsddn_1.23_${TARGETARCH}.deb" -O /tmp/wsddn.deb -q && \
+    wget "https://github.com/gershnik/wsdd-native/releases/download/v${VERSION_WSDD}/wsddn_${VERSION_WSDD}_${TARGETARCH}.deb" -O /tmp/wsddn.deb -q && \
     dpkg -i /tmp/wsddn.deb && \
     apt-get clean && \
     echo "$VERSION_ARG" > /run/version && \
@@ -32,7 +35,7 @@ ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/powe
 ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/samba.sh /run/
 ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/install.sh /run/
 
-ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v0.1.285-1/virtio-win-0.1.285.tar.xz /var/drivers.txz
+ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v${VERSION_VIRTIO}-1/virtio-win-${VERSION_VIRTIO}.tar.xz /var/drivers.txz
 
 VOLUME /storage
 EXPOSE 3389 8006
