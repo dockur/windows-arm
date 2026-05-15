@@ -622,8 +622,8 @@ getLink1() {
       url="11/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
       ;;
     "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
-      size=4689637376
-      sum="7b43e64f4e3b961a83f9b70efa4b9d863bc5c348fe86d75917ac974116d17227"
+      size=4913268736
+      sum="dcc63f43c85a7bbb12cf0ec69eaf27a3e8131f30c78c362ce1d2318e843d6d0c"
       url="10/en-us_windows_10_22h2_arm64.iso"
       ;;
     "win10arm64-ltsc" | "win10arm64-enterprise-ltsc" | "win10arm64-enterprise-ltsc-eval" )
