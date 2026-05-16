@@ -571,8 +571,8 @@ getMido() {
 
   case "${id,,}" in
     "win11arm64" )
-      size=7299147776
-      sum="32cde0071ed8086b29bb6c8c3bf17ba9e3cdf43200537434a811a9b6cc2711a1"
+      size=7994415104
+      sum="638aa2c88e94385b00f4f178d071e3df0b7d9e335577a83bd533b7f2eb65adf0"
       url="https://software-static.download.prss.microsoft.com/dbazure/888969d5-f34g-4e03-ac9d-1f9786c66749/26200.6584.250915-1905.25h2_ge_release_svc_refresh_CLIENT_CONSUMER_a64fre_en-us.iso"
       ;;
     "win11arm64-enterprise-eval" )
