@@ -24,7 +24,7 @@ RUN set -eu && \
     wget "https://github.com/gershnik/wsdd-native/releases/download/v${VERSION_WSDD}/wsddn_${VERSION_WSDD}_${TARGETARCH}.deb" -O /tmp/wsddn.deb -q && \
     dpkg -i /tmp/wsddn.deb && \
     apt-get clean && \
-    echo "$VERSION_ARG" > /run/version && \
+    echo "$VERSION_ARG" > /etc/version && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 COPY --chmod=755 ./src /run/
