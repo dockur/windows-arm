@@ -123,7 +123,7 @@ parseVersion() {
       VERSION="core11"
       [ -z "$DETECTED" ] && DETECTED="win11arm64"
       ;;
-   "tiny10" | "tiny 10" )
+    "tiny10" | "tiny 10" )
       error "Tiny 10 $msg" && return 1
       ;;
   esac
