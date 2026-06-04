@@ -30,24 +30,22 @@ cd /run
 
 trap - ERR
 
-version=$(qemu-system-aarch64 --version | head -n 1 | cut -d '(' -f 1 | awk '{ print $NF }')
+cmd=(qemu-system-aarch64)
+version=$("${cmd[@]}" --version | awk 'NR==1 { print $4 }')
 info "Booting ${APP}${BOOT_DESC} using QEMU v$version..."
 
-CMD=(qemu-system-aarch64)
-
 if [ -n "$CPU_PIN" ]; then
-  CMD=(taskset -c "$CPU_PIN" "${CMD[@]}")
+  cmd=(taskset -c "$CPU_PIN" "${cmd[@]}")
 fi
 
 if [[ "$SHUTDOWN" != [Yy1]* ]]; then
-  exec "${CMD[@]}" ${ARGS:+ $ARGS}
+  exec "${cmd[@]}" ${ARGS:+ $ARGS}
 fi
 
-PIPE="$QEMU_DIR/qemu.pipe"
-rm -f "$PIPE"
-mkfifo "$PIPE"
+pipe="$QEMU_DIR/qemu.pipe"
+rm -f "$pipe" && mkfifo "$pipe"
 
-tee "$QEMU_PTY" <"$PIPE" |
+tee "$QEMU_PTY" <"$pipe" |
 sed -u \
   -e 's/\x1B\[[=0-9;]*[a-z]//gi' \
   -e 's/\x1B\x63//g' \
@@ -57,7 +55,7 @@ sed -u \
   -e 's/failed to load Boot/skipped Boot/g' \
   -e 's/0): Not Found/0)/g' &
 
-"${CMD[@]}" ${ARGS:+ $ARGS} >"$PIPE" &
+"${cmd[@]}" ${ARGS:+ $ARGS} >"$pipe" &
 
 pid=$!
 ( sleep 30; boot ) &
