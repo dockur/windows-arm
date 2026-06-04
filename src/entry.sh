@@ -30,26 +30,39 @@ cd /run
 
 trap - ERR
 
-version=$(qemu-system-aarch64 --version | head -n 1 | cut -d '(' -f 1 | awk '{ print $NF }')
+cmd=(qemu-system-aarch64)
+version=$("${cmd[@]}" --version | awk 'NR==1 { print $4 }')
 info "Booting ${APP}${BOOT_DESC} using QEMU v$version..."
 
-if [ -z "$CPU_PIN" ]; then
-  { qemu-system-aarch64 ${ARGS:+ $ARGS} >"$QEMU_OUT" 2>"$QEMU_LOG"; rc=$?; } || :
-else
-  { taskset -c "$CPU_PIN" qemu-system-aarch64 ${ARGS:+ $ARGS} >"$QEMU_OUT" 2>"$QEMU_LOG"; rc=$?; } || :
+if [ -n "$CPU_PIN" ]; then
+  cmd=(taskset -c "$CPU_PIN" "${cmd[@]}")
 fi
 
-(( rc != 0 )) && error "$(<"$QEMU_LOG")" && exit 15
+if [[ "$SHUTDOWN" != [Yy1]* ]]; then
+  exec "${cmd[@]}" ${ARGS:+ $ARGS}
+fi
 
-terminal
+pipe="$QEMU_DIR/qemu.pipe"
+rm -f "$pipe" && mkfifo "$pipe"
+
+tee "$QEMU_PTY" <"$pipe" |
+sed -u \
+  -e 's/\x1B\[[=0-9;]*[a-z]//gi' \
+  -e 's/\x1B\x63//g' \
+  -e 's/\x1B\[[=?]7l//g' \
+  -e '/^$/d' \
+  -e 's/\x44\x53\x73//g' \
+  -e 's/failed to load Boot/skipped Boot/g' \
+  -e 's/0): Not Found/0)/g' &
+
+"${cmd[@]}" ${ARGS:+ $ARGS} >"$pipe" &
+
+pid=$!
 ( sleep 30; boot ) &
-tail -fn +0 "$QEMU_LOG" --pid=$$ 2>/dev/null &
-cat "$QEMU_TERM" 2> /dev/null | tee "$QEMU_PTY" | \
-sed -u -e 's/\x1B\[[=0-9;]*[a-z]//gi' \
--e 's/\x1B\x63//g' -e 's/\x1B\[[=?]7l//g' \
--e '/^$/d' -e 's/\x44\x53\x73//g' \
--e 's/failed to load Boot/skipped Boot/g' \
--e 's/0): Not Found/0)/g' & wait $! || :
+
+rc=0
+wait "$pid" || rc=$?
+[ -f "$QEMU_END" ] && exit "$rc"
 
 sleep 1 & wait $!
-[ ! -f "$QEMU_END" ] && finish 0
+finish "$rc"
