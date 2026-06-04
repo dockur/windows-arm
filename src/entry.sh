@@ -33,44 +33,30 @@ trap - ERR
 version=$(qemu-system-aarch64 --version | head -n 1 | cut -d '(' -f 1 | awk '{ print $NF }')
 info "Booting ${APP}${BOOT_DESC} using QEMU v$version..."
 
+CMD="qemu-system-aarch64"
+[ -n "$CPU_PIN" ] && CMD="taskset -c $CPU_PIN $CMD"
+
 if [[ "$SHUTDOWN" != [Yy1]* ]]; then
-  if [ -z "$CPU_PIN" ]; then
-    exec qemu-system-aarch64 ${ARGS:+ $ARGS}
-  else    
-    exec taskset -c "$CPU_PIN" qemu-system-aarch64 ${ARGS:+ $ARGS}
-  fi
+  exec $CMD ${ARGS:+ $ARGS}
 fi
 
 qemu() {
-  if [ -z "$CPU_PIN" ]; then
-    qemu-system-aarch64 ${ARGS:+ $ARGS} > >(
-        tee "$QEMU_PTY" | \
-        sed -u \
-        -e 's/\x1B\[[=0-9;]*[a-z]//gi' \
-        -e 's/\x1B\x63//g' \
-        -e 's/\x1B\[[=?]7l//g' \
-        -e '/^$/d' \
-        -e 's/\x44\x53\x73//g' \
-        -e 's/failed to load Boot/skipped Boot/g' \
-        -e 's/0): Not Found/0)/g' ) &
-  else    
-    taskset -c "$CPU_PIN" qemu-system-aarch64 ${ARGS:+ $ARGS} > >(
-        tee "$QEMU_PTY" | \
-        sed -u \
-        -e 's/\x1B\[[=0-9;]*[a-z]//gi' \
-        -e 's/\x1B\x63//g' \
-        -e 's/\x1B\[[=?]7l//g' \
-        -e '/^$/d' \
-        -e 's/\x44\x53\x73//g' \
-        -e 's/failed to load Boot/skipped Boot/g' \
-        -e 's/0): Not Found/0)/g' ) &
-  fi
+  $CMD ${ARGS:+ $ARGS} > >(
+    tee "$QEMU_PTY" |
+    sed -u \
+    -e 's/\x1B\[[=0-9;]*[a-z]//gi' \
+    -e 's/\x1B\x63//g' \
+    -e 's/\x1B\[[=?]7l//g' \
+    -e '/^$/d' \
+    -e 's/\x44\x53\x73//g' \
+    -e 's/failed to load Boot/skipped Boot/g' \
+    -e 's/0): Not Found/0)/g' ) &
 }
 
 if [ ! -t 1 ] || [ ! -c /dev/tty ]; then
-    qemu &
+  qemu &
 else
-    qemu </dev/tty >/dev/tty &
+  qemu </dev/tty >/dev/tty &
 fi
 
 pid=$!
