@@ -21,6 +21,7 @@ Windows for ARM in a Docker container, for devices like the Raspberry Pi 5 and m
  - Web-based viewer
  - Automatic install
  - Host file sharing
+ - USB passthrough
 
 ## Video 📺
 
@@ -315,9 +316,9 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
     - ./example3:/storage3
   ```
 
-### How do I pass-through a disk?
+### How do I pass through a disk?
 
-  It is possible to pass-through disk devices or partitions directly by adding them to your compose file in this way:
+  You can pass through disk devices or partitions directly by adding them to your compose file in this way:
 
   ```yaml
   devices:
@@ -327,9 +328,9 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
 
   Use `/disk1` if you want it to become your main drive (which will be formatted during installation), and use `/disk2` and higher to add them as secondary drives (which will stay untouched).
 
-### How do I pass-through a USB device?
+### How do I pass through a USB device?
 
-  To pass-through a USB device, first look up its vendor and product ID via the `lsusb` command, then add them to your compose file like this:
+  To pass through a USB device, first look up its vendor and product ID via the `lsusb` command, then add them to your compose file like this:
 
   ```yaml
   environment:
