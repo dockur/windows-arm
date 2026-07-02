@@ -21,7 +21,7 @@ Windows for ARM in a Docker container, for devices like the Raspberry Pi 5 and m
  - Web-based viewer
  - Automatic install
  - Shared host folder
- - USB passthrough
+  - USB pass through
 
 ## Video 📺
 
