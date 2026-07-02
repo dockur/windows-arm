@@ -20,7 +20,7 @@ Windows for ARM in a Docker container, for devices like the Raspberry Pi 5 and m
  - KVM acceleration
  - Web-based viewer
  - Automatic install
- - Host folder sharing
+ - Shared host folder
  - USB passthrough
 
 ## Video 📺
