@@ -86,7 +86,7 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
 
   ```yaml
   environment:
-    VERSION: "11"
+    VERSION: "10"
   ```
 
   Select from the values below:
@@ -125,7 +125,7 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
   ```
   
 > [!TIP]
-> This can also be used to resize the existing disk to a larger capacity without any data loss. However you will need to [manually extend the disk partition](https://learn.microsoft.com/en-us/windows-server/storage/disk-management/extend-a-basic-volume?tabs=disk-management) afterwards, since the added disk space will appear as unallocated.
+> This can also be used to resize an existing disk to a larger capacity without any data loss. However you will need to [manually extend the disk partition](https://learn.microsoft.com/en-us/windows-server/storage/disk-management/extend-a-basic-volume?tabs=disk-management) afterwards, since the added disk space will appear as unallocated.
 
 ### How do I increase the display resolution?
 
@@ -167,7 +167,7 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
 
   By default, a user called `Docker` is created and its password is `admin`.
 
-  If you want to use different credentials during installation, you can configure them in your compose file:
+  If you want to set up different credentials during installation, you can configure them in your compose file:
 
   ```yaml
   environment:
@@ -211,7 +211,7 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
   
   ```yaml
   volumes:
-    - ./example.iso:/boot.iso
+    - ./example.iso:/custom.iso
   ```
 
   Replace the example path `./example.iso` with the filename of your desired ISO file. The value of `VERSION` will be ignored in this case.
@@ -233,7 +233,7 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
 
   It's recommended to stick to the automatic installation, as it adjusts various settings to prevent common issues when running Windows inside a virtual environment.
 
-  However, if you insist on performing the installation manually at your own risk, add the following environment variable to your compose file:
+  However, if you insist on performing the installation manually (at your own risk), add the following environment variable to your compose file:
 
   ```yaml
   environment:
@@ -338,7 +338,6 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
   
   > [!WARNING]  
   > Adding a USB mass storage device before Windows Setup has finished may cause it to fail. Or worse: the drive can get formatted  as the system disk, and all your data will be lost! So always keep them disconnected when launching the container for the first time.
-
 
 ### How do I verify if my system supports KVM?
 
