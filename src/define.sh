@@ -585,8 +585,8 @@ getLink1() {
 
   case "${id,,}" in
     "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
-      size=6806982656
-      sum="1e480d324ef02d340008b49433cd2d8d4ccac3476edb7a9a900c22ea5eceae42"
+      size=6812594176
+      sum="8d208f5a09de418fa6c3731b3c78410a1eecd9593ac774d820065f8d0a0f697c"
       url="11/en-us_windows_11_25h2_arm64.iso"
       ;;
     "win11arm64-ltsc" | "win11arm64-enterprise-ltsc" | "win11arm64-enterprise-ltsc-eval" )
@@ -595,8 +595,8 @@ getLink1() {
       url="11/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
       ;;
     "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
-      size=4913268736
-      sum="dcc63f43c85a7bbb12cf0ec69eaf27a3e8131f30c78c362ce1d2318e843d6d0c"
+      size=4910370816
+      sum="eb81ec03106683e53eb83cd8a5d7685f584c351f209f8acca07535bc1aa25dd5"
       url="10/en-us_windows_10_22h2_arm64.iso"
       ;;
     "win10arm64-ltsc" | "win10arm64-enterprise-ltsc" | "win10arm64-enterprise-ltsc-eval" )
