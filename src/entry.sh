@@ -51,7 +51,7 @@ if [ -n "$CPU_PIN" ]; then
   cmd=(taskset -c "$CPU_PIN" "${cmd[@]}")
 fi
 
-if [[ "$SHUTDOWN" != [Yy1]* ]]; then
+if ! enabled "$SHUTDOWN"; then
   exec "${cmd[@]}" ${ARGS:+ $ARGS} >"$pipe"
 fi
 
