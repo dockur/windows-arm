@@ -12,20 +12,29 @@ ARG DEBCONF_NOWARNINGS="yes"
 ARG DEBIAN_FRONTEND="noninteractive"
 ARG DEBCONF_NONINTERACTIVE_SEEN="true"
 
-RUN set -eu && \
-    apt-get update && \
-    apt-get --no-install-recommends -y install \
-        samba \
-        wimtools \
-        dos2unix \
-        cabextract \
-        libxml2-utils \
-        libarchive-tools && \
-    wget "https://github.com/gershnik/wsdd-native/releases/download/v${VERSION_WSDD}/wsddn_${VERSION_WSDD}_${TARGETARCH}.deb" -O /tmp/wsddn.deb -q --timeout=10 && \
-    dpkg -i /tmp/wsddn.deb && \
-    apt-get clean && \
-    echo "$VERSION_ARG" > /etc/version && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN <<EOF
+  set -eu
+
+  apt-get update
+  apt-get --no-install-recommends -y install \
+    samba \
+    wimtools \
+    dos2unix \
+    cabextract \
+    libxml2-utils \
+    libarchive-tools
+
+  # Install wsdd
+  wget "https://github.com/gershnik/wsdd-native/releases/download/v${VERSION_WSDD}/wsddn_${VERSION_WSDD}_${TARGETARCH}.deb" -O /tmp/wsddn.deb -q --timeout=10
+  dpkg -i /tmp/wsddn.deb
+
+  apt-get clean
+
+  # Set version file
+  echo "$VERSION_ARG" > /etc/version
+
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+EOF
 
 COPY --chmod=755 ./src /run/
 COPY --chmod=755 ./assets /run/assets
