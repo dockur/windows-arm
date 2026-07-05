@@ -12,16 +12,17 @@
 
 </div></h1>
 
-Windows for ARM in a Docker container, for devices like the Raspberry Pi 5 and many others.
+Windows for ARM64 in a Docker container, for devices like the Raspberry Pi 5 and many others.
 
 ## Features ✨
 
- - ISO downloader
- - KVM acceleration
- - Web-based viewer
- - Automatic install
- - Shared host folder
- - USB pass through
+- Runs Windows inside a Docker container
+- Automatic download and hands-free installation
+- Near-native performance with KVM acceleration
+- Customizable CPU, memory, and storage allocation
+- Dynamic memory allocation with memory ballooning
+- USB passthrough and host folder sharing
+- Supports bridge, user-mode, macvlan, and macvtap networking
 
 ## Video 📺
 
