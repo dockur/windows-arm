@@ -18,6 +18,7 @@ RUN <<EOF
   apt-get update
   apt-get --no-install-recommends -y install \
     samba \
+    uuidgen \
     wimtools \
     dos2unix \
     cabextract \
