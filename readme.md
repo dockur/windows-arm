@@ -1,6 +1,6 @@
 <h1 align="center">Windows ARM64<br />
 <div align="center">
-<a href="https://github.com/dockur/windows-arm"><img src="https://github.com/dockur/windows-arm/raw/master/.github/logo.png" title="Logo" style="max-width:100%;" width="128" /></a>
+<a href="https://github.com/dockur/windows-arm"><img src="https://github.com/dockur/windows-arm/raw/master/.github/logo.png" title="Logo" style="max-width:100%;" width="96" /></a>
 </div>
 <div align="center">
 
@@ -22,7 +22,7 @@ Windows for ARM64 in a Docker container, for devices like the Raspberry Pi 5 and
 - Customizable CPU, memory, and storage allocation
 - Dynamic memory allocation with memory ballooning
 - USB passthrough and host folder sharing
-- Supports bridge, user-mode, macvlan, and macvtap networking
+- Supports NAT, user-mode, macvlan, and macvtap networking
 
 ## Video 📺
 
