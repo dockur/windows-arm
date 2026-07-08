@@ -7,7 +7,6 @@ This page lists all the environment variables that can be used to configure the 
 | Variable | Default | Description |
 |---|---|---|
 | `VERSION` | `11` | Windows version to install, for example `10` or `11`. |
-| `EDITION` |  | Windows edition to install. |
 | `LANGUAGE` | `en-US` | Windows display language, for example `en`, `fr`, `nl`, etc. |
 | `REGION` | `en-US` | Windows regional format, for example `en-US`. |
 | `KEYBOARD` | `en-US` | Keyboard layout used during installation, for example `en-US`. |
