@@ -28,10 +28,17 @@ USERNAME=$(strip "$USERNAME")
 
 MIRRORS=4
 
+hasFeature() {
+
+  # Match a whitespace-delimited token in /proc/cpuinfo
+  grep -m1 '^Features[[:space:]]*:' /proc/cpuinfo | grep -Fqw -- "$1"
+
+}
+
 isCompatible() {
 
   # ARMv8.0 cannot run Windows 11 builds 24H2 and up.
-  if [[ "${ARCH,,}" == "arm64" ]] && ! grep -qw 'Features.*atomics' /proc/cpuinfo; then
+  if [[ "${ARCH,,}" == "arm64" ]] && ! hasFeature atomics; then
     return 1
   fi
 
