@@ -22,7 +22,7 @@ Windows for ARM64 in a Docker container, for devices like the Raspberry Pi 5 and
 - Customizable CPU, memory, and storage allocation
 - Dynamic memory allocation with memory ballooning
 - USB passthrough and host folder sharing
-- Supports bridge, user-mode, macvlan, and macvtap networking
+- Supports NAT, user-mode, macvlan, and macvtap networking
 
 ## Video 📺
 
