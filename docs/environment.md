@@ -7,7 +7,7 @@ This page lists all the environment variables that can be used to configure the 
 | Variable | Default | Description |
 |---|---|---|
 | `VERSION` | `11` | Windows version to install, for example `10` or `11`. |
-| `EDITION` |  | Windows edition to install, for example `core` for Windows Server Core. |
+| `EDITION` |  | Windows edition to install. |
 | `LANGUAGE` | `en-US` | Windows display language, for example `en`, `fr`, `nl`, etc. |
 | `REGION` | `en-US` | Windows regional format, for example `en-US`. |
 | `KEYBOARD` | `en-US` | Keyboard layout used during installation, for example `en-US`. |
@@ -23,11 +23,10 @@ This page lists all the environment variables that can be used to configure the 
 | Variable | Default | Description |
 |---|---|---|
 | `CPU_CORES` | `2` | Number of CPU cores assigned to the VM. Can also be set to `max` or `half`. |
+| `CPU_PIN` |  | Pins QEMU to specific host CPU cores, for example `4,5,6,7`. |
 | `CPU_MODEL` | `host` | QEMU CPU model to use. |
 | `CPU_FLAGS` |  | Additional QEMU CPU flags. |
 | `KVM` | `Y` | Enables KVM hardware acceleration. Set to `N` to disable. |
-| `VMX` | `N` | Exposes Intel VMX virtualization extensions to Windows. |
-| `HV` | `Y` | Enables Hyper-V enlightenments for Windows. |
 | `RAM_SIZE` | `4G` | Amount of RAM assigned to the VM, for example `4G`, `8G`, `max`, or `half`. |
 | `RAM_CHECK` | `Y` | Checks whether enough host memory is available before starting the VM. |
 
@@ -35,10 +34,8 @@ This page lists all the environment variables that can be used to configure the 
 
 | Variable | Default | Description |
 |---|---|---|
-| `MACHINE` | `q35` | QEMU machine type. |
+| `MACHINE` | `virt` | QEMU machine type. |
 | `UUID` |  | QEMU VM UUID. |
-| `HPET` | `off` | Enables or disables the QEMU HPET timer. |
-| `VMPORT` | `off` | Enables or disables the QEMU VMware port. |
 | `SM_BIOS` |  | Additional SMBIOS arguments passed to QEMU. |
 | `ARGUMENTS` |  | Additional raw QEMU arguments appended to the generated command line. |
 
@@ -46,11 +43,10 @@ This page lists all the environment variables that can be used to configure the 
 
 | Variable | Default | Description |
 |---|---|---|
-| `BOOT_MODE` | `windows` | Boot mode, for example `windows`, `windows_secure`, or `windows_legacy`. |
+| `BOOT_MODE` | `windows` | Boot mode, for example `windows` or `windows_secure`. |
 | `BOOT_INDEX` | `9` | Boot priority index for the installation media. |
 | `BIOS` |  | Custom BIOS/firmware file. Setting this enables custom boot mode. |
-| `TPM` | `N` | Enables TPM support. |
-| `SMM` | `N` | Enables SMM/secure-machine support. |
+| `SECURE` | `off` | QEMU secure boot flag. Usually controlled by `BOOT_MODE`. |
 | `LOGO` | `Y` | Enables the custom boot logo. |
 | `CLEAR` | `N` | Clears the firmware/NVRAM variables on the next boot. |
 | `USB` | `qemu-xhci,id=xhci,p2=7,p3=7` | QEMU USB controller setting. Set to a `no*` value to disable. |
@@ -106,10 +102,8 @@ This page lists all the environment variables that can be used to configure the 
 |---|---|---|
 | `WIDTH` | `1920` | Display width configured for Windows. |
 | `HEIGHT` | `1080` | Display height configured for Windows. |
-| `DISPLAY` | `web` | Display backend. Common values are `web`, `vnc`, `disabled`, or `none`. |
-| `VGA` | `virtio` | QEMU video adapter model. |
-| `GPU` | `N` | Enables Intel iGPU acceleration. Experimental. |
-| `RENDERNODE` | `/dev/dri/renderD128` | Render node used for GPU acceleration. |
+| `DISPLAY` | `web` | Display backend. Common values are `web`, `vnc`, `ramfb`, `disabled`, or `none`. |
+| `VGA` | `ramfb` | QEMU video adapter model, can be set to `virtio-gpu` after installation. |
 
 ## 🌍 Web UI
 
