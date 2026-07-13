@@ -264,7 +264,7 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
 
 ### How do I enable audio?
 
-  Audio is disabled by default when not using RDP. To stream the guest's audio to the browser, add the following environment variable:
+  Audio is disabled by default unless you are using RDP. To also stream audio to the browser, add the following environment variable:
 
   ```yaml
   environment:
