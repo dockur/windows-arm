@@ -127,10 +127,10 @@ Also see [Dynamic memory allocation](https://github.com/qemus/qemu-arm/blob/mast
 | Variable | Default | Description |
 |---|---|---|
 | `BALLOONING` | `N` | Enables dynamic memory ballooning. |
-| `BALLOONING_MIN_MEM` | `33%` | Minimum memory target for the balloon device. |
-| `BALLOONING_RAM_THRESHOLD` | `80.0` | Target host RAM usage percentage. |
+| `BALLOONING_MIN_MEM` | `33%` | Minimum amount of memory retained by the VM. |
+| `BALLOONING_RAM_THRESHOLD` | `80.0` | Host RAM usage percentage at which ballooning begins adjusting memory. |
 | `BALLOONING_RAM_THRESHOLD_HARD` | `90.0` | Host RAM usage percentage at which ballooning becomes more aggressive. |
-| `BALLOONING_PSI_PRESSURE` | `10.0` | PSI memory pressure level at which ballooning becomes more aggressively. |
+| `BALLOONING_PSI_PRESSURE` | `10.0` | PSI memory pressure level at which ballooning becomes more aggressive. |
 | `BALLOONING_PSI_PRESSURE_MAX` | `50.0` | PSI memory pressure level at which ballooning reaches its strongest response. |
 | `BALLOONING_HYSTERESIS` | `128M` | Minimum memory change before the balloon target is updated. |
 | `BALLOONING_KP` | `0.5` | Proportional gain used by the ballooning controller. |
