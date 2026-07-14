@@ -7,34 +7,34 @@ This page lists all the environment variables that can be used to configure the 
 | Variable | Default | Description |
 |---|---|---|
 | `VERSION` | `11` | Windows version to install, for example `10` or `11`. |
-| `LANGUAGE` | `en` | Windows display language, for example `en`, `fr`, `nl`, etc. |
-| `REGION` | `en-US` | Windows regional format, for example `en-US`. |
-| `KEYBOARD` | `en-US` | Keyboard layout used during installation, for example `en-US`. |
-| `USERNAME` | `Dockur` | Username for the Windows account. |
+| `LANGUAGE` | `en-US` | Windows display language, such as `English`, `en-US` or `en`. |
+| `REGION` |  | Windows regional format, defaults to `LANGUAGE`. |
+| `KEYBOARD` |  | Keyboard layout, defaults to `LANGUAGE`. |
+| `USERNAME` | `Docker` | Username for the Windows account. |
 | `PASSWORD` | `admin` | Password for the Windows account. |
-| `KEY` |  | Windows product key used during installation. |
+| `KEY` |  | Windows product key used to install and activate Windows. |
 | `MANUAL` | `N` | Enables manual installation instead of unattended installation. |
-| `VERIFY` | `N` | Verifies checksums of downloaded images. |
-| `REMOVE` | `Y` | Removes the Windows ISO after installation. Set to `N` to keep it. |
+| `VERIFY` | `N` | Verifies downloaded images against a predefined list of checksums. |
+| `REMOVE` | `Y` | Deletes the downloaded Windows ISO after installation to save space. |
 
 ## 🧠 CPU and Memory
 
 | Variable | Default | Description |
 |---|---|---|
-| `CPU_CORES` | `2` | Number of CPU cores assigned to the VM. Can also be set to `max` or `half`. |
-| `CPU_PIN` |  | Pins QEMU to specific host CPU cores, for example `4,5,6,7`. |
-| `CPU_MODEL` | `host` | QEMU CPU model to use. |
+| `CPU_CORES` | `2` | Number of CPU cores assigned to the VM, for example `4`, `half`, or `max`. |
+| `CPU_MODEL` | `virt` | QEMU CPU model to use. |
 | `CPU_FLAGS` |  | Additional QEMU CPU flags. |
-| `KVM` | `Y` | Enables KVM hardware acceleration. Set to `N` to disable. |
-| `RAM_SIZE` | `4G` | Amount of RAM assigned to the VM, for example `4G`, `8G`, `max`, or `half`. |
+| `KVM` | `Y` | Enables KVM hardware acceleration. |
+| `RAM_SIZE` | `4G` | Amount of RAM assigned to the VM, for example `8G`, `half`, or `max`. |
 | `RAM_CHECK` | `Y` | Checks whether enough host memory is available before starting the VM. |
 
 ## ⚙️ System
 
-| Variable | Default | Description |
+| Variable | Defult | Description |
 |---|---|---|
-| `MACHINE` | `virt` | QEMU machine type. |
-| `UUID` |  | QEMU VM UUID. |
+| `MACHINE` | `q35` | QEMU machine type. |
+| `UUID` |  | QEMU machine UUID. |
+| `HPET` | `off` | Enables or disables the QEMU HPET timer. |
 | `SM_BIOS` |  | Additional SMBIOS arguments passed to QEMU. |
 | `ARGUMENTS` |  | Additional raw QEMU arguments appended to the generated command line. |
 
@@ -44,18 +44,19 @@ This page lists all the environment variables that can be used to configure the 
 |---|---|---|
 | `BOOT_MODE` | `windows` | Boot mode, for example `windows` or `windows_secure`. |
 | `BOOT_INDEX` | `9` | Boot priority index for the installation media. |
-| `BIOS` |  | Custom BIOS/firmware file. Setting this enables custom boot mode. |
-| `SECURE` | `off` | QEMU secure boot flag. Usually controlled by `BOOT_MODE`. |
+| `BIOS` |  | Custom BIOS/firmware file. |
+| `TPM` | `N` | Enables the TPM emulator. |
+| `SMM` | `N` | Enables SMM/secure-machine support. |
 | `LOGO` | `Y` | Enables the custom boot logo. |
 | `CLEAR` | `N` | Clears the firmware/NVRAM variables on the next boot. |
-| `USB` | `qemu-xhci,id=xhci,p2=7,p3=7` | QEMU USB controller setting. Set to a `no*` value to disable. |
+| `USB` | `qemu-xhci,id=xhci,p2=7,p3=7` | QEMU USB controller setting. |
 
 ## 💾 Storage
 
 | Variable | Default | Description |
 |---|---|---|
 | `DISK_SIZE` | `64G` | Size of the main data disk. |
-| `DISK_FMT` | `raw` | Disk image format, usually `raw` or `qcow2`. |
+| `DISK_FMT` | `raw` | Disk image format, such as `raw` or `qcow2`. |
 | `DISK_TYPE` | `scsi` | Disk controller/device type, such as `sata`, `scsi`, `nvme`, or `blk`. |
 | `DISK_CACHE` | `none` | QEMU disk cache mode, for example `none` or `writeback`. |
 | `DISK_IO` | `native` | QEMU disk I/O mode, for example `native`, `threads`, or `io_uring`. |
@@ -69,7 +70,7 @@ This page lists all the environment variables that can be used to configure the 
 
 | Variable | Default | Description |
 |---|---|---|
-| `NETWORK` | `Y` | Network mode. Common values are `Y` for NAT, `passt`, `slirp`, or `N` to disable networking. |
+| `NETWORK` | `Y` | Network mode, such as `nat`, `passt`, `slirp`, or `N` to disable networking. |
 | `DHCP` | `N` | Enables DHCP/macvtap mode so the VM receives an address from the external LAN. |
 | `IP` |  | Guest IP address override. |
 | `MAC` |  | Guest network adapter MAC address. |
@@ -83,7 +84,7 @@ This page lists all the environment variables that can be used to configure the 
 | `HOST_PORTS` |  | Ports reserved for services running on the host/container side. |
 | `USER_PORTS` |  | Additional ports to forward to the VM when using user-mode networking. |
 | `DNSMASQ_OPTS` |  | Additional dnsmasq options. |
-| `DNSMASQ_DEBUG` | `N` | Enables dnsmasq log tailing. |
+| `DNSMASQ_DEBUG` | `N` | Enables dnsmasq debug output. |
 | `DNSMASQ_DISABLE` | `N` | Disables the internal dnsmasq resolver. |
 | `PASST_OPTS` |  | Additional passt options. |
 | `PASST_DEBUG` | `N` | Enables passt debug output. |
@@ -101,8 +102,8 @@ This page lists all the environment variables that can be used to configure the 
 |---|---|---|
 | `WIDTH` | `1920` | Display width configured for Windows. |
 | `HEIGHT` | `1080` | Display height configured for Windows. |
-| `DISPLAY` | `web` | Display backend. Common values are `web`, `vnc`, `ramfb`, `disabled`, or `none`. |
-| `VGA` | `ramfb` | QEMU video adapter model, can be set to `virtio-gpu` after installation. |
+| `DISPLAY` | `web` | Display backend, such as `web`, `vnc`, `disabled`, or `none`. |
+| `VGA` | `ramfb` | QEMU video adapter model. |
 
 ## 🌍 Web UI
 
@@ -114,13 +115,13 @@ This page lists all the environment variables that can be used to configure the 
 | `WSS_PORT` | `5700` | WebSocket port used by noVNC. |
 | `WSD_PORT` | `8004` | Internal websocketd port. |
 | `AUDIO` | `N` | Streams guest audio to the web viewer. |
-| `SOUND` | `usb-audio` | QEMU audio device used for browser audio. |
+| `SOUND` | `intel-hda` | QEMU audio device used for browser audio. |
 | `AUX_PORT` | `8003` | Internal WebSocket port used for browser audio. |
 | `PROTECT` | `N` | Enables password protection for the web interface. |
 
 ## 🎈 Memory Ballooning
 
-Also see [Dynamic memory allocation](https://github.com/qemus/qemu-arm/blob/master/docs/ballooning.md) for usage notes and important caveats.
+Also see [Dynamic memory allocation](https://github.com/qemus/qemu/blob/master/docs/ballooning.md) for usage notes and important caveats.
 
 | Variable | Default | Description |
 |---|---|---|
