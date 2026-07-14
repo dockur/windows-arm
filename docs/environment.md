@@ -22,7 +22,8 @@ This page lists all the environment variables that can be used to configure the 
 | Variable | Default | Description |
 |---|---|---|
 | `CPU_CORES` | `2` | Number of CPU cores assigned to the VM, for example `4`, `half`, or `max`. |
-| `CPU_MODEL` | `virt` | QEMU CPU model to use. |
+| `CPU_PIN` |  | Pins QEMU to specific host CPU cores, for example `4,5,6,7`. |
+| `CPU_MODEL` | `host` | QEMU CPU model to use. |
 | `CPU_FLAGS` |  | Additional QEMU CPU flags. |
 | `KVM` | `Y` | Enables KVM hardware acceleration. |
 | `RAM_SIZE` | `4G` | Amount of RAM assigned to the VM, for example `8G`, `half`, or `max`. |
@@ -30,11 +31,10 @@ This page lists all the environment variables that can be used to configure the 
 
 ## ⚙️ System
 
-| Variable | Defult | Description |
+| Variable | Default | Description |
 |---|---|---|
-| `MACHINE` | `q35` | QEMU machine type. |
+| `MACHINE` | `virt` | QEMU machine type. |
 | `UUID` |  | QEMU machine UUID. |
-| `HPET` | `off` | Enables or disables the QEMU HPET timer. |
 | `SM_BIOS` |  | Additional SMBIOS arguments passed to QEMU. |
 | `ARGUMENTS` |  | Additional raw QEMU arguments appended to the generated command line. |
 
@@ -45,11 +45,10 @@ This page lists all the environment variables that can be used to configure the 
 | `BOOT_MODE` | `windows` | Boot mode, for example `windows` or `windows_secure`. |
 | `BOOT_INDEX` | `9` | Boot priority index for the installation media. |
 | `BIOS` |  | Custom BIOS/firmware file. |
-| `TPM` | `N` | Enables the TPM emulator. |
-| `SMM` | `N` | Enables SMM/secure-machine support. |
+| `SECURE` | `off` | QEMU secure boot flag, usually set by `BOOT_MODE`. |
 | `LOGO` | `Y` | Enables the custom boot logo. |
 | `CLEAR` | `N` | Clears the firmware/NVRAM variables on the next boot. |
-| `USB` | `qemu-xhci,id=xhci,p2=7,p3=7` | QEMU USB controller setting. |
+| `USB` | `qemu-xhci,id=xhci` | QEMU USB controller setting. |
 
 ## 💾 Storage
 
@@ -102,8 +101,8 @@ This page lists all the environment variables that can be used to configure the 
 |---|---|---|
 | `WIDTH` | `1920` | Display width configured for Windows. |
 | `HEIGHT` | `1080` | Display height configured for Windows. |
-| `DISPLAY` | `web` | Display backend, such as `web`, `vnc`, `disabled`, or `none`. |
-| `VGA` | `ramfb` | QEMU video adapter model. |
+| `DISPLAY` | `web` | Display backend, such as `web`, `vnc`, `ramfb`, `disabled`, or `none`. |
+| `VGA` | `ramfb` | QEMU video adapter model, can be set to `virtio-gpu` after installation. |
 
 ## 🌍 Web UI
 
@@ -115,13 +114,13 @@ This page lists all the environment variables that can be used to configure the 
 | `WSS_PORT` | `5700` | WebSocket port used by noVNC. |
 | `WSD_PORT` | `8004` | Internal websocketd port. |
 | `AUDIO` | `N` | Streams guest audio to the web viewer. |
-| `SOUND` | `intel-hda` | QEMU audio device used for browser audio. |
+| `SOUND` | `usb-audio` | QEMU audio device used for browser audio. |
 | `AUX_PORT` | `8003` | Internal WebSocket port used for browser audio. |
 | `PROTECT` | `N` | Enables password protection for the web interface. |
 
 ## 🎈 Memory Ballooning
 
-Also see [Dynamic memory allocation](https://github.com/qemus/qemu/blob/master/docs/ballooning.md) for usage notes and important caveats.
+Also see [Dynamic memory allocation](https://github.com/qemus/qemu-arm/blob/master/docs/ballooning.md) for usage notes and important caveats.
 
 | Variable | Default | Description |
 |---|---|---|
