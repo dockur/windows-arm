@@ -2,6 +2,8 @@
 
 This page lists all the environment variables that can be used to configure the container.
 
+An empty default means the variable is unset and its value is determined automatically when applicable.
+
 ## 🪟 Windows
 
 | Variable | Default | Description |
@@ -9,7 +11,7 @@ This page lists all the environment variables that can be used to configure the 
 | `VERSION` | `11` | Windows version to install, such as `10` or `11`. |
 | `LANGUAGE` | `en-US` | Windows display language, such as `English`, `en-US`, or `en`. |
 | `REGION` |  | Windows regional format. Uses `LANGUAGE` when unset. |
-| `KEYBOARD` |  | Keyboard layout when different from `LANGUAGE`. |
+| `KEYBOARD` |  | Keyboard layout. Uses `LANGUAGE` when unset. |
 | `USERNAME` | `Docker` | Name of the Windows user account. |
 | `PASSWORD` | `admin` | Password for the Windows account. |
 | `KEY` |  | Windows product key used to install and activate Windows. |
@@ -40,7 +42,7 @@ This page lists all the environment variables that can be used to configure the 
 | `DISK_IO` | `native` | Disk I/O mode, such as `native`, `threads`, or `io_uring`. |
 | `DISK_DISCARD` | `unmap` | Discard/TRIM mode for the primary disk. |
 | `DISK_ROTATION` | `1` | Rotation rate reported to the guest. Use `1` to identify the disk as an SSD. |
-| `DISK_FLAGS` |  | Additional options used when creating qcow2 disks. |
+| `DISK_FLAGS` |  | Additional options used when creating `qcow2` disks. |
 | `ALLOCATE` | `N` | Preallocates space for the primary disk. |
 | `STORAGE` | `/storage` | Storage directory used for disks, firmware variables, and downloads. |
 
@@ -80,11 +82,11 @@ This page lists all the environment variables that can be used to configure the 
 
 | Variable | Default | Description |
 |---|---|---|
-| `WEB` | `Y` | Enables or disables the web interface. |
+| `WEB` | `Y` | Enables the web interface. |
 | `WEB_PORT` | `8006` | Port for the web interface. |
 | `VNC_PORT` | `5900` | Port for the VNC server. |
 | `WSS_PORT` | `5700` | WebSocket port used by noVNC. |
-| `WSD_PORT` | `8004` | Internal websocketd port. |
+| `WSD_PORT` | `8004` | Internal websocketd port used for the display stream. |
 | `AUDIO` | `N` | Streams guest audio to the web viewer. |
 | `SOUND` | `usb-audio` | QEMU audio device used by the web viewer. |
 | `AUX_PORT` | `8003` | Internal WebSocket port used for the audio stream. |
@@ -127,12 +129,12 @@ Also see [Dynamic memory allocation](https://github.com/qemus/qemu-arm/blob/mast
 | `BALLOONING` | `N` | Enables dynamic memory ballooning. |
 | `BALLOONING_MIN_MEM` | `33%` | Minimum memory target for the balloon device. |
 | `BALLOONING_RAM_THRESHOLD` | `80.0` | Target host RAM usage percentage. |
-| `BALLOONING_RAM_THRESHOLD_HARD` | `90.0` | Host RAM usage percentage where ballooning becomes more aggressive. |
-| `BALLOONING_PSI_PRESSURE` | `10.0` | PSI memory pressure level where ballooning starts reacting more aggressively. |
-| `BALLOONING_PSI_PRESSURE_MAX` | `50.0` | PSI memory pressure level where ballooning reaches its strongest response. |
+| `BALLOONING_RAM_THRESHOLD_HARD` | `90.0` | Host RAM usage percentage at which ballooning becomes more aggressive. |
+| `BALLOONING_PSI_PRESSURE` | `10.0` | PSI memory pressure level at which ballooning becomes more aggressively. |
+| `BALLOONING_PSI_PRESSURE_MAX` | `50.0` | PSI memory pressure level at which ballooning reaches its strongest response. |
 | `BALLOONING_HYSTERESIS` | `128M` | Minimum memory change before the balloon target is updated. |
-| `BALLOONING_KP` | `0.5` | Proportional gain for the ballooning controller. |
-| `BALLOONING_KI` | `0.05` | Integral gain for the ballooning controller. |
+| `BALLOONING_KP` | `0.5` | Proportional gain used by the ballooning controller. |
+| `BALLOONING_KI` | `0.05` | Integral gain used by the ballooning controller. |
 | `BALLOONING_INTERVAL` | `5` | Polling interval in seconds. |
 | `BALLOONING_DEBUG` | `N` | Enables debug output for the ballooning monitor. |
 
@@ -151,4 +153,4 @@ Also see [Dynamic memory allocation](https://github.com/qemus/qemu-arm/blob/mast
 | `TRACE` | `N` | Enables shell command tracing. |
 | `DETECTED` |  | Overrides the automatically detected Windows image identifier. |
 | `SERIAL` | `mon:stdio` | QEMU serial device configuration. |
-| `MONITOR` | `unix:$QEMU_DIR/monitor.sock,server,wait=off,nodelay` | QEMU monitor device configuration. |
+| `MONITOR` | `unix:$QEMU_DIR/monitor.sock,server,wait=off,nodelay` | QEMU monitor configuration. |
