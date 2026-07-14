@@ -29,7 +29,7 @@ An empty default means the variable is unset and its value is determined automat
 | `CPU_FLAGS` |  | Additional QEMU CPU flags. |
 | `KVM` | `Y` | Enables KVM hardware acceleration. |
 | `RAM_SIZE` | `4G` | Amount of RAM assigned to Windows, such as `8G`, `half`, or `max`. |
-| `RAM_CHECK` | `Y` | Checks whether enough host memory is available before starting the VM. |
+| `RAM_CHECK` | `Y` | Checks whether enough host memory is available before starting Windows. |
 
 ## 💾 Storage
 
@@ -51,7 +51,7 @@ An empty default means the variable is unset and its value is determined automat
 | Variable | Default | Description |
 |---|---|---|
 | `NETWORK` | | Network mode, such as `nat`, `passt`, `slirp`, or `N` to disable networking. |
-| `DHCP` | `N` | Enables macvtap networking so the VM receives an address from the external LAN through DHCP. |
+| `DHCP` | `N` | Enables macvtap networking so Windows receives an address from the external LAN through DHCP. |
 | `HOST` | `Windows` | Hostname assigned to Windows. |
 | `IP` |  | Overrides the automatically selected guest IPv4 address. |
 | `MAC` |  | Guest network adapter MAC address. |
