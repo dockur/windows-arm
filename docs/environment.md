@@ -29,27 +29,6 @@ This page lists all the environment variables that can be used to configure the 
 | `RAM_SIZE` | `4G` | Amount of RAM assigned to the VM, such as `8G`, `half`, or `max`. |
 | `RAM_CHECK` | `Y` | Checks whether enough host memory is available before starting the VM. |
 
-## ⚙️ System
-
-| Variable | Default | Description |
-|---|---|---|
-| `MACHINE` | `virt` | QEMU machine type. |
-| `UUID` |  | UUID assigned to the VM. |
-| `SM_BIOS` |  | Additional arguments passed to QEMU’s `-smbios` option. |
-| `ARGUMENTS` |  | Additional raw arguments appended to the QEMU command line. |
-
-## 🚀 Boot
-
-| Variable | Default | Description |
-|---|---|---|
-| `BOOT_MODE` | `windows` | Boot configuration, such as `windows` or `windows_secure`. |
-| `BOOT_INDEX` | `9` | Boot priority index for the installation media. |
-| `BIOS` |  | Custom firmware file. |
-| `SECURE` | `off` | QEMU Secure Boot flag, usually set by `BOOT_MODE`. |
-| `LOGO` | `Y` | Enables the custom boot logo. |
-| `CLEAR` | `N` | Resets the NVRAM variables on the next boot. |
-| `USB` | `qemu-xhci,id=xhci` | QEMU USB controller configuration. |
-
 ## 💾 Storage
 
 | Variable | Default | Description |
@@ -88,13 +67,6 @@ This page lists all the environment variables that can be used to configure the 
 | `PASST_OPTS` |  | Additional options passed to passt. |
 | `PASST_DEBUG` | `N` | Enables passt debug output. |
 
-## 📁 File Sharing
-
-| Variable | Default | Description |
-|---|---|---|
-| `SAMBA` | `Y` | Enables the Samba shared folder. |
-| `SAMBA_DEBUG` | `N` | Enables Samba debug output. |
-
 ## 🖥️ Display
 
 | Variable | Default | Description |
@@ -117,6 +89,34 @@ This page lists all the environment variables that can be used to configure the 
 | `SOUND` | `usb-audio` | QEMU audio device used by the web viewer. |
 | `AUX_PORT` | `8003` | Internal WebSocket port used for the audio stream. |
 | `PROTECT` | `N` | Enables password protection for the web interface. |
+
+## 📁 File Sharing
+
+| Variable | Default | Description |
+|---|---|---|
+| `SAMBA` | `Y` | Enables the Samba shared folder. |
+| `SAMBA_DEBUG` | `N` | Enables Samba debug output. |
+
+## ⚙️ System
+
+| Variable | Default | Description |
+|---|---|---|
+| `MACHINE` | `virt` | QEMU machine type. |
+| `UUID` |  | UUID assigned to the VM. |
+| `SM_BIOS` |  | Additional arguments passed to QEMU’s `-smbios` option. |
+| `ARGUMENTS` |  | Additional raw arguments appended to the QEMU command line. |
+
+## 🚀 Boot
+
+| Variable | Default | Description |
+|---|---|---|
+| `BOOT_MODE` | `windows` | Boot configuration, such as `windows` or `windows_secure`. |
+| `BOOT_INDEX` | `9` | Boot priority index for the installation media. |
+| `BIOS` |  | Custom firmware file. |
+| `SECURE` | `off` | QEMU Secure Boot flag, usually set by `BOOT_MODE`. |
+| `LOGO` | `Y` | Enables the custom boot logo. |
+| `CLEAR` | `N` | Resets the NVRAM variables on the next boot. |
+| `USB` | `qemu-xhci,id=xhci` | QEMU USB controller configuration. |
 
 ## 🎈 Memory Ballooning
 
