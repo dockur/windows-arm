@@ -111,7 +111,7 @@ This page lists all the environment variables that can be used to configure the 
 | `WEB` | `Y` | Enables or disables the web interface. |
 | `WEB_PORT` | `8006` | Port for the web interface. |
 | `VNC_PORT` | `5900` | Port for the VNC server. |
-| `WSS_PORT` | `5700` | WebSocket port used by QEMU/noVNC. |
+| `WSS_PORT` | `5700` | WebSocket port used by noVNC. |
 | `WSD_PORT` | `8004` | Internal websocketd port. |
 | `AUDIO` | `N` | Streams guest audio to the web viewer. |
 | `SOUND` | `usb-audio` | QEMU audio device used for browser audio. |
