@@ -141,17 +141,6 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
 > [!TIP]
 > This can also be used to resize an existing disk to a larger capacity without any data loss. However, you will need to [manually extend the disk partition](https://learn.microsoft.com/en-us/windows-server/storage/disk-management/extend-a-basic-volume?tabs=disk-management) afterwards, since the added disk space will appear as unallocated.
 
-### How do I increase the display resolution?
-
-  The display output is a simple framebuffer, just so that the screen can be visible during installation as it doesn't require any drivers.
-  
-  To add a virtual graphics card to your machine that allows for higher resolutions, you can add the following to your compose file after Windows is fully installed:
-
-  ```yaml
-  environment:
-    VGA: "virtio-gpu"
-  ```
-
 ### How do I share files with the host?
 
   After installation there will be a folder called `Shared` on your desktop, which can be used to exchange files with the host machine.
@@ -176,6 +165,36 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
     RAM_SIZE: "8G"
     CPU_CORES: "4"
   ```
+
+### How do I enable audio?
+
+  Audio is disabled by default unless you are using RDP. To stream it to the browser, add the following environment variable:
+
+  ```yaml
+  environment:
+    AUDIO: "Y"
+  ```
+
+  Then enable **Audio** under **Settings → Advanced** in the web viewer. The stream is only active while this option is enabled, so it uses no extra bandwidth otherwise.
+
+### How do I increase the display resolution?
+
+  The display output is a simple framebuffer, just so that the screen can be visible during installation as it doesn't require any drivers.
+  
+  To add a virtual graphics card to your machine that allows for higher resolutions, you can add the following to your compose file after Windows is fully installed:
+
+  ```yaml
+  environment:
+    VGA: "virtio-gpu"
+  ```
+
+### How do I connect using RDP?
+
+  The web viewer is mainly intended for use during installation, since it is less responsive than RDP and does not support features such as clipboard sharing.
+
+  So for a better experience you can connect using any Microsoft Remote Desktop client to the IP of the container, using the username `Docker` and password `admin`.
+
+  There is an RDP client for [Android](https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx) available from the Play Store and one for [iOS](https://apps.apple.com/nl/app/microsoft-remote-desktop/id714464092?l=en-GB) in the Apple Store. For Linux you can use [FreeRDP](https://www.freerdp.com/) and on Windows just type `mstsc` in the search box.
 
 ### How do I configure the username and password?
 
@@ -253,25 +272,6 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
   environment:
     MANUAL: "Y"
   ```
-
-### How do I connect using RDP?
-
-  The web viewer is mainly intended for use during installation, since it is less responsive than RDP and does not support features such as clipboard sharing.
-
-  So for a better experience you can connect using any Microsoft Remote Desktop client to the IP of the container, using the username `Docker` and password `admin`.
-
-  There is an RDP client for [Android](https://play.google.com/store/apps/details?id=com.microsoft.rdc.androidx) available from the Play Store and one for [iOS](https://apps.apple.com/nl/app/microsoft-remote-desktop/id714464092?l=en-GB) in the Apple Store. For Linux you can use [FreeRDP](https://www.freerdp.com/) and on Windows just type `mstsc` in the search box.
-
-### How do I enable audio?
-
-  Audio is disabled by default unless you are using RDP. To stream it to the browser, add the following environment variable:
-
-  ```yaml
-  environment:
-    AUDIO: "Y"
-  ```
-
-  Then enable **Audio** under **Settings → Advanced** in the web viewer. The stream is only active while this option is enabled, so it uses no extra bandwidth otherwise.
 
 ### How do I assign an individual IP address to the container?
 
@@ -363,6 +363,12 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
   
   > [!WARNING]  
   > Adding a USB mass storage device before Windows Setup has finished may cause it to fail. Or worse: the drive can get formatted as the system disk, and all your data will be lost! So always keep them disconnected when launching the container for the first time.
+
+### How do I enable dynamic memory allocation?
+
+  By default, the VM is allocated the full amount of RAM configured via `RAM_SIZE` for its entire lifetime.
+
+  However, you can enable [memory ballooning](https://github.com/qemus/qemu-arm/docs/ballooning.md) if you want the container to dynamically reclaim unused guest RAM based on host memory pressure.
 
 ### Are these all available options?
 
