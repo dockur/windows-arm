@@ -208,6 +208,8 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
     PASSWORD: "gates"
   ```
 
+  When `DOMAIN` is set, these variables are used as domain credentials instead.
+
 ### How do I join an Active Directory domain?
 
   Windows can automatically join an Active Directory domain during installation. Specify the domain name in your compose file:
