@@ -880,6 +880,23 @@ validateProductKey() {
   return 0
 }
 
+validatePassword() {
+
+  local value="$1"
+
+  if [ "${#value}" -gt 127 ]; then
+    error "The PASSWORD variable cannot contain more than 127 characters!"
+    return 1
+  fi
+
+  if [[ "$value" =~ [[:cntrl:]] ]]; then
+    error "The PASSWORD variable cannot contain control characters!"
+    return 1
+  fi
+
+  return 0
+}
+
 addFolder() {
 
   local src="$1"
