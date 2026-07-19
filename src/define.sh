@@ -844,6 +844,42 @@ validVersion() {
   return 1
 }
 
+validateResolution() {
+
+  local name="$1"
+  local value="$2"
+  local minimum="$3"
+  local number
+
+  if [[ ! "$value" =~ ^[0-9]+$ ]] || [ "${#value}" -gt 5 ]; then
+    error "The $name variable must be between $minimum and 16384!"
+    return 1
+  fi
+
+  number=$((10#$value))
+
+  if [ "$number" -lt "$minimum" ] || [ "$number" -gt 16384 ]; then
+    error "The $name variable must be between $minimum and 16384!"
+    return 1
+  fi
+
+  return 0
+}
+
+validateProductKey() {
+
+  local value="$1"
+
+  [ -z "$value" ] && return 0
+
+  if [[ ! "$value" =~ ^[A-Za-z0-9]{5}(-[A-Za-z0-9]{5}){4}$ ]]; then
+    error "The KEY variable must contain a valid 25-character product key!"
+    return 1
+  fi
+
+  return 0
+}
+
 addFolder() {
 
   local src="$1"
