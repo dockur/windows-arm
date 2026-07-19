@@ -32,5 +32,3 @@ jobs:
       -
         name: Validate JSON and YML files
         uses: GrantBirki/json-yaml-validate@v5.0.0
-        with:
-          yaml_exclude_regex: ".*\\kubernetes\\.yml$"
