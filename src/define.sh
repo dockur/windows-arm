@@ -912,14 +912,18 @@ validateComputerName() {
 validatePassword() {
 
   local value="$1"
+  local desc="${2:-}"
+  local suffix=""
+
+  [ -n "$desc" ] && suffix=" for $desc"
 
   if [ "${#value}" -gt 127 ]; then
-    error "The PASSWORD variable cannot contain more than 127 characters!"
+    error "The PASSWORD variable cannot contain more than 127 characters$suffix!"
     return 1
   fi
 
   if [[ "$value" =~ [[:cntrl:]] ]]; then
-    error "The PASSWORD variable cannot contain control characters!"
+    error "The PASSWORD variable cannot contain control characters$suffix!"
     return 1
   fi
 
