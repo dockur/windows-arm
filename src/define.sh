@@ -837,7 +837,7 @@ validVersion() {
 
   local id="$1"
   local lang="$2"
-  local url
+  local url i=0
 
   isESD "$id" "$lang" && return 0
   isMido "$id" "$lang" && return 0
