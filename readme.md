@@ -152,7 +152,7 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
     -  ./example:/shared
   ```
 
-  Replace the example path `./example` with your desired shared folder, which then will become visible as `Shared`.
+  Replace the example path `./example` with your desired shared folder, which then will become visible as `Shared` on the desktop and as drive `Z:`.
 
 ### How do I change the amount of CPU or RAM?
 
@@ -214,14 +214,13 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
 
   Windows can automatically join an Active Directory domain during installation. Specify the domain name in your compose file:
 
-  ```yaml
+    ```yaml
   environment:
     DOMAIN: "example.com"
+    DOMAIN_OU: "OU=Virtual Machines,OU=Servers,DC=example,DC=com"
   ```
 
-  Use the domain name, such as `example.com`, rather than a URL. The supplied account is added to the local Administrators group and automatically signed in after installation.
-
-  Windows must be able to resolve and reach the domain controller through the domain's DNS server.
+  Use the domain name, such as `example.com`, rather than a URL. The supplied account is added to the local Administrators group and automatically signed in after installation. `DOMAIN_OU` is optional and specifies where the computer account should be created.
 
 ### How do I select the Windows language?
 
