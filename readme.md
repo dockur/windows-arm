@@ -214,7 +214,7 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
 
   Windows can automatically join an Active Directory domain during installation. Specify the domain name in your compose file:
 
-    ```yaml
+  ```yaml
   environment:
     DOMAIN: "example.com"
     DOMAIN_OU: "OU=Virtual Machines,OU=Servers,DC=example,DC=com"
