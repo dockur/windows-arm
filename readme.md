@@ -222,6 +222,8 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
 
   Use the domain name, such as `example.com`, rather than a URL. The supplied account is added to the local Administrators group and automatically signed in after installation. `DOMAIN_OU` is optional and specifies where the computer account should be created.
 
+  Windows must be able to resolve and reach the domain controller through the domain's DNS server.
+
 ### How do I select the Windows language?
 
   By default, the English version of Windows will be downloaded.
