@@ -42,6 +42,7 @@ COPY --chmod=755 ./assets /run/assets
 ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/mido.sh /run/
 ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/power.sh /run/
 ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/samba.sh /run/
+ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/answer.sh /run/
 ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/install.sh /run/
 
 ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v${VERSION_VIRTIO}-1/virtio-win-${VERSION_VIRTIO}.tar.xz /var/drivers.txz
