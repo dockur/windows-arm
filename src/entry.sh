@@ -15,6 +15,7 @@ cd /run
 . server.sh     # Start webserver
 . define.sh     # Define versions
 . mido.sh       # Download Windows
+. answer.sh     # Setup answer files
 . install.sh    # Run installation
 . disk.sh       # Initialize disks
 . display.sh    # Initialize graphics
