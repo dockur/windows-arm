@@ -358,7 +358,8 @@ parseLanguage() {
     "czech" | "cz" | "cesky" ) LANGUAGE="cs" ;;
     "danish" | "dk" | "danske" ) LANGUAGE="da" ;;
     "dutch" | "nederlands" ) LANGUAGE="nl" ;;
-    "english" | "gb" | "british" ) LANGUAGE="en" ;;
+    "english" ) LANGUAGE="en" ;;
+    "british" | "gb" ) LANGUAGE="en-gb" ;;
     "estonian" | "eesti" ) LANGUAGE="et" ;;
     "finnish" | "suomi" ) LANGUAGE="fi" ;;
     "french" | "français" | "francais" ) LANGUAGE="fr" ;;
