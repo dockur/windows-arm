@@ -18,6 +18,9 @@ set -Eeuo pipefail
 : "${LANGUAGE:=""}"
 : "${USERNAME:=""}"
 : "${PASSWORD:=""}"
+: "${DOMAIN_OU:=""}"
+: "${WORKGROUP:=""}"
+: "${AUTOLOGIN:=""}"
 
 # Sanitize variables
 KEY=$(strip "$KEY")
@@ -31,6 +34,9 @@ EDITION=$(strip "$EDITION")
 KEYBOARD=$(strip "$KEYBOARD")
 LANGUAGE=$(strip "$LANGUAGE")
 USERNAME=$(strip "$USERNAME")
+DOMAIN_OU=$(strip "$DOMAIN_OU")
+WORKGROUP=$(strip "$WORKGROUP")
+AUTOLOGIN=$(strip "$AUTOLOGIN")
 
 MIRRORS=4
 
@@ -831,7 +837,7 @@ validVersion() {
 
   local id="$1"
   local lang="$2"
-  local url
+  local url i=0
 
   isESD "$id" "$lang" && return 0
   isMido "$id" "$lang" && return 0
@@ -906,6 +912,49 @@ validateComputerName() {
     return 1
   fi
 
+  return 0
+}
+
+validateWorkgroup() {
+
+  local value="$1"
+  local safe=""
+
+  [ -z "$value" ] && return 0
+
+  if [ "${#value}" -gt 15 ]; then
+    error "The WORKGROUP variable cannot contain more than 15 characters!"
+    return 1
+  fi
+
+  safe=$(printf '%s' "$value" | tr -d '"/\\[]:;|=,+*?<>') || return 1
+
+  if [[ "$safe" != "$value" ]]; then
+    error "The WORKGROUP variable contains characters that are not valid in a NetBIOS name!"
+    return 1
+  fi
+
+  if [[ "$value" =~ ^[.[:space:]]+$ ]]; then
+    error "The WORKGROUP variable cannot consist only of spaces or periods!"
+    return 1
+  fi
+
+  return 0
+}
+
+validateMembership() {
+
+  if [ -n "$DOMAIN" ] && [ -n "$WORKGROUP" ]; then
+    error "The DOMAIN and WORKGROUP variables cannot be used together!"
+    return 1
+  fi
+
+  if [ -n "$DOMAIN_OU" ] && [ -z "$DOMAIN" ]; then
+    error "The DOMAIN_OU variable requires DOMAIN to be specified!"
+    return 1
+  fi
+
+  validateWorkgroup "$WORKGROUP" || return 1
   return 0
 }
 
