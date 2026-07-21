@@ -81,13 +81,31 @@
         <FullName>Docker</FullName>
         <Organization>Windows for Docker</Organization>
         <ProductKey>
-          <Key>VK7JG-NPHTM-C97JM-9MPGT-3V66T</Key>
+          <Key>CGK42-GYN6Y-VD22B-BX98W-J8JXD</Key>
         </ProductKey>
       </UserData>
       <EnableFirewall>false</EnableFirewall>
       <Diagnostics>
         <OptIn>false</OptIn>
       </Diagnostics>
+      <RunSynchronous>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <Path>reg.exe add "HKLM\SYSTEM\Setup\LabConfig" /v BypassTPMCheck /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>2</Order>
+          <Path>reg.exe add "HKLM\SYSTEM\Setup\LabConfig" /v BypassSecureBootCheck /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>3</Order>
+          <Path>reg.exe add "HKLM\SYSTEM\Setup\LabConfig" /v BypassRAMCheck /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>4</Order>
+          <Path>reg.exe add "HKLM\SYSTEM\Setup\MoSetup" /v AllowUpgradesWithUnsupportedTPMOrCPU /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+      </RunSynchronous>
     </component>
   </settings>
   <settings pass="offlineServicing">
@@ -251,6 +269,11 @@
         </RunSynchronousCommand>
         <RunSynchronousCommand wcm:action="add">
           <Order>26</Order>
+          <Path>pnputil -i -a C:\Windows\Drivers\viogpudo\viogpudo.inf</Path>
+          <Description>Install VirtIO display driver</Description>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>27</Order>
           <Path>C:\Windows\Drivers\Balloon\blnsvr.exe -i</Path>
           <Description>Install VirtIO Balloon service</Description>
         </RunSynchronousCommand>
@@ -332,34 +355,34 @@
           <Description>Allow guest access to network shares</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
-          <Order>3</Order>
+          <Order>2</Order>
+          <CommandLine>reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" /v "RequireSecuritySignature" /t REG_DWORD /d 0 /f</CommandLine>
+          <Description>Disable SMB signing requirement</Description>
+        </SynchronousCommand>
+        <SynchronousCommand wcm:action="add">
+          <Order>4</Order>
           <CommandLine>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\PasswordLess\Device" /v "DevicePasswordLessBuildVersion" /t REG_DWORD /d 0 /f</CommandLine>
           <Description>Enable option for passwordless sign-in</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
-          <Order>4</Order>
-          <CommandLine>cmd /C wmic useraccount where name="Docker" set PasswordExpires=false</CommandLine>
+          <Order>5</Order>
+          <CommandLine>powershell.exe -ExecutionPolicy Unrestricted -NoLogo -NoProfile -NonInteractive set-localuser -name "Docker" -passwordneverexpires 1</CommandLine>
           <Description>Password Never Expires</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
-          <Order>5</Order>
+          <Order>6</Order>
           <CommandLine>cmd /C POWERCFG -H OFF</CommandLine>
           <Description>Disable Hibernation</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
-          <Order>6</Order>
+          <Order>7</Order>
           <CommandLine>cmd /C POWERCFG -X -monitor-timeout-ac 0</CommandLine>
           <Description>Disable monitor blanking</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
-          <Order>7</Order>
+          <Order>8</Order>
           <CommandLine>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Edge" /v "HideFirstRunExperience" /t REG_DWORD /d 1 /f</CommandLine>
           <Description>Disable first-run experience in Edge</Description>
-        </SynchronousCommand>
-        <SynchronousCommand wcm:action="add">
-          <Order>8</Order>
-          <CommandLine>reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f</CommandLine>
-          <Description>Show file extensions in Explorer</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
           <Order>9</Order>
@@ -368,33 +391,33 @@
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
           <Order>10</Order>
+          <CommandLine>reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f</CommandLine>
+          <Description>Show file extensions in Explorer</Description>
+        </SynchronousCommand>
+        <SynchronousCommand wcm:action="add">
+          <Order>11</Order>
           <CommandLine>reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "HibernateFileSizePercent" /t REG_DWORD /d 0 /f</CommandLine>
           <Description>Zero Hibernation File</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
-          <Order>11</Order>
+          <Order>12</Order>
           <CommandLine>reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "HibernateEnabled" /t REG_DWORD /d 0 /f</CommandLine>
           <Description>Disable Hibernation</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
-          <Order>12</Order>
+          <Order>13</Order>
           <CommandLine>cmd /C POWERCFG -X -standby-timeout-ac 0</CommandLine>
           <Description>Disable Sleep</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
-          <Order>13</Order>
-          <CommandLine>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v "fAllowUnlistedRemotePrograms" /t REG_DWORD /d 1 /f</CommandLine>
-          <Description>Enable RemoteApp to launch unlisted programs</Description>
-        </SynchronousCommand>
-        <SynchronousCommand wcm:action="add">
           <Order>14</Order>
-          <CommandLine>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Terminal Server\TSAppAllowList" /v "fDisabledAllowList" /t REG_DWORD /d 1 /f</CommandLine>
-          <Description>Disable RemoteApp allowlist</Description>
+          <CommandLine>reg.exe add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v "fAllowUnlistedRemotePrograms" /t REG_DWORD /d 1 /f</CommandLine>
+          <Description>Enable RemoteAPP to launch unlisted programs</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
           <Order>15</Order>
-          <CommandLine>reg.exe add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "SearchboxTaskbarMode" /t REG_DWORD /d 0 /f</CommandLine>
-          <Description>Remove Search from the Taskbar</Description>
+          <CommandLine>reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Terminal Server\TSAppAllowList" /v "fDisabledAllowList" /t REG_DWORD /d 1 /f</CommandLine>
+          <Description>Disable RemoteApp allowlist</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
           <Order>16</Order>
@@ -423,26 +446,36 @@
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
           <Order>21</Order>
-          <CommandLine>reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff" /f</CommandLine>
-          <Description>Disable Network Discovery popup</Description>
-        </SynchronousCommand>
-        <SynchronousCommand wcm:action="add">
-          <Order>22</Order>
           <CommandLine>netsh advfirewall firewall set rule group="@FirewallAPI.dll,-28502" new enable=Yes</CommandLine>
           <Description>Enable File Sharing</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
+          <Order>22</Order>
+          <CommandLine>reg.exe add "HKCU\Control Panel\UnsupportedHardwareNotificationCache" /v SV1 /d 0 /t REG_DWORD /f</CommandLine>
+          <Description>Disable unsupported hardware notifications</Description>
+        </SynchronousCommand>
+        <SynchronousCommand wcm:action="add">
           <Order>23</Order>
+          <CommandLine>reg.exe add "HKCU\Control Panel\UnsupportedHardwareNotificationCache" /v SV2 /d 0 /t REG_DWORD /f</CommandLine>
+          <Description>Disable unsupported hardware notifications</Description>
+        </SynchronousCommand>
+        <SynchronousCommand wcm:action="add">
+          <Order>24</Order>
+          <CommandLine>cmd /C rd /q C:\Windows.old</CommandLine>
+          <Description>Remove empty Windows.old folder</Description>
+        </SynchronousCommand>
+        <SynchronousCommand wcm:action="add">
+          <Order>25</Order>
           <CommandLine>cmd /C mklink /d %userprofile%\Desktop\Shared \\host.lan\Data</CommandLine>
           <Description>Create desktop shortcut to shared folder</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
-          <Order>24</Order>
+          <Order>26</Order>
           <CommandLine>cmd /C net use Z: \\host.lan\Data /persistent:yes</CommandLine>
           <Description>Map shared folder</Description>
         </SynchronousCommand>
         <SynchronousCommand wcm:action="add">
-          <Order>25</Order>
+          <Order>27</Order>
           <CommandLine>cmd /C if exist "C:\OEM\install.bat" start "Install" "cmd /C C:\OEM\install.bat"</CommandLine>
           <Description>Execute custom script from the OEM folder if exists</Description>
         </SynchronousCommand>

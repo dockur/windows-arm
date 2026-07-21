@@ -270,7 +270,7 @@
           <Group>@FirewallAPI.dll,-28752</Group>
         </FirewallGroup>
       </FirewallGroups>
-    </component>    
+    </component>
   </settings>
   <settings pass="auditSystem" />
   <settings pass="auditUser" />
