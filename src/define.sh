@@ -693,16 +693,6 @@ getLink3() {
   [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
-    "tiny11" )
-      size=4480499712
-      sum="ec6056aa554c17290224af23e1b99961fe99606bb5ea9102d61838939c63325b"
-      url="tiny11a64/tiny11a64%20r1.iso"
-      ;;
-    "core11" )
-      size=3300327424
-      sum="812dae6b5bf5215db63b61ae10d8f0ffd3aa8529a18d96e9ced53341e2c676ec"
-      url="tiny11-core-arm64/tiny11%20core%20arm64.iso"
-      ;;
     "win11arm64" )
       size=5460387840
       sum="57d1dfb2c6690a99fe99226540333c6c97d3fd2b557a50dfe3d68c3f675ef2b0"
@@ -722,11 +712,11 @@ getLink3() {
       size=5121449984
       sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
       url="Windows11LTSC/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
-      ;;      
+      ;;
     "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
-      size=5192060928
-      sum="101079b911c8c3dd9c9a88499a16b930fbf00cbaf901761d8265bb3a8fcd9ea9"
-      url="win-pro-10-22-h-2.15-arm-64-eng-intl-pro-ent-edu-n-mlf-x-23-67222/Win_Pro_10_22H2.15_Arm64_Eng_Intl_Pro_Ent_EDU_N_MLF_X23-67222.ISO"
+      size=5913647104
+      sum="465109120d93738598faf72193193d66d6577278406f4ffa75642e472985a486"
+      url="windows_10_version_2004/Windows%2010%2C%20version%2022H2/Updated%20October%202025%20%2819045.6456%29/SW_DVD9_Win_Pro_10_22H2.36_Arm64_English_Pro_Ent_EDU_N_MLF_X24-17199.iso"
       ;;
     "win10arm64-ltsc" | "win10arm64-enterprise-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       size=4430471168
@@ -737,13 +727,23 @@ getLink3() {
       size=4430471168
       sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="windows-10-enterprise-ltsc-full-collection/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
+      ;;
+    "tiny11" )
+      size=5554755584
+      sum="5c5d45799e1664d81802d1d5a85b9e50c1dcf278e1d2e7e10e3328fc8dd4615c"
+      url="tiny11_25H2/tiny11_25H2_Oct25_arm64.iso"
+      ;;
+    "core11" )
+      size=3307509760
+      sum="dbc533be2e3a679c548eb9e11b7827d0be9b7aea8d9fea8288fceba4965139e1"
+      url="tiny11_25H2/tiny11core_25H2_Oct25_arm64.iso"
       ;;      
   esac
 
   case "${ret,,}" in
     "sum" ) echo "$sum" ;;
     "size" ) echo "$size" ;;
-    *) [ -n "$url" ] && echo "$host/$url";;
+    *) [ -n "$url" ] && echo "$host/$url" ;;
   esac
 
   return 0
