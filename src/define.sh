@@ -431,10 +431,10 @@ printEdition() {
       edition="Enterprise"
       ;;
     *"-iot" | *"-iot-eval" )
-      edition="LTSC"
+      edition="IoT Enterprise LTSC"
       ;;
     *"-ltsc" | *"-ltsc-eval" )
-      edition="LTSC"
+      edition="Enterprise LTSC"
       ;;
     *"-enterprise-eval" )
       edition="Enterprise (Evaluation)"
