@@ -130,10 +130,13 @@ parseVersion() {
 
   SUGGEST=$(getSuggestedVersion "$VERSION")
 
-  if [[ "${VERSION,,}" == "win11"* || "${SUGGEST,,}" == "win11"* ]]; then
+  if [[ "${VERSION,,}" == "win11"* || "${SUGGEST,,}" == "win11"* ||
+        "${VERSION,,}" == "tiny11"* || "${VERSION,,}" == "core11"* ]]; then
+
     if ! isCompatible; then
       warn "Your CPU architecture is below ARMv8.1, and does not support Windows 11 build 24H2 and up."
     fi
+
   fi
 
   return 0
