@@ -623,12 +623,10 @@ normalizeEditionID() {
       case "$edition" in
         "iot-enterprise-ltsc" | \
         "iot-enterprise-ltsc-"[0-9][0-9][0-9][0-9] )
-          edition="iot"
-          ;;
+          edition="iot" ;;
         "enterprise-ltsc" | \
         "enterprise-ltsc-"[0-9][0-9][0-9][0-9] )
-          edition="ltsc"
-          ;;
+          edition="ltsc" ;;
       esac
       ;;
   esac
