@@ -558,28 +558,6 @@ printEdition() {
   return 0
 }
 
-detectWindowsVersion() {
-
-  local value="${1,,}"
-  local arch="$2"
-
-  value="${value//-/_}"
-  value="${value// /_}"
-
-  case "$value" in
-    "win10"* | "win_10"* | *"windows10"* | *"windows_10"* | \
-    *"optimum10"* | *"optimum_10"* )
-      echo "win10${arch}"
-      ;;
-    "win11"* | "win_11"* | *"windows11"* | *"windows_11"* | \
-    *"optimum11"* | *"optimum_11"* )
-      echo "win11${arch}"
-      ;;
-  esac
-
-  return 0
-}
-
 fromFile() {
 
   local id=""
@@ -609,8 +587,11 @@ fromFile() {
     "tiny11"* | "tiny_11"* )
       id="tiny11"
       ;;
-    * )
-      id=$(detectWindowsVersion "$file" "$arch")
+    "win10"*| "win_10"* | *"windows10"* | *"windows_10"* )
+      id="win10${arch}"
+      ;;
+    "win11"* | "win_11"* | *"windows11"* | *"windows_11"* )
+      id="win11${arch}"
       ;;
   esac
 
@@ -624,10 +605,19 @@ fromFile() {
 
 fromName() {
 
+  local id=""
   local name="$1"
   local arch="$2"
 
-  detectWindowsVersion "$name" "$arch"
+  case "${name,,}" in
+    *"windows 10"* ) id="win10${arch}" ;;
+    *"optimum 10"* ) id="win10${arch}" ;;
+    *"windows 11"* ) id="win11${arch}" ;;
+    *"optimum 11"* ) id="win11${arch}" ;;
+  esac
+
+  echo "$id"
+  return 0
 }
 
 normalizeEdition() {
