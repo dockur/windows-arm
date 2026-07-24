@@ -30,7 +30,6 @@ WIDTH=$(strip "$WIDTH")
 HEIGHT=$(strip "$HEIGHT")
 DOMAIN=$(strip "$DOMAIN")
 REGION=$(strip "$REGION")
-COMMAND=$(strip "$COMMAND")
 EDITION=$(strip "$EDITION")
 KEYBOARD=$(strip "$KEYBOARD")
 LANGUAGE=$(strip "$LANGUAGE")
@@ -39,6 +38,7 @@ DOMAIN_OU=$(strip "$DOMAIN_OU")
 WORKGROUP=$(strip "$WORKGROUP")
 
 MIRRORS=4
+SUGGEST=""
 
 parseVersion() {
 
@@ -56,12 +56,10 @@ parseVersion() {
       ;;
     "11l" | "11ltsc" | "ltsc11" | "win11l" | "win11-ltsc" | "win11arm64-ltsc" )
       VERSION="win11arm64-enterprise-ltsc-eval"
-      [ -z "$DETECTED" ] && DETECTED="win11arm64-ltsc"
       ;;
     "11i" | "11iot" | "iot11" | "win11i" | "win11-iot" | "win11arm64-iot" )
       VERSION="win11arm64-enterprise-iot-eval"
-      [ -z "$DETECTED" ] && DETECTED="win11arm64-iot"
-      ;;      
+      ;;
     "10" | "10p" | "win10" | "pro10" | "win10p" | "windows10" | "windows 10" )
       VERSION="win10arm64"
       ;;
@@ -70,11 +68,9 @@ parseVersion() {
       ;;
     "10l" | "10ltsc" | "ltsc10" | "win10l" | "win10-ltsc" | "win10arm64-ltsc" )
       VERSION="win10arm64-enterprise-ltsc-eval"
-      [ -z "$DETECTED" ] && DETECTED="win10arm64-ltsc"
       ;;
     "10i" | "10iot" | "iot10" | "win10i" | "win10-iot" | "win10arm64-iot" )
       VERSION="win10arm64-enterprise-iot-eval"
-      [ -z "$DETECTED" ] && DETECTED="win10arm64-iot"
       ;;
     "8" | "8p" | "81" | "81p" | "pro8" | "8.1" | "win8" | "win8p" | "win81" | "win81p" | "windows 8" | \
     "8e" | "81e" | "8.1e" | "win8e" | "win81e" | "windows 8e" )
@@ -123,22 +119,52 @@ parseVersion() {
       ;;
     "tiny11" | "tiny 11" )
       VERSION="tiny11"
-      [ -z "$DETECTED" ] && DETECTED="win11arm64"
       ;;
     "core11" | "core 11" )
       VERSION="core11"
-      [ -z "$DETECTED" ] && DETECTED="win11arm64"
       ;;
     "tiny10" | "tiny 10" )
       error "Tiny 10 $msg" && return 1
       ;;
   esac
 
-  if [[ "${VERSION,,}" == "win11"* || "${DETECTED,,}" == "win11"* ]]; then
+  SUGGEST=$(getSuggestedVersion "$VERSION")
+
+  if [[ "${VERSION,,}" == "win11"* || "${SUGGEST,,}" == "win11"* ]]; then
     if ! isCompatible; then
       warn "Your CPU architecture is below ARMv8.1, and does not support Windows 11 build 24H2 and up."
     fi
   fi
+
+  return 0
+}
+
+getSuggestedVersion() {
+
+  local id="${1,,}"
+
+  [[ "$id" == http* ]] && return 0
+
+  case "$id" in
+    "win10arm64" | "win11arm64" )
+      echo "$id"
+      ;;
+    *"-enterprise-ltsc-eval" )
+      echo "${id%-enterprise-ltsc-eval}-ltsc"
+      ;;
+    *"-enterprise-iot-eval" )
+      echo "${id%-enterprise-iot-eval}-iot"
+      ;;
+    *"-enterprise-ltsc" )
+      echo "${id%-enterprise-ltsc}-ltsc"
+      ;;
+    *"-enterprise-iot" )
+      echo "${id%-enterprise-iot}-iot"
+      ;;
+    *"-eval" )
+      echo "${id%-eval}"
+      ;;
+  esac
 
   return 0
 }
@@ -411,6 +437,7 @@ printVariant() {
 
   local id="$1"
   local desc="$2"
+  local show_eval="${3:-N}"
 
   desc=$(printVersion "$id" "$desc") || return 1
 
@@ -426,7 +453,32 @@ printVariant() {
       ;;
   esac
 
+  if enabled "$show_eval" && [[ "${id,,}" == *"-eval" ]]; then
+    desc+=" (Evaluation)"
+  fi
+
   echo "$desc"
+  return 0
+}
+
+formatEdition() {
+
+  local edition="${1//-/ }"
+  local result="" word
+
+  for word in $edition; do
+    if [ "$word" == "for" ]; then
+      word="for"
+    elif [ "${#word}" -eq 1 ]; then
+      word="${word^^}"
+    else
+      word="${word^}"
+    fi
+
+    result+="${result:+ }$word"
+  done
+
+  echo "$result"
   return 0
 }
 
@@ -434,31 +486,59 @@ printEdition() {
 
   local id="$1"
   local desc="$2"
-  local result=""
-  local edition=""
+  local show_eval="${3:-N}"
+  local normalized="${id,,}"
+  local result="" edition="" suffix=""
 
   result=$(printVersion "$id" "x")
   [[ "$result" == "x" ]] && echo "$desc" && return 0
 
-  case "${id,,}" in
-    *"-enterprise" )
-      edition="Enterprise"
-      ;;
-    *"-iot" | *"-iot-eval" )
-      edition="IoT Enterprise LTSC"
-      ;;
-    *"-ltsc" | *"-ltsc-eval" )
-      edition="Enterprise LTSC"
-      ;;
-    *"-enterprise-eval" )
-      edition="Enterprise (Evaluation)"
-      ;;
+  normalized="${normalized%-eval}"
+
+  case "$normalized" in
     "win10"* | "win11"* )
-      edition="Pro"
+      [[ "$normalized" == *"-"* ]] && suffix="${normalized#*-}"
+
+      case "$suffix" in
+        "" )
+          edition="Pro"
+          ;;
+        "home" )
+          edition="Home"
+          ;;
+        "starter" )
+          edition="Starter"
+          ;;
+        "ultimate" )
+          edition="Ultimate"
+          ;;
+        "enterprise" )
+          edition="Enterprise"
+          ;;
+        "education" )
+          edition="Education"
+          ;;
+        "n" )
+          edition="Pro N"
+          ;;
+        "iot" | "enterprise-iot" )
+          edition="IoT Enterprise LTSC"
+          ;;
+        "ltsc" | "enterprise-ltsc" )
+          edition="Enterprise LTSC"
+          ;;
+        * )
+          edition=$(formatEdition "$suffix")
+          ;;
+      esac
       ;;
   esac
 
   [ -n "$edition" ] && result+=" $edition"
+
+  if enabled "$show_eval" && [[ "${id,,}" == *"-eval" ]]; then
+    result+=" (Evaluation)"
+  fi
 
   echo "$result"
   return 0
@@ -487,17 +567,17 @@ fromFile() {
   esac
 
   case "$file" in
-    "tiny11core"* | "tiny11_core"* | "tiny_11_core"* )
-      id="core11"
-      ;;
-    "tiny11"* | "tiny_11"* )
-      id="tiny11"
-      ;;
     "win10"*| "win_10"* | *"windows10"* | *"windows_10"* )
       id="win10${arch}"
       ;;
     "win11"* | "win_11"* | *"windows11"* | *"windows_11"* )
       id="win11${arch}"
+      ;;
+    "tiny11core"* | "tiny11_core"* | "tiny_11_core"* )
+      id="core11"
+      ;;
+    "tiny11"* | "tiny_11"* )
+      id="tiny11"
       ;;
   esac
 
@@ -526,22 +606,101 @@ fromName() {
   return 0
 }
 
-getVersion() {
+normalizeEdition() {
 
-  local id
-  local name="$1"
-  local arch="$2"
+  local source="${1,,}"
+  local edition
 
-  id=$(fromName "$name" "$arch")
+  source="${source//evaluation/}"
+
+  source=$(printf '%s' "$source" |
+    uconv -x 'Any-Latin; Latin-ASCII' 2>/dev/null) || return 1
+
+  edition=$(sed -E \
+    -e 's/[^a-z0-9]+/-/g' \
+    -e 's/^-+//' \
+    -e 's/-+$//' \
+    <<< "$source")
+
+  echo "$edition"
+  return 0
+}
+
+normalizeEditionID() {
+
+  local edition
+  local id="$2"
+
+  edition=$(normalizeEdition "$1")
+
+  case "$edition" in
+    "pro" | "professional" | "business" )
+      edition=""
+      ;;
+    "pro-n" | "professional-n" )
+      edition="n"
+      ;;
+  esac
 
   case "${id,,}" in
     "win10"* | "win11"* )
-       case "${name,,}" in
-          *" iot"* ) id="$id-iot" ;;
-          *" ltsc"* ) id="$id-ltsc" ;;
-          *" enterprise evaluation"* ) id="$id-enterprise-eval" ;;
-          *" enterprise"* ) id="$id-enterprise" ;;
-        esac
+      case "$edition" in
+        "iot-enterprise-ltsc" | \
+        "iot-enterprise-ltsc-"[0-9][0-9][0-9][0-9] )
+          edition="iot"
+          ;;
+        "enterprise-ltsc" | \
+        "enterprise-ltsc-"[0-9][0-9][0-9][0-9] )
+          edition="ltsc"
+          ;;
+      esac
+      ;;
+  esac
+
+  echo "$edition"
+  return 0
+}
+
+getEditionID() {
+
+  local name="${1,,}"
+  local id="${2,,}"
+  local edition=""
+
+  case "$id" in
+    "win10"* )
+      edition="${name#*10}"
+      ;;
+    "win11"* )
+      edition="${name#*11}"
+      ;;
+    * )
+      return 1
+      ;;
+  esac
+
+  edition=$(normalizeEditionID "$edition" "$id")
+
+  echo "$edition"
+  return 0
+}
+
+getVersion() {
+
+  local id edition
+  local name="$1"
+  local arch="$2"
+  local evaluation=""
+
+  id=$(fromName "$name" "$arch")
+  [[ "${name,,}" == *"evaluation"* ]] && evaluation="-eval"
+
+  case "${id,,}" in
+    "win10"* | "win11"* )
+      if edition=$(getEditionID "$name" "$id"); then
+        [ -n "$edition" ] && id+="-$edition"
+        [ -n "$evaluation" ] && id+="$evaluation"
+      fi
       ;;
   esac
 
@@ -551,10 +710,14 @@ getVersion() {
 
 switchEdition() {
 
-  local id="$1"
+  local -n id="$1"
 
-  if [[ "${id,,}" == *"-eval" ]]; then
-    [ -z "$DETECTED" ] && DETECTED="${id::-5}"
+  [[ "${id,,}" == *"-eval" ]] || return 1
+
+  id="${id::-5}"
+
+  if ! enabled "${DETECTED_ORG:-}"; then
+    DETECTED="${SUGGEST:-$id}"
   fi
 
   return 0
@@ -592,13 +755,13 @@ getMido() {
       size=5042194432
       sum="3dcdba9c9c0aa0430d4332b60c9afcb3cd613d648a49cbba2d4ef7b5978f32e8"
       url="https://software-static.download.prss.microsoft.com/dbazure/998969d5-f34g-4e03-ac9d-1f9786c66749/26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_IOT_LTSC_EVAL_A64FRE_en-us.iso"
-      ;;      
+      ;;
   esac
 
   case "${ret,,}" in
     "sum" ) echo "$sum" ;;
     "size" ) echo "$size" ;;
-    *) echo "$url";;
+    * ) echo "$url";;
   esac
 
   return 0
@@ -634,7 +797,7 @@ getLink1() {
       size=5121449984
       sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
       url="11/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
-      ;;      
+      ;;
     "win10arm64" | "win10arm64-enterprise" )
       size=4910370816
       sum="eb81ec03106683e53eb83cd8a5d7685f584c351f209f8acca07535bc1aa25dd5"
@@ -649,13 +812,13 @@ getLink1() {
       size=4430471168
       sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="10/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
-      ;;      
+      ;;
   esac
 
   case "${ret,,}" in
     "sum" ) echo "$sum" ;;
     "size" ) echo "$size" ;;
-    *) [ -n "$url" ] && echo "$host/$url";;
+    * ) [ -n "$url" ] && echo "$host/$url";;
   esac
 
   return 0
@@ -687,7 +850,7 @@ getLink2() {
   case "${ret,,}" in
     "sum" ) echo "$sum" ;;
     "size" ) echo "$size" ;;
-    *) [ -n "$url" ] && echo "$host/$url";;
+    * ) [ -n "$url" ] && echo "$host/$url";;
   esac
 
   return 0
@@ -751,13 +914,13 @@ getLink3() {
       size=3307509760
       sum="dbc533be2e3a679c548eb9e11b7827d0be9b7aea8d9fea8288fceba4965139e1"
       url="tiny11_25H2/tiny11core_25H2_Oct25_arm64.iso"
-      ;;      
+      ;;
   esac
 
   case "${ret,,}" in
     "sum" ) echo "$sum" ;;
     "size" ) echo "$size" ;;
-    *) [ -n "$url" ] && echo "$host/$url" ;;
+    * ) [ -n "$url" ] && echo "$host/$url" ;;
   esac
 
   return 0
@@ -787,7 +950,7 @@ getLink4() {
   case "${ret,,}" in
     "sum" ) echo "$sum" ;;
     "size" ) echo "$size" ;;
-    *) [ -n "$url" ] && echo "$host/$url";;
+    * ) [ -n "$url" ] && echo "$host/$url";;
   esac
 
   return 0
@@ -858,13 +1021,10 @@ isESD() {
   disabled "${ESD:-}" && return 1
 
   case "${id,,}" in
-    "win11${PLATFORM,,}" | "win10${PLATFORM,,}" )
-      return 0
-      ;;
-    "win11${PLATFORM,,}-enterprise" | "win11${PLATFORM,,}-enterprise-eval")
-      return 0
-      ;;
-    "win10${PLATFORM,,}-enterprise" | "win10${PLATFORM,,}-enterprise-eval" )
+    "win11${PLATFORM,,}" | \
+    "win10${PLATFORM,,}" | \
+    "win11${PLATFORM,,}-enterprise" | \
+    "win10${PLATFORM,,}-enterprise" )
       return 0
       ;;
   esac
@@ -878,8 +1038,11 @@ validVersion() {
   local lang="$2"
   local url i=0
 
-  isESD "$id" "$lang" && return 0
   isMido "$id" "$lang" && return 0
+
+  [[ "${id,,}" == *"-eval" ]] && id="${id::-5}"
+
+  isESD "$id" "$lang" && return 0
 
   for ((i=1;i<=MIRRORS;i++)); do
 
