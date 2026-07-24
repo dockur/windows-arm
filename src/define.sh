@@ -132,7 +132,7 @@ parseVersion() {
 
   if ! isCompatible; then
 
-    local msg="your CPU architecture is below ARMv8.1, and does not support Windows 11 build 24H2 and up."
+    msg="your CPU architecture is below ARMv8.1, and does not support Windows 11 build 24H2 and up."
 
     case "${SUGGEST,,}|${VERSION,,}" in
       "win11arm64|"* | "win11arm64-enterprise|"* )
@@ -456,15 +456,9 @@ printVariant() {
   desc=$(printVersion "$id" "$desc") || return 1
 
   case "${id,,}" in
-    *"-iot" | *"-iot-eval" )
-      desc+=" IoT"
-      ;;
-    *"-ltsc" | *"-ltsc-eval" )
-      desc+=" LTSC"
-      ;;
-    *"-enterprise" | *"-enterprise-eval" )
-      desc+=" Enterprise"
-      ;;
+    *"-iot" | *"-iot-eval" ) desc+=" IoT" ;;
+    *"-ltsc" | *"-ltsc-eval" ) desc+=" LTSC" ;;
+    *"-enterprise" | *"-enterprise-eval" ) desc+=" Enterprise" ;;
   esac
 
   if enabled "$show_eval" && [[ "${id,,}" == *"-eval" ]]; then
@@ -502,7 +496,7 @@ printEdition() {
   local desc="$2"
   local show_eval="${3:-N}"
   local normalized="${id,,}"
-  local result="" edition="" suffix=""
+  local result edition="" suffix=""
 
   result=$(printVersion "$id" "x")
   [[ "$result" == "x" ]] && echo "$desc" && return 0
@@ -514,36 +508,16 @@ printEdition() {
       [[ "$normalized" == *"-"* ]] && suffix="${normalized#*-}"
 
       case "$suffix" in
-        "" )
-          edition="Pro"
-          ;;
-        "home" )
-          edition="Home"
-          ;;
-        "starter" )
-          edition="Starter"
-          ;;
-        "ultimate" )
-          edition="Ultimate"
-          ;;
-        "enterprise" )
-          edition="Enterprise"
-          ;;
-        "education" )
-          edition="Education"
-          ;;
-        "n" )
-          edition="Pro N"
-          ;;
-        "iot" | "enterprise-iot" )
-          edition="IoT Enterprise LTSC"
-          ;;
-        "ltsc" | "enterprise-ltsc" )
-          edition="Enterprise LTSC"
-          ;;
-        * )
-          edition=$(formatEdition "$suffix")
-          ;;
+        "" ) edition="Pro" ;;
+        "n" ) edition="Pro N" ;;
+        "home" ) edition="Home" ;;
+        "starter" ) edition="Starter" ;;
+        "ultimate" ) edition="Ultimate" ;;
+        "enterprise" ) edition="Enterprise" ;;
+        "education" ) edition="Education" ;;
+        "iot" | "enterprise-iot" ) edition="IoT Enterprise LTSC" ;;
+        "ltsc" | "enterprise-ltsc" ) edition="Enterprise LTSC" ;;
+        * ) edition=$(formatEdition "$suffix") ;;
       esac
       ;;
   esac
@@ -569,30 +543,20 @@ fromFile() {
   file="${file// /_}"
 
   case "$file" in
-    *"_x64_"* | *"_x64."*)
-      arch="x64"
-      ;;
-    *"_x86_"* | *"_x86."*)
-      arch="x86"
-      ;;
-    *"_arm64_"* | *"_arm64."*)
-      arch="arm64"
-      ;;
+    *"_x64_"* | *"_x64."*) arch="x64" ;;
+    *"_x86_"* | *"_x86."*) arch="x86" ;;
+    *"_arm64_"* | *"_arm64."*) arch="arm64" ;;
   esac
 
   case "$file" in
     "tiny11core"* | "tiny11_core"* | "tiny_11_core"* )
-      id="core11"
-      ;;
+      id="core11" ;;
     "tiny11"* | "tiny_11"* )
-      id="tiny11"
-      ;;
+      id="tiny11" ;;
     "win10"*| "win_10"* | *"windows10"* | *"windows_10"* )
-      id="win10${arch}"
-      ;;
+      id="win10${arch}" ;;
     "win11"* | "win_11"* | *"windows11"* | *"windows_11"* )
-      id="win11${arch}"
-      ;;
+      id="win11${arch}" ;;
   esac
 
   if [ -n "$id" ]; then
@@ -649,11 +613,9 @@ normalizeEditionID() {
 
   case "$edition" in
     "pro" | "professional" | "business" )
-      edition=""
-      ;;
+      edition="" ;;
     "pro-n" | "professional-n" )
-      edition="n"
-      ;;
+      edition="n" ;;
   esac
 
   case "${id,,}" in
@@ -679,18 +641,12 @@ getEditionID() {
 
   local name="${1,,}"
   local id="${2,,}"
-  local edition=""
+  local edition
 
   case "$id" in
-    "win10"* )
-      edition="${name#*10}"
-      ;;
-    "win11"* )
-      edition="${name#*11}"
-      ;;
-    * )
-      return 1
-      ;;
+    "win10"* ) edition="${name#*10}" ;;
+    "win11"* ) edition="${name#*11}" ;;
+    * ) return 1 ;;
   esac
 
   edition=$(normalizeEditionID "$edition" "$id")
@@ -1038,7 +994,7 @@ validVersion() {
 
   local id="$1"
   local lang="$2"
-  local url i=0
+  local url i
 
   isMido "$id" "$lang" && return 0
 
