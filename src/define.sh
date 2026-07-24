@@ -630,32 +630,32 @@ getLink1() {
   [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
-    "win11arm64" | "win11arm64-enterprise" )
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
       size=6812594176
       sum="8d208f5a09de418fa6c3731b3c78410a1eecd9593ac774d820065f8d0a0f697c"
       url="11/en-us_windows_11_25h2_arm64.iso"
       ;;
-    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc" )
+    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc" | "win11arm64-enterprise-ltsc-eval" )
       size=5121449984
       sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
       url="11/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
       ;;
-    "win11arm64-iot" | "win11arm64-enterprise-iot" )
+    "win11arm64-iot" | "win11arm64-enterprise-iot" | "win11arm64-enterprise-iot-eval" )
       size=5121449984
       sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
       url="11/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
       ;;      
-    "win10arm64" | "win10arm64-enterprise" )
+    "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
       size=4910370816
       sum="eb81ec03106683e53eb83cd8a5d7685f584c351f209f8acca07535bc1aa25dd5"
       url="10/en-us_windows_10_22h2_arm64.iso"
       ;;
-    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc" )
+    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       size=4430471168
       sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="10/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
       ;;
-    "win10arm64-iot" | "win10arm64-enterprise-iot" )
+    "win10arm64-iot" | "win10arm64-enterprise-iot" | "win10arm64-enterprise-iot-eval" )
       size=4430471168
       sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="10/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
@@ -687,7 +687,7 @@ getLink2() {
   [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
-    "win11arm64" | "win11arm64-enterprise" )
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
       size=6755211264
       sum="bde2bcefe470bd19eb6cb810f38478dbd6809f04bac20c26ff27d4c9b864f662"
       url="11/en-us_windows_11_23h2_arm64.iso"
@@ -722,32 +722,32 @@ getLink3() {
       sum="57d1dfb2c6690a99fe99226540333c6c97d3fd2b557a50dfe3d68c3f675ef2b0"
       url="Windows11_24H2_Arm64_ISO/Win11_24H2_English_Arm64.iso"
       ;;
-    "win11arm64-enterprise" )
+    "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
       size=6872444928
       sum="2bf0fd1d5abd267cd0ae8066fea200b3538e60c3e572428c0ec86d4716b61cb7"
       url="win11-23h2-en-fr/ARM64/SW_DVD9_Win_Pro_11_23H2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-59519.ISO"
       ;;
-    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc" )
+    "win11arm64-ltsc" | "win11arm64-enterprise-ltsc" | "win11arm64-enterprise-ltsc-eval" )
       size=5121449984
       sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
       url="Windows11LTSC/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
       ;;
-    "win11arm64-iot" | "win11arm64-enterprise-iot" )
+    "win11arm64-iot" | "win11arm64-enterprise-iot" | "win11arm64-enterprise-iot-eval" )
       size=5121449984
       sum="f8f068cdc90c894a55d8c8530db7c193234ba57bb11d33b71383839ac41246b4"
       url="Windows11LTSC/X23-81950_26100.1742.240906-0331.ge_release_svc_refresh_CLIENT_ENTERPRISES_OEM_A64FRE_en-us.iso"
       ;;
-    "win10arm64" | "win10arm64-enterprise" )
+    "win10arm64" | "win10arm64-enterprise" | "win10arm64-enterprise-eval" )
       size=5913647104
       sum="465109120d93738598faf72193193d66d6577278406f4ffa75642e472985a486"
       url="windows_10_version_2004/Windows%2010%2C%20version%2022H2/Updated%20October%202025%20%2819045.6456%29/SW_DVD9_Win_Pro_10_22H2.36_Arm64_English_Pro_Ent_EDU_N_MLF_X24-17199.iso"
       ;;
-    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc" )
+    "win10arm64-ltsc" | "win10arm64-enterprise-ltsc" | "win10arm64-enterprise-ltsc-eval" )
       size=4430471168
       sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="windows-10-enterprise-ltsc-full-collection/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
       ;;
-    "win10arm64-iot" | "win10arm64-enterprise-iot" )
+    "win10arm64-iot" | "win10arm64-enterprise-iot" | "win10arm64-enterprise-iot-eval" )
       size=4430471168
       sum="d265df49b30a1477d010c79185a7bc88591a1be4b3eb690c994bed828ea17c00"
       url="windows-10-enterprise-ltsc-full-collection/en-us_windows_10_iot_enterprise_ltsc_2021_arm64_dvd_e8d4fc46.iso"
@@ -787,7 +787,7 @@ getLink4() {
   [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
 
   case "${id,,}" in
-    "win11arm64" | "win11arm64-enterprise" )
+    "win11arm64" | "win11arm64-enterprise" | "win11arm64-enterprise-eval" )
       size=6872444928
       sum="2bf0fd1d5abd267cd0ae8066fea200b3538e60c3e572428c0ec86d4716b61cb7"
       url="win11-23h2-en-fr/ARM64/SW_DVD9_Win_Pro_11_23H2_Arm64_English_Pro_Ent_EDU_N_MLF_X23-59519.ISO"
