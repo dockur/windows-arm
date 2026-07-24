@@ -40,16 +40,6 @@ WORKGROUP=$(strip "$WORKGROUP")
 
 MIRRORS=4
 
-isCompatible() {
-
-  # ARMv8.0 cannot run Windows 11 builds 24H2 and up.
-  if [[ "${ARCH,,}" == "arm64" ]] && ! hasFeature atomics; then
-    return 1
-  fi
-
-  return 0
-}
-
 parseVersion() {
 
   VERSION=$(strip "$VERSION")
@@ -899,6 +889,16 @@ validVersion() {
   done
 
   return 1
+}
+
+isCompatible() {
+
+  # ARMv8.0 cannot run Windows 11 builds 24H2 and up.
+  if [[ "${ARCH,,}" == "arm64" ]] && ! hasFeature atomics; then
+    return 1
+  fi
+
+  return 0
 }
 
 return 0
