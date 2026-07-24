@@ -21,6 +21,7 @@ RUN <<EOF
     wimtools \
     dos2unix \
     cabextract \
+    icu-devtools \
     libxml2-utils \
     libarchive-tools
 
@@ -42,6 +43,7 @@ COPY --chmod=755 ./assets /run/assets
 ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/mido.sh /run/
 ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/power.sh /run/
 ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/samba.sh /run/
+ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/image.sh /run/
 ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/answer.sh /run/
 ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/install.sh /run/
 
