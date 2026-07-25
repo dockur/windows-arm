@@ -169,6 +169,7 @@ Also see [Dynamic memory allocation](https://github.com/qemus/qemu-arm/blob/mast
 |---|---|---|
 | `DEBUG` | `N` | Enables verbose debug output. |
 | `TRACE` | `N` | Enables shell command tracing. |
+| `LOG`   | `N` | Saves all output from `install.bat` to `C:\OEM\install.log` for troubleshooting. |
 | `DETECTED` |  | Overrides the automatically detected Windows image identifier. |
 | `SERIAL` | `mon:stdio` | QEMU serial device configuration. |
 | `MONITOR` | `unix:$QEMU_DIR/monitor.sock,server,wait=off,nodelay` | QEMU monitor configuration. |
