@@ -628,7 +628,7 @@ normalizeEditionID() {
   case "$edition" in
     "pro" | "professional" | "business" )
       edition="" ;;
-    "pro-n" | "professional-n" )
+    "pro-n" | "pron" | "professional-n" | "professionaln" )
       edition="n" ;;
   esac
 
