@@ -140,6 +140,9 @@ parseVersion() {
     "tiny10" | "tiny 10" )
       error "Tiny 10 $msg" && return 1
       ;;
+    "reactos" | "react os" )
+      error "Reactos $msg" && return 1
+      ;;
   esac
 
   SUGGEST=$(getSuggestedVersion "$VERSION")
