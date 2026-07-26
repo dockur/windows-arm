@@ -667,6 +667,24 @@ getEditionID() {
   return 0
 }
 
+normalizeServerEdition() {
+
+  : "${1:-}"
+  return 0
+}
+
+normalizeServerEditionID() {
+
+  : "${1:-}"
+  return 0
+}
+
+getServerEditionID() {
+
+  : "${1:-}" "${2:-}"
+  return 0
+}
+
 getVersion() {
 
   local id edition
