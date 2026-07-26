@@ -11,6 +11,7 @@ set -Eeuo pipefail
 : "${EDITION:=""}"
 : "${MANUAL:=""}"
 : "${REMOVE:=""}"
+: "${REBUILD:=""}"
 : "${VERSION:=""}"
 : "${COMMAND:=""}"
 : "${DETECTED:=""}"
@@ -663,6 +664,24 @@ getEditionID() {
   edition=$(normalizeEditionID "$edition" "$id")
 
   echo "$edition"
+  return 0
+}
+
+normalizeServerEdition() {
+
+  : "${1:-}"
+  return 0
+}
+
+normalizeServerEditionID() {
+
+  : "${1:-}"
+  return 0
+}
+
+getServerEditionID() {
+
+  : "${1:-}" "${2:-}"
   return 0
 }
 
