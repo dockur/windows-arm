@@ -114,7 +114,10 @@ kubectl apply -f https://raw.githubusercontent.com/dockur/windows/refs/heads/mas
   | `10`   | Windows 10 Pro        | 3.5 GB   |
   | `10l`  | Windows 10 LTSC       | 4.1 GB   |  
   | `10e`  | Windows 10 Enterprise | 3.4 GB   |
-  
+  ||||  
+  | `core11` | Tiny11 Core      | 3.0 GB   |
+  | `tiny11` | Tiny11           | 5.1 GB   |
+
 > [!TIP]
 > To install x64 versions of Windows, use [dockur/windows](https://github.com/dockur/windows/).
 
