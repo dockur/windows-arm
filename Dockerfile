@@ -47,9 +47,9 @@ RUN <<EOF
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EOF
 
-COPY --chmod=755 ./src /run/
-COPY --chmod=755 ./assets /run/assets
-COPY --from=base --chmod=755 /src/*.sh /src/*.py /run/
+COPY --from=base --chmod=755 /src/ /run/
+COPY --chmod=755 ./src/ /run/
+COPY --chmod=755 ./assets/ /run/assets/
 
 ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v${VERSION_VIRTIO}-1/virtio-win-${VERSION_VIRTIO}.tar.xz /var/drivers.txz
 
