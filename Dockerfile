@@ -1,5 +1,8 @@
 # syntax=docker/dockerfile:1
 
+FROM scratch AS base
+ADD https://github.com/dockur/windows.git#master /
+
 FROM scratch
 COPY --from=qemux/qemu-arm:7.41 / /
 
@@ -46,13 +49,7 @@ EOF
 
 COPY --chmod=755 ./src /run/
 COPY --chmod=755 ./assets /run/assets
-
-ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/mido.sh /run/
-ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/power.sh /run/
-ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/samba.sh /run/
-ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/image.sh /run/
-ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/answer.sh /run/
-ADD --chmod=755 https://raw.githubusercontent.com/dockur/windows/master/src/install.sh /run/
+COPY --from=base --chmod=755 /src/*.sh /src/*.py /run/
 
 ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v${VERSION_VIRTIO}-1/virtio-win-${VERSION_VIRTIO}.tar.xz /var/drivers.txz
 
