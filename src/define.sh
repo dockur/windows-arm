@@ -38,19 +38,6 @@ USERNAME=$(strip "$USERNAME")
 DOMAIN_OU=$(strip "$DOMAIN_OU")
 WORKGROUP=$(strip "$WORKGROUP")
 
-EDITION_ORDER=(
-  "-enterprise|enterprise|enterprise enterprise-*"
-  "-ultimate|ultimate|ultimate ultimate-*"
-  "|default|@default n pro pro-* professional professional-* business business-*"
-  "-iot|iot|iot iot-* enterprise-iot enterprise-iot-*"
-  "-ltsc|ltsc|ltsc ltsc-* enterprise-ltsc enterprise-ltsc-*"
-  "-education|education|education education-* pro-education pro-education-*"
-  "-home|home|home home-*"
-  "-home-premium|home|home-premium home-premium-*"
-  "-home-basic|home|home-basic home-basic-*"
-  "-starter|starter|starter starter-*"
-)
-
 MIRRORS=4
 
 parseVersion() {
@@ -685,6 +672,29 @@ normalizeServerEditionID() {
 getServerEditionID() {
 
   : "${1:-}" "${2:-}"
+  return 0
+}
+
+getEditionOrder() {
+
+  local result_name="$2"
+  local -n result="$result_name"
+
+  : "$1"
+
+  result=(
+    "-enterprise|enterprise|enterprise enterprise-*"
+    "-ultimate|ultimate|ultimate ultimate-*"
+    "|default|@default n pro pro-* professional professional-* business business-*"
+    "-iot|iot|iot iot-* enterprise-iot enterprise-iot-*"
+    "-ltsc|ltsc|ltsc ltsc-* enterprise-ltsc enterprise-ltsc-*"
+    "-education|education|education education-* pro-education pro-education-*"
+    "-home|home|home home-*"
+    "-home-premium|home|home-premium home-premium-*"
+    "-home-basic|home|home-basic home-basic-*"
+    "-starter|starter|starter starter-*"
+  )
+
   return 0
 }
 
