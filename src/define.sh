@@ -721,6 +721,13 @@ getVersion() {
   return 0
 }
 
+skipVersion() {
+
+  : "$1"
+
+  return 0
+}
+
 switchEdition() {
 
   local -n id="$1"
