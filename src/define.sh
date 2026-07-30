@@ -11,7 +11,6 @@ set -Eeuo pipefail
 : "${EDITION:=""}"
 : "${MANUAL:=""}"
 : "${REMOVE:=""}"
-: "${REBUILD:=""}"
 : "${VERSION:=""}"
 : "${COMMAND:=""}"
 : "${DETECTED:=""}"
@@ -726,6 +725,13 @@ skipVersion() {
   : "$1"
 
   return 0
+}
+
+isLegacy() {
+
+  : "$1"
+
+  return 1
 }
 
 switchEdition() {
