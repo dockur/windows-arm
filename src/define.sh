@@ -727,6 +727,13 @@ skipVersion() {
   return 0
 }
 
+isLegacy() {
+
+  : "$1"
+
+  return 1
+}
+
 switchEdition() {
 
   local -n id="$1"
