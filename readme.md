@@ -188,7 +188,7 @@ For a complete graphical desktop experience, see [WinBoat](https://winboat.app),
 
   The display output is a simple framebuffer, just so that the screen can be visible during installation as it doesn't require any drivers.
   
-  To add a virtual graphics card to your machine that allows for higher resolutions, you can add the following to your compose file after Windows is fully installed:
+  To add a virtual graphics card to your machine that allows for better picture quality and higher resolutions, you can add the following to your compose file after Windows is fully installed:
 
   ```yaml
   environment:
