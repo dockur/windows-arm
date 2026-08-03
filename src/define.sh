@@ -702,20 +702,18 @@ getServerEditionID() {
 getEditionOrder() {
 
   : "$1"
-  local -n geo_result="$2"
 
-  geo_result=(
-    "-enterprise|enterprise|enterprise enterprise-*"
-    "-ultimate|ultimate|ultimate ultimate-*"
-    "|default|@default n pro pro-* professional professional-* business business-*"
-    "-iot|iot|iot iot-* enterprise-iot enterprise-iot-*"
-    "-ltsc|ltsc|ltsc ltsc-* enterprise-ltsc enterprise-ltsc-*"
-    "-education|education|education education-* pro-education pro-education-*"
-    "-home|home|home home-*"
-    "-home-premium|home|home-premium home-premium-*"
-    "-home-basic|home|home-basic home-basic-*"
+  printf '%s\n' \
+    "-enterprise|enterprise|enterprise enterprise-*" \
+    "-ultimate|ultimate|ultimate ultimate-*" \
+    "|default|@default n pro pro-* professional professional-* business business-*" \
+    "-iot|iot|iot iot-* enterprise-iot enterprise-iot-*" \
+    "-ltsc|ltsc|ltsc ltsc-* enterprise-ltsc enterprise-ltsc-*" \
+    "-education|education|education education-* pro-education pro-education-*" \
+    "-home|home|home home-*" \
+    "-home-premium|home|home-premium home-premium-*" \
+    "-home-basic|home|home-basic home-basic-*" \
     "-starter|starter|starter starter-*"
-  )
 
   return 0
 }
@@ -759,16 +757,11 @@ isLegacy() {
 
 switchEdition() {
 
-  local -n se_id="$1"
+  local version="$1"
 
-  [[ "${se_id,,}" == *"-eval" ]] || return 1
+  [[ "${version,,}" == *"-eval" ]] || return 1
 
-  se_id="${se_id::-5}"
-
-  if ! enabled "${DETECTED_ORG:-}"; then
-    DETECTED="${SUGGEST:-$se_id}"
-  fi
-
+  echo "${version::-5}"
   return 0
 }
 
