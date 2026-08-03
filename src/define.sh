@@ -49,86 +49,61 @@ parseVersion() {
 
   case "${VERSION,,}" in
     "11" | "11p" | "win11" | "pro11" | "win11p" | "windows11" | "windows 11" )
-      VERSION="win11arm64"
-      ;;
+      VERSION="win11arm64" ;;
     "11e" | "win11e" | "windows11e" | "windows 11e" )
-      VERSION="win11arm64-enterprise-eval"
-      ;;
+      VERSION="win11arm64-enterprise-eval" ;;
     "11l" | "11ltsc" | "ltsc11" | "win11l" | "win11-ltsc" | "win11arm64-ltsc" )
-      VERSION="win11arm64-enterprise-ltsc-eval"
-      ;;
+      VERSION="win11arm64-enterprise-ltsc-eval" ;;
     "11i" | "11iot" | "iot11" | "win11i" | "win11-iot" | "win11arm64-iot" )
-      VERSION="win11arm64-enterprise-iot-eval"
-      ;;
+      VERSION="win11arm64-enterprise-iot-eval" ;;
     "10" | "10p" | "win10" | "pro10" | "win10p" | "windows10" | "windows 10" )
-      VERSION="win10arm64"
-      ;;
+      VERSION="win10arm64" ;;
     "10e" | "win10e" | "windows10e" | "windows 10e" )
-      VERSION="win10arm64-enterprise-eval"
-      ;;
+      VERSION="win10arm64-enterprise-eval" ;;
     "10l" | "10ltsc" | "ltsc10" | "win10l" | "win10-ltsc" | "win10arm64-ltsc" )
-      VERSION="win10arm64-enterprise-ltsc-eval"
-      ;;
+      VERSION="win10arm64-enterprise-ltsc-eval" ;;
     "10i" | "10iot" | "iot10" | "win10i" | "win10-iot" | "win10arm64-iot" )
-      VERSION="win10arm64-enterprise-iot-eval"
-      ;;
+      VERSION="win10arm64-enterprise-iot-eval" ;;
     "8" | "8p" | "81" | "81p" | "pro8" | "8.1" | "win8" | "win8p" | "win81" | "win81p" | "windows 8" | \
     "8e" | "81e" | "8.1e" | "win8e" | "win81e" | "windows 8e" )
-      error "Windows 8 $msg" && return 1
-      ;;
+      error "Windows 8 $msg" && return 1 ;;
     "7" | "win7" | "windows7" | "windows 7" | "7u" | "win7u" | "windows7u" | "windows 7u" | "7e" | \
     "win7e" | "windows7e" | "windows 7e" | "7x86" | "win7x86" | "win732" | "windows7x86" | "7ux86" | \
     "7u32" | "win7x86-ultimate" | "7ex86" | "7e32" | "win7x86-enterprise" )
-      error "Windows 7 $msg" && return 1
-      ;;
+      error "Windows 7 $msg" && return 1 ;;
     "vista" | "vs" | "6" | "winvista" | "windowsvista" | "windows vista" | "vistu" | "vu" | "6u" | "winvistu" | \
     "viste" | "ve" | "6e" | "winviste" | "vistax86" | "vista32" | "6x86" | "winvistax86" | "windowsvistax86" | \
     "vux86" | "vu32" | "winvistax86-ultimate" | "vex86" | "ve32" | "winvistax86-enterprise" )
-      error "Windows Vista $msg" && return 1
-      ;;
+      error "Windows Vista $msg" && return 1 ;;
     "xp" | "xp32" | "xpx86" | "5" | "5x86" | "winxp" | "winxp86" | "windowsxp" | "windows xp" | \
     "xp64" | "xpx64" | "5x64" | "winxp64" | "winxpx64" | "windowsxp64" | "windowsxpx64" )
-      error "Windows XP $msg" && return 1
-      ;;
+      error "Windows XP $msg" && return 1 ;;
     "2k" | "2000" | "win2k" | "win2000" | "windows2k" | "windows2000" )
-      error "Windows 2000 $msg" && return 1
-      ;;
+      error "Windows 2000 $msg" && return 1 ;;
     "25" | "2025" | "win25" | "win2025" | "windows2025" | "windows 2025" )
-      error "Windows Server 2025 $msg" && return 1
-      ;;
+      error "Windows Server 2025 $msg" && return 1 ;;
     "22" | "2022" | "win22" | "win2022" | "windows2022" | "windows 2022" )
-      error "Windows Server 2022 $msg" && return 1
-      ;;
+      error "Windows Server 2022 $msg" && return 1 ;;
     "19" | "2019" | "win19" | "win2019" | "windows2019" | "windows 2019" )
-      error "Windows Server 2019 $msg" && return 1
-      ;;
+      error "Windows Server 2019 $msg" && return 1 ;;
     "16" | "2016" | "win16" | "win2016" | "windows2016" | "windows 2016" )
-      error "Windows Server 2016 $msg" && return 1
-      ;;
+      error "Windows Server 2016 $msg" && return 1 ;;
     "hv" | "hyperv" | "hyper v" | "hyper-v" | "19hv" | "2019hv" | "win2019hv" )
-      error "Hyper-V Server 2019 $msg" && return 1
-      ;;
+      error "Hyper-V Server 2019 $msg" && return 1 ;;
     "2012" | "2012r2" | "win2012" | "win2012r2" | "windows2012" | "windows 2012" )
-      error "Windows Server 2012 $msg" && return 1
-      ;;
+      error "Windows Server 2012 $msg" && return 1 ;;
     "2008" | "2008r2" | "win2008" | "win2008r2" | "windows2008" | "windows 2008" )
-      error "Windows Server 2008 $msg" && return 1
-      ;;
+      error "Windows Server 2008 $msg" && return 1 ;;
     "2003" | "2003r2" | "win2003" | "win2003r2" | "windows2003" | "windows 2003" )
-      error "Windows Server 2003 $msg" && return 1
-      ;;
+      error "Windows Server 2003 $msg" && return 1 ;;
     "tiny11" | "tiny 11" )
-      VERSION="tiny11"
-      ;;
+      VERSION="tiny11" ;;
     "core11" | "core 11" )
-      VERSION="core11"
-      ;;
+      VERSION="core11" ;;
     "tiny10" | "tiny 10" )
-      error "Tiny 10 $msg" && return 1
-      ;;
+      error "Tiny 10 $msg" && return 1 ;;
     "reactos" | "react os" )
-      error "Reactos $msg" && return 1
-      ;;
+      error "Reactos $msg" && return 1 ;;
   esac
 
   SUGGEST=$(getSuggestedVersion "$VERSION")
@@ -139,12 +114,10 @@ parseVersion() {
 
     case "${SUGGEST,,}|${VERSION,,}" in
       "win11arm64|"* | "win11arm64-enterprise|"* )
-        warn "$msg"
-        ;;
+        warn "$msg" ;;
       *"|win11"* | *"|tiny11"* | *"|core11"* )
         error "$msg"
-        return 1
-        ;;
+        return 1 ;;
     esac
 
   fi
@@ -159,24 +132,12 @@ getSuggestedVersion() {
   [[ "$id" == http* ]] && return 0
 
   case "$id" in
-    "win10arm64" | "win11arm64" )
-      echo "$id"
-      ;;
-    *"-enterprise-ltsc-eval" )
-      echo "${id%-enterprise-ltsc-eval}-ltsc"
-      ;;
-    *"-enterprise-iot-eval" )
-      echo "${id%-enterprise-iot-eval}-iot"
-      ;;
-    *"-enterprise-ltsc" )
-      echo "${id%-enterprise-ltsc}-ltsc"
-      ;;
-    *"-enterprise-iot" )
-      echo "${id%-enterprise-iot}-iot"
-      ;;
-    *"-eval" )
-      echo "${id%-eval}"
-      ;;
+    "win10arm64" | "win11arm64" ) echo "$id" ;;
+    *"-enterprise-ltsc-eval" ) echo "${id%-enterprise-ltsc-eval}-ltsc" ;;
+    *"-enterprise-iot-eval" ) echo "${id%-enterprise-iot-eval}-iot" ;;
+    *"-enterprise-ltsc" ) echo "${id%-enterprise-ltsc}-ltsc" ;;
+    *"-enterprise-iot" ) echo "${id%-enterprise-iot}-iot" ;;
+    *"-eval" ) echo "${id%-eval}" ;;
   esac
 
   return 0
@@ -187,11 +148,8 @@ getLanguage() {
   local source="$1"
   local input="${1,,}"
   local ret="$2"
-  local id="$source"
-  local lang=""
-  local desc=""
-  local short=""
-  local culture=""
+
+  local id="$source" lang="" desc="" short="" culture=""
 
   case "$input" in
     "ar" | "ar-"* | "arabic" | "arab" )
@@ -475,6 +433,7 @@ printVariant() {
 formatEdition() {
 
   local edition="${1//-/ }"
+
   local result="" word
 
   for word in $edition; do
@@ -498,6 +457,7 @@ printEdition() {
   local id="$1"
   local desc="$2"
   local show_eval="${3:-N}"
+
   local normalized="${id,,}"
   local result edition="" suffix=""
 
@@ -601,6 +561,7 @@ isClientEdition() {
 normalizeEdition() {
 
   local source="${1,,}"
+
   local edition
 
   source="${source//evaluation/}"
@@ -667,6 +628,7 @@ getEditionID() {
 
   local name="${1,,}"
   local id="${2,,}"
+
   local edition
 
   case "$id" in
@@ -770,9 +732,8 @@ getMido() {
   local id="$1"
   local lang="$2"
   local ret="$3"
-  local url=""
-  local sum=""
-  local size=""
+
+  local url="" sum="" size=""
 
   [[ "${id,,}" == "win11"* ]] && ! isCompatible && return 0
   [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
@@ -816,9 +777,8 @@ getLink1() {
   local id="$1"
   local lang="$2"
   local ret="$3"
-  local url=""
-  local sum=""
-  local size=""
+
+  local url="" sum="" size=""
   local host="https://dl.bobpony.com/windows"
 
   [[ "${id,,}" == "win11"* ]] && ! isCompatible && return 0
@@ -873,9 +833,8 @@ getLink2() {
   local id="$1"
   local lang="$2"
   local ret="$3"
-  local url=""
-  local sum=""
-  local size=""
+
+  local url="" sum="" size=""
   local host="https://dl.bobpony.com/windows"
 
   isCompatible && return 0
@@ -903,9 +862,8 @@ getLink3() {
   local id="$1"
   local lang="$2"
   local ret="$3"
-  local url=""
-  local sum=""
-  local size=""
+
+  local url="" sum="" size=""
   local host="https://archive.org/download"
 
   [[ "${id,,}" == "win11"* ]] && ! isCompatible && return 0
@@ -973,9 +931,8 @@ getLink4() {
   local id="$1"
   local lang="$2"
   local ret="$3"
-  local url=""
-  local sum=""
-  local size=""
+
+  local url="" sum="" size=""
   local host="https://archive.org/download"
 
   isCompatible && return 0
@@ -1000,11 +957,12 @@ getLink4() {
 
 getValue() {
 
-  local val=""
   local id="$2"
   local lang="$3"
   local type="$4"
   local func="getLink$1"
+
+  local val=""
 
   if [ "$1" -gt 0 ] && [ "$1" -le "$MIRRORS" ]; then
     val=$($func "$id" "$lang" "$type")
@@ -1033,6 +991,7 @@ isMido() {
 
   local id="$1"
   local lang="$2"
+
   local sum
 
   disabled "${MIDO:-}" && return 1
@@ -1054,9 +1013,7 @@ isESD() {
     "win11${PLATFORM,,}" | \
     "win10${PLATFORM,,}" | \
     "win11${PLATFORM,,}-enterprise" | \
-    "win10${PLATFORM,,}-enterprise" )
-      return 0
-      ;;
+    "win10${PLATFORM,,}-enterprise" ) return 0 ;;
   esac
 
   return 1
