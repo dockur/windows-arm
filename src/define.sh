@@ -717,6 +717,13 @@ isLegacy() {
   return 1
 }
 
+bootDirect() {
+
+  : "$1"
+
+  return 1
+}
+
 switchEdition() {
 
   local version="$1"
