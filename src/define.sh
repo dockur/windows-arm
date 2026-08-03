@@ -701,12 +701,10 @@ getServerEditionID() {
 
 getEditionOrder() {
 
-  local result_name="$2"
-  local -n result="$result_name"
-
   : "$1"
+  local -n geo_result="$2"
 
-  result=(
+  geo_result=(
     "-enterprise|enterprise|enterprise enterprise-*"
     "-ultimate|ultimate|ultimate ultimate-*"
     "|default|@default n pro pro-* professional professional-* business business-*"
@@ -761,14 +759,14 @@ isLegacy() {
 
 switchEdition() {
 
-  local -n id="$1"
+  local -n se_id="$1"
 
-  [[ "${id,,}" == *"-eval" ]] || return 1
+  [[ "${se_id,,}" == *"-eval" ]] || return 1
 
-  id="${id::-5}"
+  se_id="${se_id::-5}"
 
   if ! enabled "${DETECTED_ORG:-}"; then
-    DETECTED="${SUGGEST:-$id}"
+    DETECTED="${SUGGEST:-$se_id}"
   fi
 
   return 0
