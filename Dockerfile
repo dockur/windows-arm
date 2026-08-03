@@ -4,7 +4,7 @@ FROM scratch AS base
 ADD https://github.com/dockur/windows.git#master /
 
 FROM scratch
-COPY --from=qemux/qemu-arm:7.42 / /
+COPY --from=qemux/qemu-arm:7.43 / /
 
 ARG TARGETARCH
 ARG VERSION_ARG="0.00"
