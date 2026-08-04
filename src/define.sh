@@ -703,13 +703,6 @@ getVersion() {
   return 0
 }
 
-skipVersion() {
-
-  : "$1"
-
-  return 0
-}
-
 isLegacy() {
 
   : "$1"
@@ -717,11 +710,31 @@ isLegacy() {
   return 1
 }
 
-bootDirect() {
+supportsXML() {
 
   : "$1"
 
-  return 1
+  return 0
+}
+
+supportsUnattended() {
+
+  : "$1"
+
+  return 0
+}
+
+getDriverFolder() {
+
+  local id="$1"
+
+  case "${id,,}" in
+    "win10arm64"* )   echo "w10/ARM64" ;;
+    "win11arm64"* )   echo "w11/ARM64" ;;
+    * )               return 1 ;;
+  esac
+
+  return 0
 }
 
 switchEdition() {
