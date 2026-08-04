@@ -584,7 +584,7 @@ normalizeEditionID() {
   local edition base
   local id="$2"
 
-  edition=$(normalizeEdition "$1")
+  edition=$(normalizeEdition "$1") || return 1
 
   case "$edition" in
     "pro" | "professional" | "business" )
@@ -637,7 +637,7 @@ getEditionID() {
     * ) return 1 ;;
   esac
 
-  edition=$(normalizeEditionID "$edition" "$id")
+  edition=$(normalizeEditionID "$edition" "$id") || return 1
 
   echo "$edition"
   return 0
@@ -703,18 +703,38 @@ getVersion() {
   return 0
 }
 
-skipVersion() {
+isLegacy() {
+
+  : "$1"
+
+  return 1
+}
+
+supportsXML() {
 
   : "$1"
 
   return 0
 }
 
-isLegacy() {
+supportsUnattended() {
 
   : "$1"
 
-  return 1
+  return 0
+}
+
+getDriverFolder() {
+
+  local id="$1"
+
+  case "${id,,}" in
+    "win10arm64"* )   echo "w10/ARM64" ;;
+    "win11arm64"* )   echo "w11/ARM64" ;;
+    * )               return 1 ;;
+  esac
+
+  return 0
 }
 
 switchEdition() {
