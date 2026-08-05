@@ -703,6 +703,22 @@ getVersion() {
   return 0
 }
 
+getRequiredMemory() {
+
+  local id="${1,,}"
+
+  case "$id" in
+    "win11"* | "tiny11"* | "core11"* )
+      echo 4294967296 ;;
+    "win10"* )
+      echo 2147483648 ;;
+    * )
+      echo 2147483648 ;;
+  esac
+
+  return 0
+}
+
 isLegacy() {
 
   : "$1"
