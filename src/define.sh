@@ -708,8 +708,10 @@ getRequiredMemory() {
   local id="${1,,}"
 
   case "$id" in
-    "win11"* | "tiny11"* | "core11"* )
+    "win11"* )
       echo 4294967296 ;;
+    "tiny11"* | "core11"* )
+      echo 2147483648 ;;
     "win10"* )
       echo 2147483648 ;;
     * )
