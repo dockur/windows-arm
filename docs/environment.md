@@ -152,7 +152,6 @@ Also see [Dynamic memory allocation](https://github.com/qemus/qemu-arm/blob/mast
 | `ESD` | `Y` | Enables downloading Windows through the ESD-based installation method. |
 | `VERIFY` | `N` | Verifies downloaded installation media against predefined checksums. |
 | `REMOVE` | `Y` | Deletes the downloaded Windows ISO after installation to save space. |
-| `MANUAL` | `N` | Enables manual installation instead of unattended installation. |
 | `COMMAND` |  | Command to be executed during the final step of automatic installation. |
 
 ## 🔌 Shutdown
