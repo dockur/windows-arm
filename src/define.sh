@@ -45,18 +45,23 @@ parseVersion() {
   [ -z "$VERSION" ] && VERSION="win11"
 
   local msg="is not available for ARM64 CPU's."
+  local fail="Your CPU architecture is below ARMv8.1, and does not support Windows 11 build 24H2 and up."
 
   case "${VERSION,,}" in
     "11" | "11p" | "win11" | "pro11" | "win11p" | "windows11" | "windows 11" )
-      VERSION="win11arm64" ;;
+      VERSION="win11arm64"
+      ! isCompatible && MIDO="N" && warn "$fail An older build (23H2) will be downloaded." ;;
     "11e" | "win11e" | "windows11e" | "windows 11e" )
-      VERSION="win11arm64-enterprise-eval" ;;
+      VERSION="win11arm64-enterprise-eval"
+      ! isCompatible && MIDO="N" && warn "$fail An older build (23H2) will be downloaded." ;;
     "11l" | "11ltsc" | "ltsc11" | "win11l" | "win11-ltsc" | "win11arm64-ltsc" )
       VERSION="win11arm64-enterprise-ltsc-eval"
-      DETECTED="win11arm64-ltsc" ;;
+      DETECTED="win11arm64-ltsc"
+      ! isCompatible && error "$fail" && return 1 ;;
     "11i" | "11iot" | "iot11" | "win11i" | "win11-iot" | "win11arm64-iot" )
       VERSION="win11arm64-enterprise-iot-eval"
-      DETECTED="win11arm64-iot" ;;
+      DETECTED="win11arm64-iot"
+      ! isCompatible && error "$fail" && return 1 ;;
     "10" | "10p" | "win10" | "pro10" | "win10p" | "windows10" | "windows 10" )
       VERSION="win10arm64" ;;
     "10e" | "win10e" | "windows10e" | "windows 10e" )
@@ -101,29 +106,17 @@ parseVersion() {
       error "Windows Server 2003 $msg" && return 1 ;;
     "tiny11" | "tiny 11" )
       VERSION="tiny11"
-      DETECTED="win11arm64" ;;
+      DETECTED="win11arm64"
+      ! isCompatible && error "$fail" && return 1 ;;
     "core11" | "core 11" )
       VERSION="core11"
-      DETECTED="win11arm64" ;;
+      DETECTED="win11arm64"
+      ! isCompatible && error "$fail" && return 1 ;;
    "tiny10" | "tiny 10" )
       error "Tiny 10 $msg" && return 1 ;;
     "reactos" | "react os" )
       error "Reactos $msg" && return 1 ;;
   esac
-
-  if ! isCompatible; then
-
-    msg="your CPU architecture is below ARMv8.1, and does not support Windows 11 build 24H2 and up."
-
-    case "${SUGGEST,,}|${VERSION,,}" in
-      "win11arm64|"* | "win11arm64-enterprise|"* )
-        warn "$msg" ;;
-      *"|win11"* | *"|tiny11"* | *"|core11"* )
-        error "$msg"
-        return 1 ;;
-    esac
-
-  fi
 
   return 0
 }
@@ -1014,7 +1007,6 @@ isMido() {
 
   local id="$1"
   local lang="$2"
-
   local sum
 
   disabled "${MIDO:-}" && return 1
