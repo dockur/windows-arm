@@ -13,7 +13,6 @@ set -Eeuo pipefail
 : "${REMOVE:=""}"
 : "${VERSION:=""}"
 : "${COMMAND:=""}"
-: "${DETECTED:=""}"
 : "${KEYBOARD:=""}"
 : "${LANGUAGE:=""}"
 : "${USERNAME:=""}"
@@ -41,7 +40,7 @@ MIRRORS=4
 
 parseVersion() {
 
-  SUGGEST=""
+  DETECTED=""
   VERSION=$(strip "$VERSION")
   [ -z "$VERSION" ] && VERSION="win11"
 
@@ -53,17 +52,21 @@ parseVersion() {
     "11e" | "win11e" | "windows11e" | "windows 11e" )
       VERSION="win11arm64-enterprise-eval" ;;
     "11l" | "11ltsc" | "ltsc11" | "win11l" | "win11-ltsc" | "win11arm64-ltsc" )
-      VERSION="win11arm64-enterprise-ltsc-eval" ;;
+      VERSION="win11arm64-enterprise-ltsc-eval"
+      DETECTED="win11arm64-ltsc" ;;
     "11i" | "11iot" | "iot11" | "win11i" | "win11-iot" | "win11arm64-iot" )
-      VERSION="win11arm64-enterprise-iot-eval" ;;
+      VERSION="win11arm64-enterprise-iot-eval"
+      DETECTED="win11arm64-iot" ;;
     "10" | "10p" | "win10" | "pro10" | "win10p" | "windows10" | "windows 10" )
       VERSION="win10arm64" ;;
     "10e" | "win10e" | "windows10e" | "windows 10e" )
       VERSION="win10arm64-enterprise-eval" ;;
     "10l" | "10ltsc" | "ltsc10" | "win10l" | "win10-ltsc" | "win10arm64-ltsc" )
-      VERSION="win10arm64-enterprise-ltsc-eval" ;;
+      VERSION="win10arm64-enterprise-ltsc-eval"
+      DETECTED="win10arm64-ltsc" ;;
     "10i" | "10iot" | "iot10" | "win10i" | "win10-iot" | "win10arm64-iot" )
-      VERSION="win10arm64-enterprise-iot-eval" ;;
+      VERSION="win10arm64-enterprise-iot-eval"
+      DETECTED="win10arm64-iot" ;;
     "8" | "8p" | "81" | "81p" | "pro8" | "8.1" | "win8" | "win8p" | "win81" | "win81p" | "windows 8" | \
     "8e" | "81e" | "8.1e" | "win8e" | "win81e" | "windows 8e" )
       error "Windows 8 $msg" && return 1 ;;
@@ -97,16 +100,16 @@ parseVersion() {
     "2003" | "2003r2" | "win2003" | "win2003r2" | "windows2003" | "windows 2003" )
       error "Windows Server 2003 $msg" && return 1 ;;
     "tiny11" | "tiny 11" )
-      VERSION="tiny11" ;;
+      VERSION="tiny11"
+      DETECTED="win11arm64" ;;
     "core11" | "core 11" )
-      VERSION="core11" ;;
-    "tiny10" | "tiny 10" )
+      VERSION="core11"
+      DETECTED="win11arm64" ;;
+   "tiny10" | "tiny 10" )
       error "Tiny 10 $msg" && return 1 ;;
     "reactos" | "react os" )
       error "Reactos $msg" && return 1 ;;
   esac
-
-  SUGGEST=$(getSuggestedVersion "$VERSION")
 
   if ! isCompatible; then
 
@@ -121,24 +124,6 @@ parseVersion() {
     esac
 
   fi
-
-  return 0
-}
-
-getSuggestedVersion() {
-
-  local id="${1,,}"
-
-  [[ "$id" == http* ]] && return 0
-
-  case "$id" in
-    "win10arm64" | "win11arm64" ) echo "$id" ;;
-    *"-enterprise-ltsc-eval" ) echo "${id%-enterprise-ltsc-eval}-ltsc" ;;
-    *"-enterprise-iot-eval" ) echo "${id%-enterprise-iot-eval}-iot" ;;
-    *"-enterprise-ltsc" ) echo "${id%-enterprise-ltsc}-ltsc" ;;
-    *"-enterprise-iot" ) echo "${id%-enterprise-iot}-iot" ;;
-    *"-eval" ) echo "${id%-eval}" ;;
-  esac
 
   return 0
 }
@@ -287,7 +272,7 @@ getLanguage() {
     "pt-"* )
       short="pp"
       lang="Portuguese"
-      culture="pt-BR" ;;
+      culture="pt-PT" ;;
     "ro" | "ro-"* | "romanian" | "română" | "romana" )
       [[ "$input" == "romanian" || "$input" == "română" || "$input" == "romana" ]] && id="ro"
       short="ro"
