@@ -311,7 +311,7 @@
         <VerticalResolution>720</VerticalResolution>
       </Display>
       <OOBE>
-        <HideEULAPage>true</HideEULAPage>
+        <HideEULAPage>false</HideEULAPage>
         <HideLocalAccountScreen>true</HideLocalAccountScreen>
         <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
         <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
