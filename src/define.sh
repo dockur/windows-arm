@@ -521,6 +521,29 @@ fromName() {
   return 0
 }
 
+getVersion() {
+
+  local id edition
+  local name="$1"
+  local arch="$2"
+  local evaluation=""
+
+  id=$(fromName "$name" "$arch")
+  [[ "${name,,}" == *"evaluation"* ]] && evaluation="-eval"
+
+  case "${id,,}" in
+    "win10"* | "win11"* )
+      if edition=$(getEditionID "$name" "$id"); then
+        [ -n "$edition" ] && id+="-$edition"
+        [ -n "$evaluation" ] && id+="$evaluation"
+      fi
+      ;;
+  esac
+
+  echo "$id"
+  return 0
+}
+
 isClientEdition() {
 
   case "${1,,}" in
@@ -532,6 +555,50 @@ isClientEdition() {
   esac
 
   return 1
+}
+
+getEditionRank() {
+
+  local id="${1,,}"
+  local base="${id%%-*}"
+  local edition
+
+  id="${id%-eval}"
+  edition="${id#"$base"}"
+  edition="${edition#-}"
+
+  case "$edition" in
+    "enterprise-iot" | "enterprise-iot-"* | "iot" | "iot-"* ) echo 3 ;;
+    "enterprise-ltsc" | "enterprise-ltsc-"* | "ltsc" | "ltsc-"* ) echo 4 ;;
+    "pro-education" | "pro-education-"* | "education" | "education-"* ) echo 5 ;;
+    "enterprise" | "enterprise-"* ) echo 0 ;;
+    "ultimate" | "ultimate-"* ) echo 1 ;;
+    "" | "n" | "pro" | "pro-"* | "professional" | "professional-"* | \
+    "business" | "business-"* ) echo 2 ;;
+    "home" | "home-"* ) echo 6 ;;
+    "starter" | "starter-"* ) echo 7 ;;
+    * ) echo 99 ;;
+  esac
+
+  return 0
+}
+
+getEditionPolicy() {
+
+  printf '%s\n' \
+    "normalizeEditionID" \
+    "-enterprise" \
+    "-ultimate" \
+    "" \
+    "-iot" \
+    "-ltsc" \
+    "-education" \
+    "-home" \
+    "-home-premium" \
+    "-home-basic" \
+    "-starter"
+
+  return 0
 }
 
 normalizeEdition() {
@@ -632,29 +699,6 @@ normalizeServerEditionID() {
 getServerEditionID() {
 
   : "${1:-}" "${2:-}"
-  return 0
-}
-
-getVersion() {
-
-  local id edition
-  local name="$1"
-  local arch="$2"
-  local evaluation=""
-
-  id=$(fromName "$name" "$arch")
-  [[ "${name,,}" == *"evaluation"* ]] && evaluation="-eval"
-
-  case "${id,,}" in
-    "win10"* | "win11"* )
-      if edition=$(getEditionID "$name" "$id"); then
-        [ -n "$edition" ] && id+="-$edition"
-        [ -n "$evaluation" ] && id+="$evaluation"
-      fi
-      ;;
-  esac
-
-  echo "$id"
   return 0
 }
 
