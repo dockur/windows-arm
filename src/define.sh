@@ -13,7 +13,6 @@ set -Eeuo pipefail
 : "${REMOVE:=""}"
 : "${VERSION:=""}"
 : "${COMMAND:=""}"
-: "${DETECTED:=""}"
 : "${KEYBOARD:=""}"
 : "${LANGUAGE:=""}"
 : "${USERNAME:=""}"
@@ -41,21 +40,26 @@ MIRRORS=4
 
 parseVersion() {
 
-  SUGGEST=""
+  DETECTED=""
   VERSION=$(strip "$VERSION")
   [ -z "$VERSION" ] && VERSION="win11"
 
   local msg="is not available for ARM64 CPU's."
+  local fail="Your CPU architecture is below ARMv8.1, and does not support Windows 11 build 24H2 and up."
 
   case "${VERSION,,}" in
     "11" | "11p" | "win11" | "pro11" | "win11p" | "windows11" | "windows 11" )
-      VERSION="win11arm64" ;;
+      VERSION="win11arm64"
+      ! isCompatible && MIDO="N" && warn "$fail An older build (23H2) will be downloaded." ;;
     "11e" | "win11e" | "windows11e" | "windows 11e" )
-      VERSION="win11arm64-enterprise-eval" ;;
+      VERSION="win11arm64-enterprise-eval"
+      ! isCompatible && MIDO="N" && warn "$fail An older build (23H2) will be downloaded." ;;
     "11l" | "11ltsc" | "ltsc11" | "win11l" | "win11-ltsc" | "win11arm64-ltsc" )
-      VERSION="win11arm64-enterprise-ltsc-eval" ;;
+      VERSION="win11arm64-enterprise-ltsc-eval"
+      ! isCompatible && error "$fail" && return 1 ;;
     "11i" | "11iot" | "iot11" | "win11i" | "win11-iot" | "win11arm64-iot" )
-      VERSION="win11arm64-enterprise-iot-eval" ;;
+      VERSION="win11arm64-enterprise-iot-eval"
+      ! isCompatible && error "$fail" && return 1 ;;
     "10" | "10p" | "win10" | "pro10" | "win10p" | "windows10" | "windows 10" )
       VERSION="win10arm64" ;;
     "10e" | "win10e" | "windows10e" | "windows 10e" )
@@ -97,47 +101,17 @@ parseVersion() {
     "2003" | "2003r2" | "win2003" | "win2003r2" | "windows2003" | "windows 2003" )
       error "Windows Server 2003 $msg" && return 1 ;;
     "tiny11" | "tiny 11" )
-      VERSION="tiny11" ;;
+      VERSION="tiny11"
+      DETECTED="win11arm64"
+      ! isCompatible && error "$fail" && return 1 ;;
     "core11" | "core 11" )
-      VERSION="core11" ;;
-    "tiny10" | "tiny 10" )
+      VERSION="core11"
+      DETECTED="win11arm64"
+      ! isCompatible && error "$fail" && return 1 ;;
+   "tiny10" | "tiny 10" )
       error "Tiny 10 $msg" && return 1 ;;
     "reactos" | "react os" )
       error "Reactos $msg" && return 1 ;;
-  esac
-
-  SUGGEST=$(getSuggestedVersion "$VERSION")
-
-  if ! isCompatible; then
-
-    msg="your CPU architecture is below ARMv8.1, and does not support Windows 11 build 24H2 and up."
-
-    case "${SUGGEST,,}|${VERSION,,}" in
-      "win11arm64|"* | "win11arm64-enterprise|"* )
-        warn "$msg" ;;
-      *"|win11"* | *"|tiny11"* | *"|core11"* )
-        error "$msg"
-        return 1 ;;
-    esac
-
-  fi
-
-  return 0
-}
-
-getSuggestedVersion() {
-
-  local id="${1,,}"
-
-  [[ "$id" == http* ]] && return 0
-
-  case "$id" in
-    "win10arm64" | "win11arm64" ) echo "$id" ;;
-    *"-enterprise-ltsc-eval" ) echo "${id%-enterprise-ltsc-eval}-ltsc" ;;
-    *"-enterprise-iot-eval" ) echo "${id%-enterprise-iot-eval}-iot" ;;
-    *"-enterprise-ltsc" ) echo "${id%-enterprise-ltsc}-ltsc" ;;
-    *"-enterprise-iot" ) echo "${id%-enterprise-iot}-iot" ;;
-    *"-eval" ) echo "${id%-eval}" ;;
   esac
 
   return 0
@@ -287,7 +261,7 @@ getLanguage() {
     "pt-"* )
       short="pp"
       lang="Portuguese"
-      culture="pt-BR" ;;
+      culture="pt-PT" ;;
     "ro" | "ro-"* | "romanian" | "română" | "romana" )
       [[ "$input" == "romanian" || "$input" == "română" || "$input" == "romana" ]] && id="ro"
       short="ro"
@@ -548,6 +522,7 @@ fromName() {
 }
 
 isClientEdition() {
+
   case "${1,,}" in
     "pro" | "professional" | "business" | \
     "enterprise" | "ultimate" | "education" | \
@@ -555,17 +530,16 @@ isClientEdition() {
     "homebasic" | "home-basic" | "starter" | "core" )
       return 0 ;;
   esac
+
   return 1
 }
 
 normalizeEdition() {
 
   local source="${1,,}"
-
   local edition
 
   source="${source//evaluation/}"
-
   source=$(printf '%s' "$source" |
     uconv -x 'Any-Latin; Latin-ASCII' 2>/dev/null) || return 1
 
@@ -661,25 +635,6 @@ getServerEditionID() {
   return 0
 }
 
-getEditionOrder() {
-
-  : "$1"
-
-  printf '%s\n' \
-    "-enterprise|enterprise|enterprise enterprise-*" \
-    "-ultimate|ultimate|ultimate ultimate-*" \
-    "|default|@default n pro pro-* professional professional-* business business-*" \
-    "-iot|iot|iot iot-* enterprise-iot enterprise-iot-*" \
-    "-ltsc|ltsc|ltsc ltsc-* enterprise-ltsc enterprise-ltsc-*" \
-    "-education|education|education education-* pro-education pro-education-*" \
-    "-home|home|home home-*" \
-    "-home-premium|home|home-premium home-premium-*" \
-    "-home-basic|home|home-basic home-basic-*" \
-    "-starter|starter|starter starter-*"
-
-  return 0
-}
-
 getVersion() {
 
   local id edition
@@ -752,16 +707,6 @@ getDriverFolder() {
     * )               return 1 ;;
   esac
 
-  return 0
-}
-
-switchEdition() {
-
-  local version="$1"
-
-  [[ "${version,,}" == *"-eval" ]] || return 1
-
-  echo "${version::-5}"
   return 0
 }
 
@@ -1029,7 +974,6 @@ isMido() {
 
   local id="$1"
   local lang="$2"
-
   local sum
 
   disabled "${MIDO:-}" && return 1
