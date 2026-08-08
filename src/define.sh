@@ -521,6 +521,29 @@ fromName() {
   return 0
 }
 
+getVersion() {
+
+  local id edition
+  local name="$1"
+  local arch="$2"
+  local evaluation=""
+
+  id=$(fromName "$name" "$arch")
+  [[ "${name,,}" == *"evaluation"* ]] && evaluation="-eval"
+
+  case "${id,,}" in
+    "win10"* | "win11"* )
+      if edition=$(getEditionID "$name" "$id"); then
+        [ -n "$edition" ] && id+="-$edition"
+        [ -n "$evaluation" ] && id+="$evaluation"
+      fi
+      ;;
+  esac
+
+  echo "$id"
+  return 0
+}
+
 isClientEdition() {
 
   case "${1,,}" in
@@ -532,6 +555,24 @@ isClientEdition() {
   esac
 
   return 1
+}
+
+getEditionPolicy() {
+
+  printf '%s\n' \
+    "normalizeEditionID" \
+    "-enterprise" \
+    "-ultimate" \
+    "" \
+    "-iot" \
+    "-ltsc" \
+    "-education" \
+    "-home" \
+    "-home-premium" \
+    "-home-basic" \
+    "-starter"
+
+  return 0
 }
 
 normalizeEdition() {
@@ -614,47 +655,6 @@ getEditionID() {
   edition=$(normalizeEditionID "$edition" "$id") || return 1
 
   echo "$edition"
-  return 0
-}
-
-getEditionPolicy() {
-
-  printf '%s\n' \
-    "normalizeEditionID" \
-    "-enterprise" \
-    "-ultimate" \
-    "" \
-    "-iot" \
-    "-ltsc" \
-    "-education" \
-    "-home" \
-    "-home-premium" \
-    "-home-basic" \
-    "-starter"
-
-  return 0
-}
-
-getVersion() {
-
-  local id edition
-  local name="$1"
-  local arch="$2"
-  local evaluation=""
-
-  id=$(fromName "$name" "$arch")
-  [[ "${name,,}" == *"evaluation"* ]] && evaluation="-eval"
-
-  case "${id,,}" in
-    "win10"* | "win11"* )
-      if edition=$(getEditionID "$name" "$id"); then
-        [ -n "$edition" ] && id+="-$edition"
-        [ -n "$evaluation" ] && id+="$evaluation"
-      fi
-      ;;
-  esac
-
-  echo "$id"
   return 0
 }
 
