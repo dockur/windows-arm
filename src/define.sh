@@ -526,6 +526,7 @@ fromName() {
 }
 
 isClientEdition() {
+
   case "${1,,}" in
     "pro" | "professional" | "business" | \
     "enterprise" | "ultimate" | "education" | \
@@ -533,17 +534,16 @@ isClientEdition() {
     "homebasic" | "home-basic" | "starter" | "core" )
       return 0 ;;
   esac
+
   return 1
 }
 
 normalizeEdition() {
 
   local source="${1,,}"
-
   local edition
 
   source="${source//evaluation/}"
-
   source=$(printf '%s' "$source" |
     uconv -x 'Any-Latin; Latin-ASCII' 2>/dev/null) || return 1
 
@@ -636,25 +636,6 @@ normalizeServerEditionID() {
 getServerEditionID() {
 
   : "${1:-}" "${2:-}"
-  return 0
-}
-
-getEditionOrder() {
-
-  : "$1"
-
-  printf '%s\n' \
-    "-enterprise|enterprise|enterprise enterprise-*" \
-    "-ultimate|ultimate|ultimate ultimate-*" \
-    "|default|@default n pro pro-* professional professional-* business business-*" \
-    "-iot|iot|iot iot-* enterprise-iot enterprise-iot-*" \
-    "-ltsc|ltsc|ltsc ltsc-* enterprise-ltsc enterprise-ltsc-*" \
-    "-education|education|education education-* pro-education pro-education-*" \
-    "-home|home|home home-*" \
-    "-home-premium|home|home-premium home-premium-*" \
-    "-home-basic|home|home-basic home-basic-*" \
-    "-starter|starter|starter starter-*"
-
   return 0
 }
 
