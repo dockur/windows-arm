@@ -557,6 +557,31 @@ isClientEdition() {
   return 1
 }
 
+getEditionRank() {
+
+  local id="${1,,}"
+  local base="${id%%-*}"
+  local edition
+
+  id="${id%-eval}"
+  edition="${id#"$base"}"
+  edition="${edition#-}"
+
+  case "$edition" in
+    "enterprise-iot" | "enterprise-iot-"* | "iot" | "iot-"* ) echo 3 ;;
+    "enterprise-ltsc" | "enterprise-ltsc-"* | "ltsc" | "ltsc-"* ) echo 4 ;;
+    "pro-education" | "pro-education-"* | "education" | "education-"* ) echo 5 ;;
+    "enterprise" | "enterprise-"* ) echo 0 ;;
+    "ultimate" | "ultimate-"* ) echo 1 ;;
+    "" | "n" | "pro" | "pro-"* | "professional" | "professional-"* | \
+    "business" | "business-"* ) echo 2 ;;
+    "home" | "home-"* ) echo 6 ;;
+    "starter" | "starter-"* ) echo 7 ;;
+    * ) echo 99 ;;
+  esac
+
+}
+
 getEditionPolicy() {
 
   printf '%s\n' \
