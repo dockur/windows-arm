@@ -580,6 +580,7 @@ getEditionRank() {
     * ) echo 99 ;;
   esac
 
+  return 0
 }
 
 getEditionPolicy() {
