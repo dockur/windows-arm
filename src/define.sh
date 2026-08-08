@@ -56,22 +56,18 @@ parseVersion() {
       ! isCompatible && MIDO="N" && warn "$fail An older build (23H2) will be downloaded." ;;
     "11l" | "11ltsc" | "ltsc11" | "win11l" | "win11-ltsc" | "win11arm64-ltsc" )
       VERSION="win11arm64-enterprise-ltsc-eval"
-      DETECTED="win11arm64-ltsc"
       ! isCompatible && error "$fail" && return 1 ;;
     "11i" | "11iot" | "iot11" | "win11i" | "win11-iot" | "win11arm64-iot" )
       VERSION="win11arm64-enterprise-iot-eval"
-      DETECTED="win11arm64-iot"
       ! isCompatible && error "$fail" && return 1 ;;
     "10" | "10p" | "win10" | "pro10" | "win10p" | "windows10" | "windows 10" )
       VERSION="win10arm64" ;;
     "10e" | "win10e" | "windows10e" | "windows 10e" )
       VERSION="win10arm64-enterprise-eval" ;;
     "10l" | "10ltsc" | "ltsc10" | "win10l" | "win10-ltsc" | "win10arm64-ltsc" )
-      VERSION="win10arm64-enterprise-ltsc-eval"
-      DETECTED="win10arm64-ltsc" ;;
+      VERSION="win10arm64-enterprise-ltsc-eval" ;;
     "10i" | "10iot" | "iot10" | "win10i" | "win10-iot" | "win10arm64-iot" )
-      VERSION="win10arm64-enterprise-iot-eval"
-      DETECTED="win10arm64-iot" ;;
+      VERSION="win10arm64-enterprise-iot-eval" ;;
     "8" | "8p" | "81" | "81p" | "pro8" | "8.1" | "win8" | "win8p" | "win81" | "win81p" | "windows 8" | \
     "8e" | "81e" | "8.1e" | "win8e" | "win81e" | "windows 8e" )
       error "Windows 8 $msg" && return 1 ;;
