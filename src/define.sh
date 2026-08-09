@@ -716,13 +716,33 @@ getRequiredMemory() {
 
   case "$id" in
     "win11"* )
-      echo 2147483648 ;;
+      echo "2G" ;;
     "tiny11"* | "core11"* )
-      echo 2147483648 ;;
-    "win10"* )
-      echo 2147483648 ;;
+      echo "2G" ;;
+    "win10"* | "tiny10"* )
+      echo "2G" ;;
     * )
-      echo 2147483648 ;;
+      echo "2G" ;;
+  esac
+
+  return 0
+}
+
+getRequiredDisk() {
+
+  local id="${1,,}"
+
+  case "$id" in
+    "win11"* )
+      echo "32G" ;;
+    "tiny11"* )
+      echo "8G" ;;
+    "core11"* )
+      echo "4G" ;;
+    "win10"* )
+      echo "16G" ;;
+    * )
+      echo "4G" ;;
   esac
 
   return 0
