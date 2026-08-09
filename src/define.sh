@@ -529,16 +529,14 @@ getVersion() {
   local evaluation=""
 
   id=$(fromName "$name" "$arch")
+  [ -z "$id" ] && return 0
+
   [[ "${name,,}" == *"evaluation"* ]] && evaluation="-eval"
 
-  case "${id,,}" in
-    "win10"* | "win11"* )
-      if edition=$(getEditionID "$name" "$id"); then
-        [ -n "$edition" ] && id+="-$edition"
-        [ -n "$evaluation" ] && id+="$evaluation"
-      fi
-      ;;
-  esac
+  if edition=$(getEditionID "$name" "$id"); then
+    [ -n "$edition" ] && id+="-$edition"
+    [ -n "$evaluation" ] && id+="$evaluation"
+  fi
 
   echo "$id"
   return 0
@@ -631,11 +629,15 @@ normalizeEditionID() {
   edition=$(normalizeEdition "$1") || return 1
 
   case "$edition" in
+
     "pro" | "professional" | "business" )
       edition="" ;;
+
     "pro-n" | "pron" | "professional-n" | "professionaln" | "business-n" | "businessn" )
       edition="n" ;;
+
     * )
+
       if ! isClientEdition "$edition"; then
 
         case "$edition" in
@@ -649,10 +651,13 @@ normalizeEditionID() {
         fi
 
       fi ;;
+
   esac
 
   case "${id,,}" in
+
     "win10"* | "win11"* )
+
       case "$edition" in
         "iot-enterprise-ltsc" | \
         "iot-enterprise-ltsc-"[0-9][0-9][0-9][0-9] )
@@ -660,8 +665,8 @@ normalizeEditionID() {
         "enterprise-ltsc" | \
         "enterprise-ltsc-"[0-9][0-9][0-9][0-9] )
           edition="ltsc" ;;
-      esac
-      ;;
+      esac ;;
+
   esac
 
   echo "$edition"
