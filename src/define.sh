@@ -755,14 +755,21 @@ isLegacy() {
   return 1
 }
 
-supportsXML() {
+supportsUnattended() {
 
   : "$1"
 
   return 0
 }
 
-supportsUnattended() {
+supportsBootKey() {
+
+  : "$1"
+
+  return 0
+}
+
+supportsXML() {
 
   : "$1"
 
