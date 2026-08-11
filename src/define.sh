@@ -770,14 +770,21 @@ supportsUnattended() {
   return 0
 }
 
-supportsBootKey() {
+supportsXML() {
 
   : "$1"
 
   return 0
 }
 
-supportsXML() {
+supportsSIF() {
+
+  : "$1"
+
+  return 1
+}
+
+supportsBootKey() {
 
   : "$1"
 
