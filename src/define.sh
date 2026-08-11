@@ -784,6 +784,13 @@ supportsSIF() {
   return 1
 }
 
+supportsACPI() {
+
+  : "$1"
+
+  return 0
+}
+
 supportsBootKey() {
 
   : "$1"
