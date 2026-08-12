@@ -23,6 +23,7 @@ RUN <<EOF
 
   apt-get update
   apt-get --no-install-recommends -y install \
+    gcab \
     samba \
     mtools \
     wimtools \
@@ -33,6 +34,7 @@ RUN <<EOF
     libxml2-utils \
     libarchive-tools
 
+  # Install Blinter
   python3 -m pip install --break-system-packages --root-user-action=ignore --no-cache-dir "Blinter==${VERSION_BLINTER}"
 
   # Install wsddn package
