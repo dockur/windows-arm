@@ -33,11 +33,7 @@ RUN <<EOF
     libxml2-utils \
     libarchive-tools
 
-  # Install Blinter
-  python3 -m pip install \
-    --break-system-packages \
-    --no-cache-dir \
-    "Blinter==${VERSION_BLINTER}"
+  python3 -m pip install --break-system-packages --root-user-action=ignore --no-cache-dir "Blinter==${VERSION_BLINTER}"
 
   # Install wsddn package
   wget "https://github.com/gershnik/wsdd-native/releases/download/v${VERSION_WSDD}/wsddn_${VERSION_WSDD}_${TARGETARCH}.deb" -O /tmp/wsddn.deb -q --timeout=10
