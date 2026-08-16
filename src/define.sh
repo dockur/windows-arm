@@ -84,6 +84,12 @@ parseVersion() {
       error "Windows XP $msg" && return 1 ;;
     "2k" | "2000" | "win2k" | "win2000" | "windows2k" | "windows2000" )
       error "Windows 2000 $msg" && return 1 ;;
+    "me" | "winme" | "win9x" | "windowsme" | "windows me" )
+      error "Windows ME $msg" && return 1 ;;
+    "98" | "98se" | "win98" | "win98se" | "windows98" | "windows98se" | "windows 98" | "windows 98 se" )
+      error "Windows 98 $msg" && return 1 ;;
+    "95" | "95c" | "win95" | "win95c" | "windows95" | "windows 95" )
+      error "Windows 95 $msg" && return 1 ;;
     "25" | "2025" | "win25" | "win2025" | "windows2025" | "windows 2025" )
       error "Windows Server 2025 $msg" && return 1 ;;
     "22" | "2022" | "win22" | "win2022" | "windows2022" | "windows 2022" )
@@ -538,14 +544,28 @@ supportsUnattended() {
   return 0
 }
 
-supportsBootKey() {
+supportsXML() {
 
   : "$1"
 
   return 0
 }
 
-supportsXML() {
+supportsSIF() {
+
+  : "$1"
+
+  return 1
+}
+
+supportsACPI() {
+
+  : "$1"
+
+  return 0
+}
+
+supportsBootKey() {
 
   : "$1"
 
