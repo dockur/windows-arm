@@ -1132,18 +1132,4 @@ getLanguage() {
   return 0
 }
 
-getLocaleID() {
-
-  echo "0409"
-
-  return 0
-}
-
-getKeyboardID() {
-
-  echo "00000409"
-
-  return 0
-}
-
 return 0
