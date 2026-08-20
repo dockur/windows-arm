@@ -184,16 +184,21 @@ For a complete graphical desktop experience, see [WinBoat](https://winboat.app),
 
   Then enable **Audio** under **Settings → Advanced** in the web viewer. The stream is only active while this option is enabled, so it uses no extra bandwidth otherwise.
 
-### How do I increase the display resolution?
+### How do I improve the graphical performance?
 
-  The display output is a simple framebuffer, just so that the screen can be visible during installation as it doesn't require any drivers.
-  
-  To add a virtual graphics card to your machine that allows for better picture quality and higher resolutions, you can add the following to your compose file after Windows is fully installed:
+  By default, the `bochs-display` adapter is used as it doesn't require any additional graphics drivers.
+
+  For better graphical performance, you can switch to `virtio-gpu` after Windows is fully installed:
 
   ```yaml
   environment:
     VGA: "virtio-gpu"
   ```
+
+  It uses a dedicated paravirtualized display driver and can provide better desktop responsiveness than the `bochs-display` adapter.
+
+> [!NOTE]
+> With `virtio-gpu`, the screen may remain black during the initial boot process until Windows loads its driver. For this reason, `bochs-display` remains the default and provides the most reliable display output during boot and installation.
 
 ### How do I connect using RDP?
 
