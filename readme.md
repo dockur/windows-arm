@@ -186,7 +186,7 @@ For a complete graphical desktop experience, see [WinBoat](https://winboat.app),
 
 ### How do I improve the graphical performance?
 
-  By default, the `bochs-display` adapter is used as it doesn't require any additional graphics drivers.
+  By default, the `ramfb` adapter is used as it doesn't require any additional graphics drivers.
 
   For better graphical performance, you can switch to `virtio-gpu` after Windows is fully installed:
 
@@ -195,10 +195,10 @@ For a complete graphical desktop experience, see [WinBoat](https://winboat.app),
     VGA: "virtio-gpu"
   ```
 
-  It uses a dedicated paravirtualized display driver and can provide better desktop responsiveness than the `bochs-display` adapter.
+  It uses a dedicated paravirtualized display driver and can provide better desktop responsiveness than the `ramfb` adapter.
 
 > [!NOTE]
-> With `virtio-gpu`, the screen may remain black during the initial boot process until Windows loads its driver. For this reason, `bochs-display` remains the default and provides the most reliable display output during boot and installation.
+> With `virtio-gpu`, the screen will black out during Windows setup until the stage where its driver is installed. For this reason, `ramfb` remains the default and provides the most reliable display output during early boot and installation.
 
 ### How do I connect using RDP?
 
