@@ -31,6 +31,7 @@ An empty default means the variable is unset and its value is determined automat
 | `SMP` |  | Custom CPU topology. Determined from `CPU_CORES` when unset. |
 | `KVM` | `Y` | Enables KVM hardware acceleration. |
 | `RAM_SIZE` | `4G` | Amount of RAM assigned to Windows, such as `8G`, `half`, or `max`. |
+| `RAM_BACKEND` |  | Guest RAM backing mechanism, set `memfd` for memfd-backed memory. |
 | `RAM_CHECK` | `Y` | Checks whether enough host memory is available before starting Windows. |
 
 ## 💾 Storage
