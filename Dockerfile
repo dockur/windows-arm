@@ -9,7 +9,6 @@ COPY --from=qemux/qemu-arm:7.49 / /
 ARG TARGETARCH
 
 ARG VERSION_ARG="0.00"
-ARG VERSION_UDF="1.2.0"
 ARG VERSION_WSDD="1.27"
 ARG VERSION_VIRTIO="0.1.285"
 ARG VERSION_BLINTER="1.0.112"
@@ -41,10 +40,6 @@ RUN <<EOF
   wget "https://github.com/gershnik/wsdd-native/releases/download/v${VERSION_WSDD}/wsddn_${VERSION_WSDD}_${TARGETARCH}.deb" -O /tmp/wsddn.deb -q --timeout=10
   dpkg -i /tmp/wsddn.deb
 
-  # Install UDFread package
-  wget "https://github.com/qemus/udfread/releases/download/v${VERSION_UDF}/udfread_${VERSION_UDF}_${TARGETARCH}.deb" -O /tmp/udfread.deb -q --timeout=10
-  dpkg -i /tmp/udfread.deb
-
   apt-get clean
 
   # Set version file
@@ -56,6 +51,7 @@ EOF
 COPY --from=base --chmod=755 /src/ /run/
 COPY --chmod=755 ./src/ /run/
 COPY --chmod=755 ./assets/ /run/assets/
+COPY --from=qemux/udfread:1.2.0 /udfread /usr/bin/
 
 ADD --chmod=664 https://github.com/qemus/virtiso-arm/releases/download/v${VERSION_VIRTIO}-1/virtio-win-${VERSION_VIRTIO}.tar.xz /var/drivers.txz
 
