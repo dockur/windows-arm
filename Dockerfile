@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 FROM scratch AS base
-ADD https://github.com/dockur/windows.git#master /
+ADD --exclude=src/display.sh https://github.com/dockur/windows.git#master /
 
 FROM scratch
 COPY --from=qemux/qemu-arm:7.49 / /
@@ -48,7 +48,7 @@ RUN <<EOF
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EOF
 
-COPY --from=base --chmod=755 --exclude=display.sh /src/ /run/
+COPY --from=base --chmod=755 /src/ /run/
 COPY --chmod=755 ./src/ /run/
 COPY --chmod=755 ./assets/ /run/assets/
 COPY --from=qemux/udfread:1.2.0 /udfread /usr/bin/
