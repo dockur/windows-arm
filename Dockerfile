@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 FROM scratch AS base
-ADD https://github.com/dockur/windows.git#master /
+ADD --exclude=src/display.sh https://github.com/dockur/windows.git#master /
 
 FROM scratch
 COPY --from=qemux/qemu-arm:7.49 / /
