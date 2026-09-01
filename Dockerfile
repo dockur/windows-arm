@@ -48,7 +48,7 @@ RUN <<EOF
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EOF
 
-COPY --from=base --chmod=755 /src/ /run/
+COPY --from=base --chmod=755 --exclude=display.sh /src/ /run/
 COPY --chmod=755 ./src/ /run/
 COPY --chmod=755 ./assets/ /run/assets/
 COPY --from=qemux/udfread:1.2.0 /udfread /usr/bin/
