@@ -4,7 +4,7 @@ FROM scratch AS base
 ADD --exclude=src/display.sh https://github.com/dockur/windows.git#master /
 
 FROM scratch
-COPY --from=qemux/qemu-arm:7.49 / /
+COPY --from=qemux/qemu-arm:7.50 / /
 
 ARG TARGETARCH
 
