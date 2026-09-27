@@ -233,7 +233,7 @@
       <FirstLogonCommands>
         <SynchronousCommand wcm:action="add">
           <Order>1</Order>
-          <CommandLine>cmd.exe /d /c call "%WINDIR%\Setup\Scripts\SetupComplete.cmd" logon</CommandLine>
+          <CommandLine>wscript.exe //B //NoLogo %WINDIR%\Setup\Scripts\Unattend.vbs logon</CommandLine>
           <Description>Configure Windows after logon</Description>
         </SynchronousCommand>
       </FirstLogonCommands>
