@@ -635,6 +635,8 @@ getLink1() {
   [[ "${id,,}" == "win11"* ]] && ! isCompatible && return 0
   [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
 
+  return 0 # Disable
+
   case "${id,,}" in
     "win11arm64" | "win11arm64-enterprise" )
       size=6812594176
@@ -690,6 +692,8 @@ getLink2() {
 
   isCompatible && return 0
   [[ "${lang,,}" != "en" && "${lang,,}" != "en-us" ]] && return 0
+
+  return 0 # Disable
 
   case "${id,,}" in
     "win11arm64" | "win11arm64-enterprise" )
